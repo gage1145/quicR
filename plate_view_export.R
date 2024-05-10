@@ -12,7 +12,8 @@ source("functions/functions.R")
 # Initialize parameters for downstream functions.###############################
 file <- ""
 while (file == "") {
-  file <- paste0(readline("Please input .xlsx file name WITHOUT extension: "),
+  file <- paste0("input files/",
+                 readline("Please input .xlsx file name WITHOUT extension: "),
                  ".xlsx")
   if (!(file.exists(file))) {
     print("File does not exist. Please ensure file name was typed correctly")
@@ -88,4 +89,4 @@ sample_locations <- add_reps(sample_locations)
 # This function is from plate_view_function.R.
 p <- plate_view(df, sample_locations, wells, plate, color = "black")
 
-ggsave("plate_view.png", p, width = 3600, height = 2400, units = "px")
+ggsave("output files/plate_view.png", p, width = 3600, height = 2400, units = "px")
