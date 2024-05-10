@@ -2,6 +2,7 @@ library(slider)
 
 
 
+<<<<<<< HEAD
 source("functions/functions.R")
 
 
@@ -12,6 +13,13 @@ file <- paste0(
     ),
   ".xlsx"
   )
+=======
+source("C:/Users/rowde002/Box/Shiny App/standalone_scripts/use_this/R/functions.R")
+
+
+file <- paste0(readline("Please input the Excel file name without .xlsx extension: "),
+               ".xlsx")
+>>>>>>> 2bd6bdc1ec1d10668b72c1f8720e6e135cd24900
 
 df <- get_real(file, ordered=FALSE)
 
@@ -167,7 +175,11 @@ writeData(wb, "Summary", summary)
 
 
 # Save the Excel file.
+<<<<<<< HEAD
 saveWorkbook(wb, "output.xlsx", overwrite = TRUE)
+=======
+saveWorkbook(wb, "summary.xlsx", overwrite = TRUE)
+>>>>>>> 2bd6bdc1ec1d10668b72c1f8720e6e135cd24900
 
 
 
