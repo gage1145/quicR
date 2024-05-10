@@ -8,6 +8,7 @@ source("functions/functions.R")
 
 # For testing, use "test".
 file <- paste0(
+  "input files/",
   readline(
     "Please input the Excel file name without .xlsx extension: "
     ),
@@ -169,7 +170,7 @@ writeData(wb, "Summary", summary)
 
 # Save the Excel file.
 
-saveWorkbook(wb, "output.xlsx", overwrite = TRUE)
+saveWorkbook(wb, "output files/output.xlsx", overwrite = TRUE)
 
 
 
