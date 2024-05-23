@@ -115,9 +115,9 @@ organize_tables <- function(file, plate=96) {
   while (i < nrow(tidy_data)) {
     table_name <- paste0(sub("^\\d+\\. ", "", tidy_data[(1+i), 1]))
     name_list <- append(name_list, table_name)
-    new_table <- list(tidy_data[(3+i):(10+i),])
-    df_dic <- append(df_dic, new_table)
-    i = ifelse(plate == 96, i + 11, i + 19)
+    new_table <- tidy_data[(3+i):ifelse(plate == 96, (10+i), (18+i)),]
+    df_dic <- append(df_dic, list(new_table))
+    i <- ifelse(plate == 96, i + 11, i + 19)
   }
   names(df_dic) <- name_list
 
