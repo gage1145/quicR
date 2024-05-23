@@ -1,10 +1,9 @@
 library(slider)
 library(ggpubr)
 library(agricolae)
-library(PMCMRplus)
 
 
-
+# Users will need to adjust for their own file directory.
 source("C:/Users/rowde002/Box/Scripts/R scripts/functions/functions.R")
 
 
@@ -129,8 +128,8 @@ colnames(df_norm_t) <- unique_cols
 df_deriv <- df_norm_t$Time
 
 # Make sure there are no "-" in the sample IDs. This affects the formula below.
-
 for (i in colnames(df_norm_t)[-1]) {
+  var <- sym(i)
   slope_column <- slide(df_norm_t,
                         ~ lm(as.formula(paste(i, "~ Time")),
                              data = .x)[[1]][[2]] / 3600,
@@ -174,23 +173,6 @@ summary <- df_analyzed %>%
 
 ################################################################################
 
-# Initialize the workbook for Excel.
-wb <- createWorkbook()
-
-# Add the sheets.
-addWorksheet(wb, "Total")
-addWorksheet(wb, "Summary")
-
-# Write the "summary" df to the "Summary" sheet.
-writeData(wb, "Total", df_analyzed)
-writeData(wb, "Summary", summary)
-
-
-# Save the Excel file.
-saveWorkbook(wb, "output.xlsx", overwrite = TRUE)
-
-################################################################################
-
 # Calculate the statistical comparisons for MPR.
 model <- aov(MPR ~ Sample_ID, data=df_analyzed)
 stats <- LSD.test(model, "Sample_ID", p.adj = "bonferroni")
@@ -209,6 +191,23 @@ stats <- stats$groups[order(row.names(stats$groups)),]
 neg_group <- stats["N", "groups"]
 
 summary$MS_Result <- c(ifelse(stats$groups == neg_group, "ns", "*"))
+
+################################################################################
+
+# Initialize the workbook for Excel.
+wb <- createWorkbook()
+
+# Add the sheets.
+addWorksheet(wb, "Total")
+addWorksheet(wb, "Summary")
+
+# Write the "summary" df to the "Summary" sheet.
+writeData(wb, "Total", df_analyzed)
+writeData(wb, "Summary", summary)
+
+
+# Save the Excel file.
+saveWorkbook(wb, "output.xlsx", overwrite = TRUE)
 
 ################################################################################
 
