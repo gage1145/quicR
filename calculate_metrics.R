@@ -129,19 +129,20 @@ df_deriv <- df_norm_t$Time
 
 # Make sure there are no "-" in the sample IDs. This affects the formula below.
 for (i in colnames(df_norm_t)[-1]) {
-  var <- sym(i)
   slope_column <- slide(df_norm_t,
                         ~ lm(as.formula(paste(i, "~ Time")),
                              data = .x)[[1]][[2]] / 3600,
                         .before = 3,
                         .complete = TRUE)
   df_deriv <- cbind(df_deriv, slope_column)
-  
 }
 
-df_deriv <- as.data.frame(df_deriv)
-df_deriv <- t(df_deriv)
-df_deriv <- as.data.frame(df_deriv)[-1,]
+# Reformat df_deriv to match df_norm formatting.
+df_deriv <- df_deriv %>%
+  as.data.frame() %>%
+  t() %>%
+  as.data.frame()
+df_deriv <- df_deriv[-1,]
 df_deriv <- cbind(df_norm$`Sample ID`, df_deriv)
 colnames(df_deriv) <- colnames(df_norm)
 df_deriv[,-1] <- mutate_all(df_deriv[,-1], 
@@ -149,8 +150,7 @@ df_deriv[,-1] <- mutate_all(df_deriv[,-1],
 
 # Identify the max slope.
 for (i in 1: nrow(df_deriv)) {
-  maximum <- max(df_deriv[i,5:(ncol(df_deriv))])
-  df_analyzed[i,"MS"] <- maximum
+  df_analyzed[i,"MS"] <- max(df_deriv[i,5:(ncol(df_deriv))])
 }
 
 ################################################################################
