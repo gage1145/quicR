@@ -7,7 +7,7 @@ library(gridExtra)
 
 
 # Users will need to adjust this for their own log-in info.
-source("functions/functions.R")
+source("C:/Users/gage1/Box/Scripts/R scripts/functions/functions.R")
 
 
 # Initialize parameters for downstream functions.###############################
@@ -214,19 +214,14 @@ if (length(negative_row) > 0) {
 }
 
 
-
-
-
-
 # Melt the dataframe for the faceting in ggplot.
 df_summary <- reshape2::melt(df_summary, id.vars = "Sample")
+df_summary$Sample <- factor(df_summary$Sample,levels=unique(df_summary$Sample))
 
 # Faceted plot of the four analyses.
-p <- ggplot(df_summary, aes(x = Sample, y = value, fill = Sample)) +
+p <- ggplot(df_summary, aes(x = Sample, y = value, fill = variable)) +
   scale_fill_discrete() +
-  geom_dotplot(binaxis = "y",
-               stackdir="center",
-               stackratio = 0.5) +
+  geom_boxplot() +
   facet_wrap(vars(variable),
              scales = "free",
              labeller = as_labeller(c(Maxpoint =
@@ -240,14 +235,15 @@ p <- ggplot(df_summary, aes(x = Sample, y = value, fill = Sample)) +
              strip.position = "left") +
   xlab(NULL) +
   ylab(NULL) +
-  scale_x_discrete(limits = rev) +
   theme(axis.line = element_line(colour = "black"),
-        axis.text.x = element_text(angle = 45, hjust = 1),
+        axis.text.x = element_text(size = 12, angle = 45, hjust = 1),
+        axis.text.y = element_text(size = 12),
         panel.background = element_blank(),
         panel.grid = element_line(colour = "lightgrey"),
         legend.position = "none",
         strip.background = element_blank(),
-        strip.placement = "outside")
+        strip.placement = "outside",
+        strip.text = element_text(size = 14, face = "bold"))
 p
 ggsave("Summary.png", p, width = 3600, height = 2400, units = "px")
 
