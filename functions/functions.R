@@ -417,3 +417,112 @@ normalize_RFU <- function (df, bg_cycle=4) {
   }
   return (df_norm)
 }
+
+calculate_TtT <- function (data, threshold, start_col=3) {
+  # Initialize the list containing the times-to-threshold.
+  TtT_list <- c(rep(NA, nrow(data)))
+  
+  # Set the cycle interval.
+  cycle_interval <- diff(as.numeric(colnames(data[,2:3])))
+  
+  # Calculate the Time to Threshold
+  for (i in 1: nrow(data))  {
+    for (j in start_col: (ncol(data))) {
+      
+      # Use the sample-unique threshold calculated in "summary".
+      current_read <- data[i, j]
+      
+      if (is.na(TtT_list[i]) & current_read >= threshold) {
+        
+        previous_read <- data[i, j-1]
+        
+        delta_rfu <-  current_read - previous_read
+        slope <- delta_rfu / cycle_interval
+        
+        delta_threshold <- threshold - previous_read
+        delta_t <- delta_threshold / slope
+        
+        previous_cycle <- as.numeric(colnames(data[j-1]))
+        TtT_list[i] <- previous_cycle + delta_t
+      }
+    }
+  }
+  return (TtT_list)
+}
+
+calculate_MPR <- function (data, start_col=3, data_is_norm=FALSE) {
+  if (data_is_norm == FALSE) {
+    # Calculate the normalized real-time data.
+    data <- normalize_RFU(data)
+  }
+  
+  # Initialize the list containing the maxpoint ratios.
+  MPR_list <- c(rep(NA, nrow(data)))
+  
+  # Identify the maxpoint ratio.
+  for (i in 1: nrow(data)) {
+    maximum <- max(data[i, start_col:(ncol(data))])
+    MPR_list[i] <- maximum
+  }
+  return (MPR_list)
+}
+
+calculate_MS <- function (data, start_col=3) {
+  # Calculate the slope using a moving window linear regression.
+  df_norm_t <- t(data)
+  colnames(df_norm_t) <- df_norm_t[1,]
+  df_norm_t <- df_norm_t[-1,]
+  df_norm_t <- cbind(Time = as.numeric(rownames(df_norm_t)), df_norm_t)
+  df_norm_t <- as.data.frame(df_norm_t)
+  
+  unique_cols <- colnames(df_norm_t)[1]
+  
+  x <- 1
+  for (i in colnames(df_norm_t)[-1]) {
+    unique_cols <- cbind(unique_cols, paste0(i, "_", x))
+    x <- x + 1
+  }
+  
+  unique_cols <- gsub("-", "_", unique_cols, fixed = TRUE)
+  
+  colnames(df_norm_t) <- unique_cols
+  
+  df_deriv <- df_norm_t$Time
+  
+  # Make sure there are no "-" in the sample IDs. This affects the formula below.
+  for (i in colnames(df_norm_t)[-1]) {
+    slope_column <- slide(df_norm_t,
+                          ~ lm(as.formula(paste(i, "~ Time")),
+                               data = .x)[[1]][[2]] / 3600,
+                          .before = 3,
+                          .complete = TRUE)
+    df_deriv <- cbind(df_deriv, slope_column)
+  }
+  
+  # Reformat df_deriv to match data formatting.
+  df_deriv <- df_deriv %>%
+    as.data.frame() %>%
+    t() %>%
+    as.data.frame()
+  df_deriv <- df_deriv[-1,]
+  df_deriv <- cbind(data$`Sample ID`, df_deriv)
+  colnames(df_deriv) <- colnames(data)
+  df_deriv[,-1] <- mutate_all(df_deriv[,-1], 
+                              function(x) as.numeric(as.character(x)))
+  
+  # Initialize the list containing the max slope.
+  MS_list <- c(rep(NA, nrow(data)))
+  
+  for (i in 1: nrow(df_deriv)) {
+    MS_list[i] <- max(df_deriv[i,5:(ncol(df_deriv))])
+  }
+  return (MS_list)
+}
+
+
+
+
+
+
+
+
