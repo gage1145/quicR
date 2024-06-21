@@ -9,6 +9,7 @@ source("functions/functions.R")
 
 
 # For testing, use "test".
+# Request the user to input the file name for analysis.
 file <- ""
 while (file == "") {
   file <- paste0(
@@ -23,9 +24,10 @@ while (file == "") {
   }
 }
 
-
+# Get the real-time data from the BMG export file.
 df <- get_real(file, ordered=FALSE)
 
+# Ask the user which real-time data set they want to use.
 df_id <- as.integer(
   readline(
     paste(
@@ -36,8 +38,10 @@ df_id <- as.integer(
     )
   )
 
+# Select the real-time data set that the user signified.
 df <- df[[df_id]]
 
+# Export the tables in the first sheet of the file.
 dic <- organize_tables(file)
 column_names <- c("Time")
 for (i in t(dic[["Sample IDs"]])) {
@@ -47,14 +51,18 @@ for (i in t(dic[["Sample IDs"]])) {
     }
   }
 }
-
+# Apply the column names.
 colnames(df) <- column_names
 
 ################################################################################
 
+# Calculate the normalized real-time data.
 df_norm <- normalize_RFU(df)
+
+# Define the number of hours that the rxn ran for.
 hours <- as.numeric(colnames(df_norm)[ncol(df_norm)])
 
+# Initialized the dataframe with the calculated metrics.
 df_analyzed <- data.frame(`Sample_ID` = df_norm$`Sample ID`) %>%
   mutate(
     # Maxpoint Ratio
@@ -69,6 +77,7 @@ df_analyzed <- data.frame(`Sample_ID` = df_norm$`Sample ID`) %>%
 
 ################################################################################
 
+# Order the data frame based on Sample_ID.
 df_analyzed <- df_analyzed[order(df_analyzed$Sample_ID),]
 
 # Reorganize the columns of df_analyzed.
@@ -78,6 +87,7 @@ df_analyzed <- data.frame(Sample_ID = df_analyzed$Sample_ID,
                           MS  = df_analyzed$MS,
                           TtT = df_analyzed$TtT)
 
+# Create a summary data frame.
 summary <- df_analyzed %>%
   group_by(Sample_ID) %>%
   summarise(mean_TtT   = mean(TtT), 
@@ -88,16 +98,21 @@ summary <- df_analyzed %>%
 ################################################################################
 
 # Calculate the statistical comparisons for MPR.
+# ANOVA
 model <- aov(MPR ~ Sample_ID, data=df_analyzed)
-stats <- LSD.test(model, "Sample_ID", p.adj = "bonferroni")
 
+# Fisher's LSD test
+stats <- LSD.test(model, "Sample_ID", p.adj = "bonferroni")
 stats <- stats$groups[order(row.names(stats$groups)),]
+
+# Define the negative control group.
 neg_group <- stats["N", "groups"]
-  
+
+# Apply the statistical test to the summary data frame.
 summary$MPR_Result <- c(ifelse(stats$groups == neg_group, "ns", "*"))
 
 
-# Calculate the statistical comparisons for Max Slope.
+# Perform the same statistical comparisons for Max Slope.
 model <- aov(MS ~ Sample_ID, data=df_analyzed)
 stats <- LSD.test(model, "Sample_ID")
 
