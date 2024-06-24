@@ -537,25 +537,26 @@ BMG_format <- function(file) {
   colnames(locations) <- c("Wells", "Samples")
 
   dic <- unique(melt(df_, id.vars=1)[3]) %>%
-    mutate(Plate_ID = "X")
+    mutate(Plate_ID = "X") %>%
+    na.omit()
   
   x <- 0
   previous <- dic$value[1]
   current <- ""
   for (i in 1:nrow(dic)) {
     current <- dic$value[i]
-      if (tolower(current) == "n") {
-        dic[i, "Plate_ID"] <- "N"
-      } else if (tolower(current) == "p") {
-        dic[i, "Plate_ID"] <- "P"
-      } else if (tolower(current) == "b") {
-        dic[i, "Plate_ID"] <- "B"
-      } else {
-        if (previous != current) {
-          x <- x + 1
-        }
-        dic[i, "Plate_ID"] <- paste0(dic[[i, "Plate_ID"]], x)
+    if (tolower(current) == "n") {
+      dic[i, "Plate_ID"] <- "N"
+    } else if (tolower(current) == "p") {
+      dic[i, "Plate_ID"] <- "P"
+    } else if (tolower(current) == "b") {
+      dic[i, "Plate_ID"] <- "B"
+    } else {
+      if (previous != current) {
+        x <- x + 1
       }
+      dic[i, "Plate_ID"] <- paste0(dic[[i, "Plate_ID"]], x)
+    }
     previous <- current
   }
   colnames(dic) <- c("Samples", "Plate_ID")
@@ -567,7 +568,8 @@ BMG_format <- function(file) {
   }
   
   # Apply the function to each row of the data frame
-  formatted <- apply(locations, 1, format_row)
+  formatted <- apply(locations, 1, format_row) %>%
+    na.omit()
   
   
   return (formatted)
