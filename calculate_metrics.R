@@ -4,11 +4,7 @@ library(agricolae)
 
 
 # Users will need to adjust for their own file directory.
-<<<<<<< HEAD
 source("~/RTQ_analysis/functions/functions.R")
-=======
-source("C:/Users/gage1/Box/Scripts/R scripts/functions/functions.R")
->>>>>>> 734e0eaf0e6934af5f33c5f06fa06467cb6f8f07
 
 
 
@@ -84,11 +80,7 @@ df_analyzed <- data.frame(`Sample_ID` = df_norm$`Sample ID`) %>%
     TtT = calculate_TtT(df_norm, threshold=2, start_col=3, run_time=run_time)
   ) %>%
   # Rate of Amyloid Formation
-<<<<<<< HEAD
   mutate(RAF = ifelse(TtT == run_time, 0, 1 / (3600 * TtT)))
-=======
-  mutate(RAF = ifelse(is.na(TtT), 0, 1 / (3600 * TtT)))
->>>>>>> 734e0eaf0e6934af5f33c5f06fa06467cb6f8f07
 
 ################################################################################
 
@@ -112,7 +104,6 @@ summary <- df_analyzed %>%
 
 ################################################################################
 
-<<<<<<< HEAD
 metrics <- c("MPR", "MS")
 for (metric in metrics) {
   
@@ -140,7 +131,6 @@ for (metric in metrics) {
 }
 
 
-=======
 # Calculate the statistical comparisons for MPR.
 # ANOVA
 model <- aov(MPR ~ Sample_ID, data=df_analyzed)
@@ -164,7 +154,6 @@ stats <- stats$groups[order(row.names(stats$groups)),]
 neg_group <- stats["N", "groups"]
 
 summary$MS_Result <- c(ifelse(stats$groups == neg_group, "ns", "*"))
->>>>>>> e35b6d582f0b715e928cee84dac15246e4f97dab
 
 ################################################################################
 
