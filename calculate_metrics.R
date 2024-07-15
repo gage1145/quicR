@@ -38,6 +38,13 @@ df_id <- as.integer(
     )
   )
 
+# Ask the user for the run-time in hours.
+run_time <- as.integer(
+  readline(
+    "Please enter the number of hours in the run: "
+  )
+)
+
 # Select the real-time data set that the user signified.
 df <- df[[df_id]]
 
