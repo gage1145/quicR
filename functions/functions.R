@@ -20,10 +20,12 @@ plate_view <- function(df, meta, well_names, plate=96, color="black") {
   colnames(df) <- well_names
 
   # Create a template of all possible columns
-  template_columns <- expand.grid(if (plate == 96) {Var1 = LETTERS[1:8]}
-                                  else {Var1 = LETTERS[1:16]},
-                                  if (plate == 96) {Var2 = sprintf("%02d", 1:12)}
-                                  else {Var2 = sprintf("%02d", 1:24)})
+  template_columns <- expand.grid(
+    if (plate == 96) {Var1 = LETTERS[1:8]}
+    else {Var1 = LETTERS[1:16]},
+    if (plate == 96) {Var2 = sprintf("%02d", 1:12)}
+    else {Var2 = sprintf("%02d", 1:24)}
+  )
   template_columns <- sort(paste0(template_columns$Var1, template_columns$Var2))
   rm(Var1, Var2)
 
