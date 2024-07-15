@@ -43,13 +43,10 @@ plate_view <- function(df, meta, well_names, plate=96, color="black") {
   # Rename columns as the content again now that empty columns have been added.
   i <- 1
   for (col in template_columns) {
-    if (col %in% well_names) {
-      colnames(df)[i] <- meta$B[meta$A == col]
-    } else {
-      # Adds whitespace * i so each empty column is unique. Otherwise the melt
-      # function would combine them.
-      colnames(df)[i] <- paste(replicate(i, " "), collapse = "")
-    }
+    colnames(df)[i] <- ifelse(col %in% well_names, 
+                              meta$B[meta$A == col],
+                              # Adds whitespace * i
+                              paste(replicate(i, " "), collapse = ""))
     i <- i + 1
   }
 
