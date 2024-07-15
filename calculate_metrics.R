@@ -3,6 +3,7 @@ library(ggpubr)
 library(agricolae)
 
 
+
 # Users will need to adjust for their own file directory.
 source("~/RTQ_analysis/functions/functions.R")
 
@@ -112,48 +113,24 @@ for (metric in metrics) {
     # Create the statistical model using ANOVA.
     aov(as.formula(paste0(metric, " ~ ", "`", "Sample_ID", "`")), 
         data = df_analyzed),
-    "Sample_ID",  p.adj = "none", group = F)[["comparison"]]
+    "Sample_ID",  p.adj = "holm", group = F)[["comparison"]]
   
   # Initialize columns which will hold unique IDs for each sample compared.
-  comps <- cbind(comps, rownames(comps) %>%
-                   strsplit(" - ") %>%
-                   as.data.frame() %>%
-                   t() %>%
-                   as.data.frame()) %>%
+  comps <- comps %>%
+    cbind(rownames(comps) %>%
+            strsplit(" - ") %>%
+            as.data.frame() %>%
+            t() %>%
+            as.data.frame()) %>%
     
     # Remove all comparisons that are not against "N_1".
     subset(V1 == "N" | V2 == "N") %>%
     rename("{metric}_pvalue" := pvalue,
            "{metric}_significance" := signif.)
   
-  assign(names(comps[2]), comps[2])
-  assign(names(comps[3]), comps[3])
+  summary <- summary %>%
+    bind_cols(rbind(NA, comps[2]), rbind(NA, comps[3]))
 }
-
-
-# Calculate the statistical comparisons for MPR.
-# ANOVA
-model <- aov(MPR ~ Sample_ID, data=df_analyzed)
-
-# Fisher's LSD test
-stats <- LSD.test(model, "Sample_ID", p.adj = "bonferroni")
-stats <- stats$groups[order(row.names(stats$groups)),]
-
-# Define the negative control group.
-neg_group <- stats["N", "groups"]
-
-# Apply the statistical test to the summary data frame.
-summary$MPR_Result <- c(ifelse(stats$groups == neg_group, "ns", "*"))
-
-
-# Perform the same statistical comparisons for Max Slope.
-model <- aov(MS ~ Sample_ID, data=df_analyzed)
-stats <- LSD.test(model, "Sample_ID")
-
-stats <- stats$groups[order(row.names(stats$groups)),]
-neg_group <- stats["N", "groups"]
-
-summary$MS_Result <- c(ifelse(stats$groups == neg_group, "ns", "*"))
 
 ################################################################################
 
