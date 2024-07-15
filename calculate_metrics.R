@@ -135,6 +135,9 @@ for (metric in metrics) {
     bind_cols(rbind(NA, comps[2]), rbind(NA, comps[3]))
 }
 
+summary <- summary %>%
+  mutate(Positive = thres_pos & MPR_pvalue <= 0.05 & MS_pvalue <= 0.05)
+
 ################################################################################
 
 # Initialize the workbook for Excel.
