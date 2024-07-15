@@ -110,19 +110,24 @@ for (metric in metrics) {
   # Create a dataframe of the individual comparisons.
   comps <- LSD.test( # Perform the post-hoc multiple comparisons test.
     # Create the statistical model using ANOVA.
-    aov(as.formula(paste0(metric, " ~ ", "`", "Sample_ID", "`")), 
-        data = df_analyzed),
-    "Sample_ID",  p.adj = "holm", group = F)[["comparison"]]
+    aov(
+      as.formula(paste0(metric, " ~ ", "`", "Sample_ID", "`")),
+      data = df_analyzed
+    ),
+    "Sample_ID",  p.adj = "holm", group = F
+  # Select only the comparisons table.
+  )[["comparison"]] %>%
   
   # Initialize columns which will hold unique IDs for each sample compared.
-  comps <- comps %>%
-    cbind(rownames(comps) %>%
-            strsplit(" - ") %>%
-            as.data.frame() %>%
-            t() %>%
-            as.data.frame()) %>%
+    cbind(
+      rownames(comps) %>%
+        strsplit(" - ") %>%
+        as.data.frame() %>%
+        t() %>%
+        as.data.frame()
+    ) %>%
     
-    # Remove all comparisons that are not against "N_1".
+    # Remove all comparisons that are not against "N".
     subset(V1 == "N" | V2 == "N") %>%
     rename("{metric}_pvalue" := pvalue,
            "{metric}_significance" := signif.)
