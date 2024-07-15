@@ -165,23 +165,31 @@ df_analyzed %>%
   ggplot(aes(Sample_ID, value, fill=Sample_ID)) +
     scale_fill_discrete() +
     geom_boxplot() +
-    facet_wrap(vars(variable),
-               scales = "free",
-               labeller = as_labeller(c(MPR = "MPR (Max RFU / Initial RFU)",
-                                        RAF = "RAF (1/s)",
-                                        MS = "Max Slope (RFU/s)",
-                                        TtT = "Time to Threshold (h)")),
-               strip.position = "left") +
+    facet_wrap(
+      vars(variable),
+      scales = "free",
+      labeller = as_labeller(
+        c(
+          MPR = "MPR (Max RFU / Initial RFU)",
+          RAF = "RAF (1/s)",
+          MS  = "Max Slope (RFU/s)",
+          TtT = "Time to Threshold (h)"
+        )
+      ),
+      strip.position = "left"
+    ) +
     ylim(0, NA) +
     xlab(NULL) +
     ylab(NULL) +
-    theme(axis.line = element_line(colour = "black"),
-          axis.text.x = element_text(angle = 45, hjust = 1),
-          panel.background = element_blank(),
-          panel.grid = element_line(colour = "lightgrey"),
-          panel.border = element_rect(colour = "black", fill=NA, size=1),
-          legend.position = "none",
-          strip.background = element_blank(),
-          strip.placement = "outside")
+    theme(
+      axis.line = element_line(colour = "black"),
+      axis.text.x = element_text(angle = 45, hjust = 1),
+      panel.background = element_blank(),
+      panel.grid = element_line(colour = "lightgrey"),
+      panel.border = element_rect(colour = "black", fill=NA, size=1),
+      legend.position = "none",
+      strip.background = element_blank(),
+      strip.placement = "outside"
+    )
 
 ggsave("summary.png", width = 3600, height = 2400, units = "px")
