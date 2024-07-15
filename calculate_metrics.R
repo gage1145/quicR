@@ -82,29 +82,32 @@ df_analyzed <- data.frame(`Sample_ID` = df_norm$`Sample ID`) %>%
   ) %>%
   # Rate of Amyloid Formation
   mutate(RAF = ifelse(TtT == run_time, 0, 1 / (3600 * TtT)),
-         crossed = TtT != run_time)
+         crossed = TtT != run_time) %>%
+  # Order the data frame based on Sample_ID.
+  arrange(Sample_ID)
 
 ################################################################################
 
-# Order the data frame based on Sample_ID.
-df_analyzed <- df_analyzed[order(df_analyzed$Sample_ID),]
-
 # Reorganize the columns of df_analyzed.
-df_analyzed <- data.frame(Sample_ID = df_analyzed$Sample_ID,
-                          MPR = df_analyzed$MPR,
-                          RAF = df_analyzed$RAF,
-                          MS  = df_analyzed$MS,
-                          TtT = df_analyzed$TtT,
-                          crossed = df_analyzed$crossed)
-
+df_analyzed <- data.frame(
+  Sample_ID = df_analyzed$Sample_ID,
+  MPR       = df_analyzed$MPR,
+  RAF       = df_analyzed$RAF,
+  MS        = df_analyzed$MS,
+  TtT       = df_analyzed$TtT,
+  crossed   = df_analyzed$crossed
+)
+  
 # Create a summary data frame.
 summary <- df_analyzed %>%
   group_by(Sample_ID) %>%
-  summarise(mean_TtT   = mean(TtT), 
-            mean_RAF   = mean(RAF),
-            mean_MPR   = mean(MPR),
-            mean_MS    = mean(MS),
-            thres_pos  = sum(crossed) / n() > 0.5)
+  summarise(
+    mean_TtT  = mean(TtT), 
+    mean_RAF  = mean(RAF),
+    mean_MPR  = mean(MPR),
+    mean_MS   = mean(MS),
+    thres_pos = sum(crossed) / n() > 0.5
+  )
 
 ################################################################################
 
