@@ -7,7 +7,7 @@ library(gridExtra)
 
 
 # Users will need to adjust this for their own log-in info.
-source("C:/Users/gage1/Box/Scripts/R scripts/functions/functions.R")
+source("~/RTQ_analysis/functions/functions.R")
 
 
 # Initialize parameters for downstream functions.###############################

@@ -4,7 +4,7 @@ library(agricolae)
 
 
 # Users will need to adjust for their own file directory.
-source("functions/functions.R")
+source("~/RTQ_analysis/functions/functions.R")
 
 
 
