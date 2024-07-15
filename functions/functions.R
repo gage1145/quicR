@@ -84,16 +84,18 @@ organize_tables <- function(file, plate=96) {
   # Block allows input of an excel file string or a dataframe.
   if (is.character(file)) {
     # Read the Excel file into R.
-    data <- read_excel(file,
-                       sheet = 1,
-                       if (plate == 96) {range = cell_cols(1:13)}
-                       else if (plate == 384) {range = cell_cols(1:25)}
-                       else {return (print("Please enter either 96 or 384 for the 'plate' argument. "))},
-                       col_name = FALSE)
-
-
+    data <- read_excel(
+      file, sheet=1, col_name=FALSE,
+      if (plate == 96) {
+        range = cell_cols(1:13)
+      } else if (plate == 384) {
+        range = cell_cols(1:25)
+      } else {
+        return(print("Please enter either 96 or 384 for the plate argument. "))
+      }
+    )
   } else if (is.data.frame(file)) {
-    if (plate == 96) {data <- file[,1:13]}
+    if (plate == 96) {data <- file[,1:13]} 
     else {data <- file[,1:25]}
   } else {
     return ("Please enter either an excel file string or a dataframe. ")
@@ -576,13 +578,3 @@ BMG_format <- function(file) {
   
   return (formatted)
 }
-
-
-
-
-
-
-
-
-
-
