@@ -77,10 +77,10 @@ df_analyzed <- data.frame(`Sample_ID` = df_norm$`Sample ID`) %>%
     # Max Slope
     MS  = calculate_MS(df_norm, start_col=3),
     # Time to Threshold
-    TtT = calculate_TtT(df_norm, threshold=2, start_col=3)
+    TtT = calculate_TtT(df_norm, threshold=2, start_col=3, run_time=run_time)
   ) %>%
   # Rate of Amyloid Formation
-  mutate(RAF = ifelse(is.na(TtT), 0, 1 / (3600 * df_analyzed$TtT)))
+  mutate(RAF = ifelse(TtT == run_time, 0, 1 / (3600 * TtT)))
 
 ################################################################################
 
