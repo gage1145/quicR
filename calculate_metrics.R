@@ -4,7 +4,11 @@ library(agricolae)
 
 
 # Users will need to adjust for their own file directory.
+<<<<<<< HEAD
 source("~/RTQ_analysis/functions/functions.R")
+=======
+source("C:/Users/gage1/Box/Scripts/R scripts/functions/functions.R")
+>>>>>>> 734e0eaf0e6934af5f33c5f06fa06467cb6f8f07
 
 
 
@@ -80,7 +84,11 @@ df_analyzed <- data.frame(`Sample_ID` = df_norm$`Sample ID`) %>%
     TtT = calculate_TtT(df_norm, threshold=2, start_col=3, run_time=run_time)
   ) %>%
   # Rate of Amyloid Formation
+<<<<<<< HEAD
   mutate(RAF = ifelse(TtT == run_time, 0, 1 / (3600 * TtT)))
+=======
+  mutate(RAF = ifelse(is.na(TtT), 0, 1 / (3600 * TtT)))
+>>>>>>> 734e0eaf0e6934af5f33c5f06fa06467cb6f8f07
 
 ################################################################################
 
@@ -104,6 +112,35 @@ summary <- df_analyzed %>%
 
 ################################################################################
 
+<<<<<<< HEAD
+metrics <- c("MPR", "MS")
+for (metric in metrics) {
+  
+  # Create a dataframe of the individual comparisons.
+  comps <- LSD.test( # Perform the post-hoc multiple comparisons test.
+    # Create the statistical model using ANOVA.
+    aov(as.formula(paste0(metric, " ~ ", "`", "Sample_ID", "`")), 
+        data = df_analyzed),
+    "Sample_ID",  p.adj = "none", group = F)[["comparison"]]
+  
+  # Initialize columns which will hold unique IDs for each sample compared.
+  comps <- cbind(comps, rownames(comps) %>%
+                   strsplit(" - ") %>%
+                   as.data.frame() %>%
+                   t() %>%
+                   as.data.frame()) %>%
+    
+    # Remove all comparisons that are not against "N_1".
+    subset(V1 == "N" | V2 == "N") %>%
+    rename("{metric}_pvalue" := pvalue,
+           "{metric}_significance" := signif.)
+  
+  assign(names(comps[2]), comps[2])
+  assign(names(comps[3]), comps[3])
+}
+
+
+=======
 # Calculate the statistical comparisons for MPR.
 # ANOVA
 model <- aov(MPR ~ Sample_ID, data=df_analyzed)
@@ -127,6 +164,7 @@ stats <- stats$groups[order(row.names(stats$groups)),]
 neg_group <- stats["N", "groups"]
 
 summary$MS_Result <- c(ifelse(stats$groups == neg_group, "ns", "*"))
+>>>>>>> e35b6d582f0b715e928cee84dac15246e4f97dab
 
 ################################################################################
 

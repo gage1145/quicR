@@ -500,7 +500,7 @@ calculate_MS <- function (data, start_col=3) {
   # Make sure there are no "-" in the sample IDs. This affects the formula below.
   for (i in colnames(df_norm_t)[-1]) {
     slope_column <- slide(df_norm_t,
-                          ~ lm(as.formula(paste(i, "~ Time")),
+                          ~ lm(as.formula(paste0("`", i, "`", " ~ Time")),
                                data = .x)[[1]][[2]] / 3600,
                           .before = 3,
                           .complete = TRUE)
