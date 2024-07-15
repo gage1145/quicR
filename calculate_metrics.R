@@ -80,24 +80,17 @@ df_analyzed <- data.frame(`Sample_ID` = df_norm$`Sample ID`) %>%
     # Time to Threshold
     TtT = calculate_TtT(df_norm, threshold=2, start_col=3, run_time=run_time)
   ) %>%
-  # Rate of Amyloid Formation
-  mutate(RAF = ifelse(TtT == run_time, 0, 1 / (3600 * TtT)),
-         crossed = TtT != run_time) %>%
+  mutate(
+    # Rate of Amyloid Formation
+    RAF = ifelse(TtT == run_time, 0, 1 / (3600 * TtT)),
+    # Crossed threshold?
+    crossed = TtT != run_time
+  ) %>%
   # Order the data frame based on Sample_ID.
   arrange(Sample_ID)
 
 ################################################################################
 
-# Reorganize the columns of df_analyzed.
-df_analyzed <- data.frame(
-  Sample_ID = df_analyzed$Sample_ID,
-  MPR       = df_analyzed$MPR,
-  RAF       = df_analyzed$RAF,
-  MS        = df_analyzed$MS,
-  TtT       = df_analyzed$TtT,
-  crossed   = df_analyzed$crossed
-)
-  
 # Create a summary data frame.
 summary <- df_analyzed %>%
   group_by(Sample_ID) %>%
