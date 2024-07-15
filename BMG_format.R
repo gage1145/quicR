@@ -12,7 +12,6 @@ source("~/RTQ_analysis/functions/functions.R")
 
 # Use plate_layout.csv in the Desktop.
 setwd("C:/Users/Priogen/Desktop")
-
 file <- "plate_layout.csv"
 
-df_ <- BMG_format(file)
+writeLines(BMG_format(file), "formatted.txt")
