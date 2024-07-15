@@ -73,8 +73,8 @@ plate_view <- function(df, meta, well_names, plate=96, color="black") {
           axis.text.x      = element_blank(),
           axis.text.y      = element_blank()) +
     facet_wrap(vars(variable),
-               if (plate == 96) {nrow = 8} else {nrow = 16},
-               if (plate == 96) {ncol = 12} else {ncol = 24})
+               nrow=ifelse(plate == 96, 8, 16),
+               ncol=ifelse(plate == 96, 12, 24))
   return (p)
 }
 
@@ -94,8 +94,7 @@ organize_tables <- function(file, plate=96) {
       }
     )
   } else if (is.data.frame(file)) {
-    if (plate == 96) {data <- file[,1:13]} 
-    else {data <- file[,1:25]}
+    data <- ifelse(plate == 96, file[,1:13], file[,1:25])
   } else {
     return ("Please enter either an excel file string or a dataframe. ")
   }
