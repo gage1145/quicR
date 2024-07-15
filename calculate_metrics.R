@@ -147,29 +147,28 @@ saveWorkbook(wb, "output.xlsx", overwrite = TRUE)
 ################################################################################
 
 # Plot the summary metrics
-df_analyzed_melted <- reshape2::melt(df_analyzed, id.vars = "Sample_ID")
-p <- ggplot(df_analyzed_melted, aes(Sample_ID, value, fill=Sample_ID)) +
-  scale_fill_discrete() +
-  geom_boxplot() +
-  # stat_compare_means() +
-  facet_wrap(vars(variable),
-             scales = "free",
-             labeller = as_labeller(c(MPR = "MPR (Max RFU / Initial RFU)",
-                                      RAF = "RAF (1/s)",
-                                      MS = "Max Slope (RFU/s)",
-                                      TtT = "Time to Threshold (h)")),
-             strip.position = "left") +
-  ylim(0, NA) +
-  xlab(NULL) +
-  ylab(NULL) +
-  theme(axis.line = element_line(colour = "black"),
-        axis.text.x = element_text(angle = 45, hjust = 1),
-        panel.background = element_blank(),
-        panel.grid = element_line(colour = "lightgrey"),
-        panel.border = element_rect(colour = "black", fill=NA, size=1),
-        legend.position = "none",
-        strip.background = element_blank(),
-        strip.placement = "outside")
-p
+df_analyzed %>%
+  reshape2::melt(id.vars = "Sample_ID") %>%
+  ggplot(aes(Sample_ID, value, fill=Sample_ID)) +
+    scale_fill_discrete() +
+    geom_boxplot() +
+    facet_wrap(vars(variable),
+               scales = "free",
+               labeller = as_labeller(c(MPR = "MPR (Max RFU / Initial RFU)",
+                                        RAF = "RAF (1/s)",
+                                        MS = "Max Slope (RFU/s)",
+                                        TtT = "Time to Threshold (h)")),
+               strip.position = "left") +
+    ylim(0, NA) +
+    xlab(NULL) +
+    ylab(NULL) +
+    theme(axis.line = element_line(colour = "black"),
+          axis.text.x = element_text(angle = 45, hjust = 1),
+          panel.background = element_blank(),
+          panel.grid = element_line(colour = "lightgrey"),
+          panel.border = element_rect(colour = "black", fill=NA, size=1),
+          legend.position = "none",
+          strip.background = element_blank(),
+          strip.placement = "outside")
 
-ggsave("Summary.png", p, width = 3600, height = 2400, units = "px")
+ggsave("Summary.png", width = 3600, height = 2400, units = "px")
