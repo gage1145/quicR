@@ -146,7 +146,7 @@ writeData(wb, "Total", df_analyzed)
 writeData(wb, "Summary", summary)
 
 # Save the Excel file.
-saveWorkbook(wb, "output.xlsx", overwrite = TRUE)
+saveWorkbook(wb, "summary.xlsx", overwrite = TRUE)
 
 ################################################################################
 
@@ -175,4 +175,4 @@ df_analyzed %>%
           strip.background = element_blank(),
           strip.placement = "outside")
 
-ggsave("Summary.png", width = 3600, height = 2400, units = "px")
+ggsave("summary.png", width = 3600, height = 2400, units = "px")
