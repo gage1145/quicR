@@ -94,7 +94,8 @@ df_analyzed <- data.frame(Sample_ID = df_analyzed$Sample_ID,
                           MPR = df_analyzed$MPR,
                           RAF = df_analyzed$RAF,
                           MS  = df_analyzed$MS,
-                          TtT = df_analyzed$TtT)
+                          TtT = df_analyzed$TtT,
+                          crossed = df_analyzed$crossed)
 
 # Create a summary data frame.
 summary <- df_analyzed %>%
@@ -102,7 +103,8 @@ summary <- df_analyzed %>%
   summarise(mean_TtT   = mean(TtT), 
             mean_RAF   = mean(RAF),
             mean_MPR   = mean(MPR),
-            mean_MS    = mean(MS))
+            mean_MS    = mean(MS),
+            thres_pos  = sum(crossed) / n() > 0.5)
 
 ################################################################################
 
