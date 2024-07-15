@@ -506,12 +506,17 @@ calculate_MS <- function (data, start_col=3) {
   df_deriv <- df_deriv %>%
     as.data.frame() %>%
     t() %>%
-    as.data.frame()
-  df_deriv <- df_deriv[-1,]
+    as.data.frame() %>%
+    slice(-c(1))
+  
   df_deriv <- cbind(data$`Sample ID`, df_deriv)
   colnames(df_deriv) <- colnames(data)
-  df_deriv[,-1] <- mutate_all(df_deriv[,-1], 
-                              function(x) as.numeric(as.character(x)))
+
+  # Convert df_deriv to numeric values.
+  df_deriv[,-1] <- mutate_all(
+    df_deriv[,-1], 
+    function(x) as.numeric(as.character(x))
+  )
   
   # Initialize the list containing the max slope.
   MS_list <- c(rep(NA, nrow(data)))
@@ -533,12 +538,15 @@ BMG_format <- function(file) {
     }
   }
   
-  locations <- cbind(locations, samples) %>%
+  locations <- locations %>%
+    cbind(samples) %>%
     as.data.frame()
   
   colnames(locations) <- c("Wells", "Samples")
 
-  dic <- unique(melt(df_, id.vars=1)[3]) %>%
+  dic <- df_ %>%
+    melt(id.vars=1)[3] %>%
+    unique() %>%
     mutate(Plate_ID = "X") %>%
     na.omit()
   
@@ -570,9 +578,9 @@ BMG_format <- function(file) {
   }
   
   # Apply the function to each row of the data frame
-  formatted <- apply(locations, 1, format_row) %>%
+  formatted <- locations %>%
+    apply(1, format_row) %>%
     na.omit()
-  
   
   return (formatted)
 }
