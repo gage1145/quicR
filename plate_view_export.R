@@ -23,7 +23,7 @@ while (file == "") {
 plate <- ""
 while (plate == "") {
   plate <-  as.integer(readline("Please enter 96 or 384 for plate type: "))
-  if (!(plate == 96) & !(plate == 384)) {
+  if (plate != 96 & plate != 384) {
     plate <- ""
   }
 }
