@@ -419,7 +419,7 @@ normalize_RFU <- function (df, bg_cycle=4) {
   return (df_norm)
 }
 
-calculate_TtT <- function (data, threshold, start_col=3) {
+calculate_TtT <- function (data, threshold, start_col=3, run_time=48) {
   # Initialize the list containing the times-to-threshold.
   TtT_list <- c(rep(NA, nrow(data)))
   
@@ -430,7 +430,7 @@ calculate_TtT <- function (data, threshold, start_col=3) {
   for (i in 1: nrow(data))  {
     for (j in start_col: (ncol(data))) {
       
-      # Use the sample-unique threshold calculated in "summary".
+      # Use the threshold argument.
       current_read <- data[i, j]
       
       if (is.na(TtT_list[i]) & current_read >= threshold) {
@@ -445,7 +445,14 @@ calculate_TtT <- function (data, threshold, start_col=3) {
         
         previous_cycle <- as.numeric(colnames(data[j-1]))
         TtT_list[i] <- previous_cycle + delta_t
+        
+        break
+        
       }
+      
+    }
+    if (is.na(TtT_list[i])) {
+      TtT_list[i] <- run_time
     }
   }
   return (TtT_list)
