@@ -81,7 +81,8 @@ df_analyzed <- data.frame(`Sample_ID` = df_norm$`Sample ID`) %>%
     TtT = calculate_TtT(df_norm, threshold=2, start_col=3, run_time=run_time)
   ) %>%
   # Rate of Amyloid Formation
-  mutate(RAF = ifelse(TtT == run_time, 0, 1 / (3600 * TtT)))
+  mutate(RAF = ifelse(TtT == run_time, 0, 1 / (3600 * TtT)),
+         crossed = TtT != run_time)
 
 ################################################################################
 
