@@ -121,14 +121,18 @@ for (metric in metrics) {
             as.data.frame() %>%
             t() %>%
             as.data.frame()) %>%
-    
-    # Remove all comparisons that are not against "N_1".
+    select(-difference) %>%
+    # Remove all comparisons that are not against "N".
     subset(V1 == "N" | V2 == "N") %>%
     rename("{metric}_pvalue" := pvalue,
-           "{metric}_significance" := signif.)
+           "{metric}_significance" := signif.) %>%
+    mutate(V1 = replace(V1, V1=="N", NA),
+           V2 = replace(V2, V2=="N", NA)) %>%
+    unite(Sample_ID, c("V1", "V2"), sep="", na.rm=T) %>%
+    rbind(c(NA, NA, "N"))
   
   summary <- summary %>%
-    bind_cols(rbind(NA, comps[2]), rbind(NA, comps[3]))
+    left_join(comps)
 }
 
 summary <- summary %>%
@@ -154,6 +158,7 @@ saveWorkbook(wb, "summary.xlsx", overwrite = TRUE)
 
 # Plot the summary metrics
 df_analyzed %>%
+  select(-crossed) %>%
   reshape2::melt(id.vars = "Sample_ID") %>%
   ggplot(aes(Sample_ID, value, fill=Sample_ID)) +
     scale_fill_discrete() +
