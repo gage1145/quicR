@@ -131,8 +131,7 @@ for (metric in metrics) {
     unite(Sample_ID, c("V1", "V2"), sep="", na.rm=T) %>%
     rbind(c(NA, NA, "N"))
   
-  summary <- summary %>%
-    left_join(comps)
+  summary <- left_join(summary, comps)
 }
 
 summary <- summary %>%
