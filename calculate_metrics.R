@@ -159,9 +159,9 @@ saveWorkbook(wb, "summary.xlsx", overwrite = TRUE)
 df_analyzed %>%
   select(-crossed) %>%
   reshape2::melt(id.vars = "Sample_ID") %>%
-  ggplot(aes(Sample_ID, value, fill=Sample_ID)) +
-    scale_fill_discrete() +
-    geom_boxplot() +
+  ggplot(aes(Sample_ID, value)) +
+    geom_boxplot(fill="lightgrey") +
+    geom_dotplot(binaxis="y", stackdir="center", position="dodge") +
     facet_wrap(
       vars(variable),
       scales = "free",
