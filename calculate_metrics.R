@@ -46,6 +46,13 @@ run_time <- as.integer(
   )
 )
 
+# Ask the user for the run-time in hours.
+threshold <- as.integer(
+  readline(
+    "Please enter the desired threshold for RAF calculation: "
+  )
+)
+
 # Select the real-time data set that the user signified.
 df <- df[[df_id]]
 
@@ -78,7 +85,7 @@ df_analyzed <- data.frame(`Sample_ID` = df_norm$`Sample ID`) %>%
     # Max Slope
     MS  = calculate_MS(df_norm, start_col=3),
     # Time to Threshold
-    TtT = calculate_TtT(df_norm, threshold=2, start_col=3, run_time=run_time)
+    TtT = calculate_TtT(df_norm, threshold=threshold, start_col=3, run_time=run_time)
   ) %>%
   mutate(
     # Rate of Amyloid Formation
