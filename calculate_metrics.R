@@ -167,8 +167,9 @@ df_analyzed %>%
   select(-crossed) %>%
   reshape2::melt(id.vars = "Sample_ID") %>%
   ggplot(aes(Sample_ID, value)) +
-    geom_boxplot(fill="lightgrey") +
-    geom_dotplot(binaxis="y", stackdir="center", position="dodge") +
+    geom_boxplot(fill="lightgrey", outlier.shape = NA) +
+    geom_dotplot(binaxis="y", stackdir="center", dotsize=0.5, position="dodge",
+                 stackratio=0.5) +
     facet_wrap(
       vars(variable),
       scales = "free",
@@ -196,4 +197,4 @@ df_analyzed %>%
       strip.placement = "outside"
     )
 
-ggsave("summary.png", width = 3600, height = 2400, units = "px")
+ggsave("summary.png", width = 2800, height = 2400, units = "px")
