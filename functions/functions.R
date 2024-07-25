@@ -27,12 +27,10 @@ plate_view <- function(df, meta, well_names, plate=96, color="black") {
     else {Var2 = sprintf("%02d", 1:24)}
   )
   template_columns <- sort(paste0(template_columns$Var1, template_columns$Var2))
-  # colnames(template_columns) <- c("B")
   rm(Var1, Var2)
 
-  # Iterate over all columns.
+  # Add columns with NAs if they do not exist.
   for (col in template_columns) {
-    # If the column is in df, add it to result_df.
     if (!(col %in% meta$A)) {
       df[[col]] <- NA
     }
@@ -45,12 +43,18 @@ plate_view <- function(df, meta, well_names, plate=96, color="black") {
   template_columns <- as.data.frame(template_columns)
   colnames(template_columns) <- "A"
   
-  
+  # Create a data.frame with all the wells and IDs, even if some are missing.
   full <- sample_locations %>%
     full_join(as.data.frame(template_columns)) %>%
     arrange(A)
   
-  df <- df %>%
+  # Create the labeller function for the facet plot.
+  ID_labeller <- function(variable, value) {
+    i <- full$B[full$A == value]
+    ifelse(is.na(i), " ", i)
+  }
+  
+  df %>%
     # Melt the data to help with the faceting.
     reshape2::melt(id.vars = "Time") %>%
     # Separate the wells from the IDs.
@@ -60,16 +64,8 @@ plate_view <- function(df, meta, well_names, plate=96, color="black") {
            value = as.numeric(value),
            ID = as.character(ID),
            Well = as.factor(Well)) %>%
-    mutate(ID = replace_na(ID, "none"))
-
-  
-  ID_labeller <- function(variable, value) {
-    i <- full$B[full$A == value]
-    ifelse(is.na(i), " ", i)
-  }
-
-  # Create a facet plot.
-  df %>%
+    mutate(ID = replace_na(ID, "none")) %>%
+  # Create the facet plot.
     ggplot(aes(x = Time, y = value)) +
       geom_line() +
       labs(y = "RFU",
