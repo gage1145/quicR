@@ -80,15 +80,11 @@ wells <- get_wells(file)
 # Take the metadata and apply it into a dataframe for the plate_view function.
 sample_locations <- na.omit(do.call(rbind, Map(data.frame, A=wells, B=ID_list)))
 
-# Add replicate number to Sample IDs column.
-# Uses add_reps function from functions.R
-sample_locations <- add_reps(sample_locations)
-
 # Run plate_view function which produces a plate view figure.
 # This function is from plate_view_function.R.
-p <- plate_view(df, sample_locations, wells, plate, color = "black")
+plate_view(df, sample_locations, wells, plate, color = "black")
 
-ggsave("plate_view.png", p, width = 3600, height = 2400, units = "px")
+ggsave("plate_view.png", width = 3600, height = 2400, units = "px")
 
 rm(df, df_dic, df_list, df_meta, ID_list, IDs, sample_locations, wells,
    df_id, file, i, j, plate, time_col)
