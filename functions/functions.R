@@ -17,7 +17,7 @@ plate_view <- function(df, meta, well_names, plate=96, color="black") {
   # Ensures that the input is a dataframe.
   df <- data.frame(df)
 
-  colnames(df) <- paste(meta$B, meta$A, sep="-")
+  colnames(df) <- paste(meta$B, meta$A, sep=".")
 
   # Create a template of all possible columns
   template_columns <- expand.grid(
@@ -54,13 +54,13 @@ plate_view <- function(df, meta, well_names, plate=96, color="black") {
     # Melt the data to help with the faceting.
     reshape2::melt(id.vars = "Time") %>%
     # Separate the wells from the IDs.
-    separate(variable, c("ID", "Well"), "-", fill="left") %>%
+    separate(variable, c("ID", "Well"), "\\.", fill="left") %>%
     # Ensures that Time and observations are numeric.
     mutate(Time = as.numeric(Time),
            value = as.numeric(value),
            ID = as.character(ID),
            Well = as.factor(Well)) %>%
-    mutate(ID = replace_na(ID, "empty"))
+    mutate(ID = replace_na(ID, "none"))
 
   
   ID_labeller <- function(variable, value) {
