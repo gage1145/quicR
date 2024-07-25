@@ -38,22 +38,6 @@ plate_view <- function(df, meta, well_names, plate=96, color="black") {
     }
   }
 
-  # Ensure columns are sorted alphabetically.
-  # df <- df[, order(names(df))]
-
-  # Rename columns as the content again now that empty columns have been added.
-  # i <- 1
-  # for (col in template_columns) {
-  #   if (!(col %in% meta$A)) {
-  #     colnames(df)[i] <-  paste(replicate(i, " "), collapes="")
-    # }
-      # ifelse(col %in% meta$A,
-      #                         meta$B[meta$A == col],
-      #                         # Adds whitespace * i
-      #                         paste(replicate(i, " "), collapse = ""))
-    # i <- i + 1
-  # }
-
   # Add a "Time" column. This is important for the melt function.
   df <- cbind(Time = rownames(df), df)
   
