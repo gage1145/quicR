@@ -10,6 +10,7 @@ source("~/RTQ_analysis/functions/functions.R")
 
 
 # Initialize parameters for downstream functions.###############################
+
 file <- ""
 while (file == "") {
   file <- paste0(readline("Please input .xlsx file name WITHOUT extension: "),
@@ -28,10 +29,7 @@ while (plate == "") {
   }
 }
 
-
 # Following block exports the plate view figure.################################
-
-
 
 # Define the layout using the first sheet in the excel file.
 # The sheet should be formatted so that each ID in the "layout" table is unique.
