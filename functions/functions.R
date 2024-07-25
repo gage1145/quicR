@@ -17,8 +17,7 @@ plate_view <- function(df, meta, well_names, plate=96, color="black") {
   # Ensures that the input is a dataframe.
   df <- data.frame(df)
 
-  well_names <- meta$A
-  colnames(df) <- well_names
+  colnames(df) <- paste(meta$B, meta$A, sep="-")
 
   # Create a template of all possible columns
   template_columns <- expand.grid(
@@ -28,55 +27,81 @@ plate_view <- function(df, meta, well_names, plate=96, color="black") {
     else {Var2 = sprintf("%02d", 1:24)}
   )
   template_columns <- sort(paste0(template_columns$Var1, template_columns$Var2))
+  # colnames(template_columns) <- c("B")
   rm(Var1, Var2)
 
   # Iterate over all columns.
   for (col in template_columns) {
     # If the column is in df, add it to result_df.
-    if (!(col %in% colnames(df))) {
+    if (!(col %in% meta$A)) {
       df[[col]] <- NA
     }
   }
 
   # Ensure columns are sorted alphabetically.
-  df <- df[, order(names(df))]
+  # df <- df[, order(names(df))]
 
   # Rename columns as the content again now that empty columns have been added.
-  i <- 1
-  for (col in template_columns) {
-    colnames(df)[i] <- ifelse(col %in% well_names, 
-                              meta$B[meta$A == col],
-                              # Adds whitespace * i
-                              paste(replicate(i, " "), collapse = ""))
-    i <- i + 1
-  }
+  # i <- 1
+  # for (col in template_columns) {
+  #   if (!(col %in% meta$A)) {
+  #     colnames(df)[i] <-  paste(replicate(i, " "), collapes="")
+    # }
+      # ifelse(col %in% meta$A,
+      #                         meta$B[meta$A == col],
+      #                         # Adds whitespace * i
+      #                         paste(replicate(i, " "), collapse = ""))
+    # i <- i + 1
+  # }
 
   # Add a "Time" column. This is important for the melt function.
   df <- cbind(Time = rownames(df), df)
+  
+  # Combine the template_columns and sample_locations.
+  template_columns <- as.data.frame(template_columns)
+  colnames(template_columns) <- "A"
+  
+  
+  full <- sample_locations %>%
+    full_join(as.data.frame(template_columns)) %>%
+    arrange(A)
+  
+  df <- df %>%
+    # Melt the data to help with the faceting.
+    reshape2::melt(id.vars = "Time") %>%
+    # Separate the wells from the IDs.
+    separate(variable, c("ID", "Well"), "-", fill="left") %>%
+    # Ensures that Time and observations are numeric.
+    mutate(Time = as.numeric(Time),
+           value = as.numeric(value),
+           ID = as.character(ID),
+           Well = as.factor(Well)) %>%
+    mutate(ID = replace_na(ID, "empty"))
 
-  # Melt the data to help with the faceting.
-  df <- reshape2::melt(df, id.vars = "Time")
-
-  # Ensures that Time and observations are numeric.
-  df$Time <- as.numeric(df$Time)
-  df$value <- as.numeric(df$value)
+  
+  ID_labeller <- function(variable, value) {
+    i <- full$B[full$A == value]
+    ifelse(is.na(i), " ", i)
+  }
 
   # Create a facet plot.
-  p <- ggplot(df, aes(x = Time, y = value)) +
-    geom_line(colour = color) +
-    labs(y = "RFU",
-         x = "Time (h)") +
-    theme_classic2() +
-    theme(panel.border     = element_rect(colour = "black",
-                                          fill = NA,
-                                          size = 0.5),
-          strip.background = element_blank(),
-          axis.text.x      = element_blank(),
-          axis.text.y      = element_blank()) +
-    facet_wrap(vars(variable),
-               nrow=ifelse(plate == 96, 8, 16),
-               ncol=ifelse(plate == 96, 12, 24))
-  return (p)
+  df %>%
+    ggplot(aes(x = Time, y = value)) +
+      geom_line() +
+      labs(y = "RFU",
+           x = "Time (h)") +
+      theme_classic2() +
+      theme(panel.border     = element_rect(colour = "black",
+                                            fill = NA,
+                                            size = 0.5),
+            strip.background = element_blank(),
+            axis.text.x      = element_blank(),
+            axis.text.y      = element_blank()) +
+      facet_wrap(vars(Well),
+                 nrow=ifelse(plate == 96, 8, 16),
+                 ncol=ifelse(plate == 96, 12, 24),
+                 labeller=ID_labeller)
+
 }
 
 organize_tables <- function(file, plate=96) {
