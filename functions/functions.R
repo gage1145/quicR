@@ -84,7 +84,8 @@ plate_view <- function(df, meta, well_names, plate=96, color="black") {
       facet_wrap(vars(Well),
                  nrow=ifelse(plate == 96, 8, 16),
                  ncol=ifelse(plate == 96, 12, 24),
-                 labeller=ID_labeller)
+                 labeller=ID_labeller) %>%
+    suppressWarnings()
 
 }
 
