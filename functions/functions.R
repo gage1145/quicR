@@ -75,12 +75,12 @@ plate_view <- function(df, meta, well_names, plate=96, color="black") {
       labs(y = "RFU",
            x = "Time (h)") +
       theme_classic2() +
-      theme(panel.border     = element_rect(colour = "black",
-                                            fill = NA,
-                                            size = 0.5),
-            strip.background = element_blank(),
-            axis.text.x      = element_blank(),
-            axis.text.y      = element_blank()) +
+      theme(
+        panel.border = element_rect(colour = "black", fill = NA, size = 0.5),
+        strip.background = element_blank(),
+        axis.text.x = element_blank(),
+        axis.text.y = element_blank()
+      ) +
       facet_wrap(vars(Well),
                  nrow=ifelse(plate == 96, 8, 16),
                  ncol=ifelse(plate == 96, 12, 24),
