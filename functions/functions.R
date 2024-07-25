@@ -431,7 +431,7 @@ calculate_TtT <- function (data, threshold, start_col=3, run_time=48) {
   TtT_list <- c(rep(run_time, nrow(data)))
   
   # Set the cycle interval.
-  cycle_interval <- diff(as.numeric(colnames(data[,2:3])))
+  cycle_interval <- diff(as.numeric(colnames(data[,start_col:(start_col + 1)])))
   
   # Calculate the Time to Threshold
   for (i in 1: nrow(data))  {
