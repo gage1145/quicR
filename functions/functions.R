@@ -66,13 +66,13 @@ plate_view <- function(df, meta, well_names, plate=96, color="black") {
            Well = as.factor(Well)) %>%
     mutate(ID = replace_na(ID, "none")) %>%
   # Create the facet plot.
-    ggplot(aes(x = Time, y = value)) +
+    ggplot(aes(x=Time, y=value)) +
       geom_line() +
       labs(y = "RFU",
            x = "Time (h)") +
       theme_classic2() +
       theme(
-        panel.border = element_rect(colour = "black", fill = NA, size = 0.5),
+        panel.border = element_rect(colour="black", fill=NA, linewidth=0.5),
         strip.background = element_blank(),
         axis.text.x = element_blank(),
         axis.text.y = element_blank()
