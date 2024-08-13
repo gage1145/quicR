@@ -45,6 +45,21 @@ for (i in IDs) {
   }
 }
 
+# Determine if there is a dilutions table.
+dilution_bool <- "Dilutions" %in% names(df_dic)
+
+# Add dilution factors if applicable.
+if (dilution_bool) {
+  dilutions <- c()
+  for (i in t(df_dic[["Dilutions"]])) {
+    for (j in i) {
+      if (!is.na(j)) {
+        dilutions <- rbind(dilutions, j)
+      }
+    }
+  }
+}
+
 # Read in the real-time data.
 # "get_real" will return a list of dataframes depending on how many real-time
 # measurements the user exported from MARS.
@@ -78,11 +93,15 @@ wells <- get_wells(file)
 # Take the metadata and apply it into a dataframe for the plate_view function.
 sample_locations <- na.omit(do.call(rbind, Map(data.frame, A=wells, B=ID_list)))
 
+# Add the dilutions if applicable.
+if (dilution_bool) {
+  sample_locations <- sample_locations %>%
+    mutate(Dilutions = -log10(as.numeric(dilutions))) %>%
+    unite(B, B:Dilutions, sep="\n")
+}
+
 # Run plate_view function which produces a plate view figure.
 # This function is from plate_view_function.R.
 plate_view(df, sample_locations, wells, plate)
 
 ggsave("plate_view.png", width = 3600, height = 2400, units = "px")
-
-# rm(df, df_dic, df_list, df_meta, ID_list, IDs, sample_locations, wells,
-#    df_id, file, i, j, plate, time_col)
