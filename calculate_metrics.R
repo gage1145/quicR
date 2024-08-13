@@ -69,10 +69,25 @@ for (i in t(dic[["Sample IDs"]])) {
 # Apply the column names.
 colnames(df) <- column_names
 
+# Determine if there is a dilutions table.
+dilution_bool <- "Dilutions" %in% names(dic)
+
 ################################################################################
 
 # Calculate the normalized real-time data.
 df_norm <- normalize_RFU(df)
+
+# Add dilution factors if applicable.
+if (dilution_bool) {
+  dilutions <- c()
+  for (i in t(dic[["Dilutions"]])) {
+    for (j in i) {
+      if (!is.na(j)) {
+        dilutions <- rbind(dilutions, j)
+      }
+    }
+  }
+}
 
 # Define the number of hours that the rxn ran for.
 hours <- as.numeric(colnames(df_norm)[ncol(df_norm)])
@@ -80,6 +95,8 @@ hours <- as.numeric(colnames(df_norm)[ncol(df_norm)])
 # Initialized the dataframe with the calculated metrics.
 df_analyzed <- data.frame(`Sample_ID` = df_norm$`Sample ID`) %>%
   mutate(
+    # Add dilutions if applicable.
+    Dilutions = if (dilution_bool) -log10(as.numeric(dilutions)),
     # Maxpoint Ratio
     MPR = calculate_MPR(df_norm, start_col=3, data_is_norm=TRUE),
     # Max Slope
@@ -99,8 +116,13 @@ df_analyzed <- data.frame(`Sample_ID` = df_norm$`Sample ID`) %>%
 ################################################################################
 
 # Create a summary data frame.
-summary <- df_analyzed %>%
-  group_by(Sample_ID) %>%
+summary <- (if (dilution_bool) {
+  summary <- df_analyzed %>%
+    group_by(Sample_ID, Dilutions)
+} else {
+  summary <- df_analyzed %>%
+    group_by(Sample_ID)
+}) %>%
   summarise(
     mean_TtT  = mean(TtT), 
     mean_RAF  = mean(RAF),
@@ -117,9 +139,10 @@ for (metric in metrics) {
   # Create a dataframe of the individual comparisons.
   comps <- LSD.test( # Perform the post-hoc multiple comparisons test.
     # Create the statistical model using ANOVA.
-    aov(as.formula(paste0(metric, " ~ ", "`", "Sample_ID", "`")), 
+    aov(as.formula(paste0(metric, " ~ ", "Sample_ID")), 
         data = df_analyzed),
-    "Sample_ID",  p.adj = "holm", group = F)[["comparison"]]
+    "Sample_ID",  p.adj = "holm", group = F
+  )[["comparison"]]
   
   # Initialize columns which will hold unique IDs for each sample compared.
   comps <- comps %>%
@@ -163,38 +186,49 @@ saveWorkbook(wb, "summary.xlsx", overwrite = TRUE)
 ################################################################################
 
 # Plot the summary metrics
+
 df_analyzed %>%
   select(-crossed) %>%
-  reshape2::melt(id.vars = "Sample_ID") %>%
-  ggplot(aes(Sample_ID, value)) +
-    geom_boxplot(fill="lightgrey", outlier.shape = NA) +
-    geom_dotplot(binaxis="y", stackdir="center", dotsize=0.5, position="dodge",
-                 stackratio=0.5) +
-    facet_wrap(
-      vars(variable),
-      scales = "free",
-      labeller = as_labeller(
-        c(
-          MPR = "MPR (Max RFU / Initial RFU)",
-          RAF = "RAF (1/s)",
-          MS  = "Max Slope (RFU/s)",
-          TtT = "Time to Threshold (h)"
-        )
-      ),
-      strip.position = "left"
-    ) +
-    ylim(0, NA) +
-    xlab(NULL) +
-    ylab(NULL) +
-    theme(
-      axis.line = element_line(colour = "black"),
-      axis.text.x = element_text(angle = 45, hjust = 1),
-      panel.background = element_blank(),
-      panel.grid = element_line(colour = "lightgrey"),
-      panel.border = element_rect(colour = "black", fill=NA, size=1),
-      legend.position = "none",
-      strip.background = element_blank(),
-      strip.placement = "outside"
-    )
+  
+  {
+    if (dilution_bool) {
+      reshape2::melt(., id.vars = c("Sample_ID", "Dilutions")) %>%
+        mutate(Dilutions = as.factor(desc(Dilutions))) %>%
+        ggplot(aes(Sample_ID, value, fill = Dilutions))
+    } else {
+      reshape2::melt(., id.vars = "Sample_ID") %>%
+        ggplot(aes(Sample_ID, value))
+    }
+  } +
+  
+  geom_boxplot(aes(fill=Dilutions), outlier.shape = NA, position="dodge") +
+  geom_dotplot(binaxis="y", stackdir="center", dotsize=0.5, position="dodge",
+               stackratio=0.5) +
+  facet_wrap(
+    vars(variable),
+    scales = "free",
+    labeller = as_labeller(
+      c(
+        MPR = "MPR (Max RFU / Initial RFU)",
+        RAF = "RAF (1/s)",
+        MS  = "Max Slope (RFU/s)",
+        TtT = "Time to Threshold (h)"
+      )
+    ),
+    strip.position = "left"
+  ) +
+  ylim(0, NA) +
+  xlab(NULL) +
+  ylab(NULL) +
+  theme(
+    axis.line = element_line(colour = "black"),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    panel.background = element_blank(),
+    panel.grid = element_line(colour = "lightgrey"),
+    panel.border = element_rect(colour = "black", fill=NA, size=1),
+    # legend.position = "none",
+    strip.background = element_blank(),
+    strip.placement = "outside"
+  )
 
 ggsave("summary.png", width = 2800, height = 2400, units = "px")
