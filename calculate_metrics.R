@@ -50,13 +50,6 @@ df_id <- as.integer(
   )
 
 # Ask the user for the run-time in hours.
-run_time <- as.integer(
-  readline(
-    "Please enter the number of hours in the run: "
-  )
-)
-
-# Ask the user for the run-time in hours.
 threshold <- as.integer(
   readline(
     "Please enter the desired threshold for RAF calculation: "
@@ -65,6 +58,12 @@ threshold <- as.integer(
 
 # Select the real-time data set that the user signified.
 df <- df[[df_id]]
+
+
+
+# Get the metadata of each sample -----------------------------------------
+
+
 
 # Export the tables in the first sheet of the file.
 dic <- organize_tables(file)
@@ -122,7 +121,7 @@ df_analyzed <- data.frame(`Sample_ID` = df_norm$`Sample ID`) %>%
     # Max Slope
     MS  = calculate_MS(df_norm, start_col=3),
     # Time to Threshold
-    TtT = calculate_TtT(df_norm, threshold=threshold, start_col=3, run_time=run_time)
+    TtT = calculate_TtT(df_norm, threshold=threshold, start_col=3, run_time=hours)
   ) %>%
   mutate(
     # Rate of Amyloid Formation
@@ -133,7 +132,11 @@ df_analyzed <- data.frame(`Sample_ID` = df_norm$`Sample ID`) %>%
   # Order the data frame based on Sample_ID.
   arrange(Sample_ID)
 
-################################################################################
+
+
+# Summarize the data ------------------------------------------------------
+
+
 
 # Create a summary data frame.
 summary <- (if (dilution_bool) {
@@ -144,14 +147,23 @@ summary <- (if (dilution_bool) {
     group_by(Sample_ID)
 }) %>%
   summarise(
-    mean_TtT  = mean(TtT), 
+    reps      = n(),
+    mean_TtT  = mean(TtT),
+    sd_TtT    = sd(TtT),
     mean_RAF  = mean(RAF),
+    sd_RAF    = sd(RAF),
     mean_MPR  = mean(MPR),
+    sd_MPR    = sd(MPR),
     mean_MS   = mean(MS),
+    sd_MS     = sd(MS),
     thres_pos = sum(crossed) / n() > 0.5
   )
 
-################################################################################
+
+
+# Run the statistical analysis against the negative control ---------------
+
+
 
 metrics <- c("MPR", "MS")
 for (metric in metrics) {
