@@ -535,7 +535,11 @@ calculate_MS <- function (data, start_col=3) {
 }
 
 BMG_format <- function(file) {
-  df_ <- read.csv(file, header = TRUE)
+  
+  df_ <- read.csv(file, header = F)
+  colnames(df_) <- c("col", df_[1, -1])
+  df_ <- df_[-1,]
+  
   locations <- c()
   samples <- c()
   for (i in 1: (ncol(df_)-1)) {
@@ -552,10 +556,12 @@ BMG_format <- function(file) {
   colnames(locations) <- c("Wells", "Samples")
 
   dic <- df_ %>%
-    melt(id.vars=1)[3] %>%
+    melt(id.vars=1) %>%
     unique() %>%
     mutate(Plate_ID = "X") %>%
-    na.omit()
+    na.omit() %>%
+    unite(Wells, c("col", "variable"), sep="")
+  
   
   x <- 0
   previous <- dic$value[1]
@@ -576,8 +582,13 @@ BMG_format <- function(file) {
     }
     previous <- current
   }
-  colnames(dic) <- c("Samples", "Plate_ID")
+  
+  dic <- select(dic, -value)
+  
+  # colnames(dic) <- c("Samples", "Plate_ID")
   locations <- left_join(locations, dic)
+  
+  # locations <- locations[, c("Wells", "Plate_ID", "Samples")]
   
   # Function to format each row
   format_row <- function(row) {
