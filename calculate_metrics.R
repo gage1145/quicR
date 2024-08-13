@@ -9,6 +9,10 @@ source("~/RTQ_analysis/functions/functions.R")
 
 
 
+# Initialize the file and read in the data --------------------------------
+
+
+
 # For testing, use "test".
 # Request the user to input the file name for analysis.
 file <- ""
@@ -24,6 +28,12 @@ while (file == "") {
     file <- ""
   }
 }
+
+
+
+# Identify the raw real-time data -----------------------------------------
+
+
 
 # Get the real-time data from the BMG export file.
 df <- get_real(file, ordered=FALSE)
@@ -72,7 +82,11 @@ colnames(df) <- column_names
 # Determine if there is a dilutions table.
 dilution_bool <- "Dilutions" %in% names(dic)
 
-################################################################################
+
+
+# Calculate the normalized real-time data ---------------------------------
+
+
 
 # Calculate the normalized real-time data.
 df_norm <- normalize_RFU(df)
@@ -88,6 +102,12 @@ if (dilution_bool) {
     }
   }
 }
+
+
+
+# Calculate the relevant metrics ------------------------------------------
+
+
 
 # Define the number of hours that the rxn ran for.
 hours <- as.numeric(colnames(df_norm)[ncol(df_norm)])
@@ -167,7 +187,11 @@ for (metric in metrics) {
 summary <- summary %>%
   mutate(Positive = thres_pos & MPR_pvalue <= 0.05 & MS_pvalue <= 0.05)
 
-################################################################################
+
+
+# Save the data to an Excel workbook --------------------------------------
+
+
 
 # Initialize the workbook for Excel.
 wb <- createWorkbook()
@@ -183,9 +207,11 @@ writeData(wb, "Summary", summary)
 # Save the Excel file.
 saveWorkbook(wb, "summary.xlsx", overwrite = TRUE)
 
-################################################################################
 
-# Plot the summary metrics
+
+# Plot the metrics in a facet plot ----------------------------------------
+
+
 
 df_analyzed %>%
   select(-crossed) %>%
@@ -231,4 +257,4 @@ df_analyzed %>%
     strip.placement = "outside"
   )
 
-ggsave("summary.png", width = 2800, height = 2400, units = "px")
+ggsave("summary.png", width = 4000, height = 2500, units = "px")
