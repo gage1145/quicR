@@ -14,4 +14,4 @@ source("~/RTQ_analysis/functions/functions.R")
 setwd("C:/Users/Priogen/Desktop")
 file <- "plate_layout.csv"
 
-writeLines(BMG_format(file), "formatted.txt")
+BMG_format(file) |> writeLines("formatted.txt")
