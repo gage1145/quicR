@@ -16,7 +16,7 @@
 #' @importFrom ggpubr theme_classic2
 #'
 #' @export
-plate_view <- function(df, meta, well_names, plate=96) {
+plate_view <- function(df, meta, plate=96) {
 
   if (plate != 96 & plate != 384) {
     return ("Invalid plate layout. Format should be either 96 or 384. ")
