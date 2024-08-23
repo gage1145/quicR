@@ -3,10 +3,7 @@ library(tidyverse)
 library(ggpubr)
 library(ggplot2)
 library(gridExtra)
-
-
-
-source("~/RTQ_analysis/functions/functions.R")
+library(quicR)
 
 
 # Initialize parameters for downstream functions.###############################
@@ -76,7 +73,7 @@ df_id <- as.integer(
 )
 
 df <- data.frame(df_list[[df_id]])
-df_meta <- get_meta(file)
+# df_meta <- get_meta(file)
 
 # Specify the time column.
 time_col <- df[, 1]
@@ -101,7 +98,6 @@ if (dilution_bool) {
 }
 
 # Run plate_view function which produces a plate view figure.
-# This function is from plate_view_function.R.
-plate_view(df, sample_locations, wells, plate)
+quicR::plate_view(df, sample_locations, plate)
 
 ggsave("plate_view.png", width = 3600, height = 2400, units = "px")
