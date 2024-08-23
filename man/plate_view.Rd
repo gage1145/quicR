@@ -4,14 +4,12 @@
 \alias{plate_view}
 \title{Real-Time Plate View}
 \usage{
-plate_view(df, meta, well_names, plate = 96)
+plate_view(df, meta, plate = 96)
 }
 \arguments{
 \item{df}{Real-time dataframe}
 
-\item{meta}{Metadata to title each facet.}
-
-\item{well_names}{The well names (A1, B4, H11, etc.)}
+\item{meta}{Dataframe containing well IDs and Sample IDs to title each facet.}
 
 \item{plate}{Integer either 96 or 384 to denote microplate type.}
 }
