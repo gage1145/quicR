@@ -4,8 +4,7 @@
 #' or 16x24 for 96- and 384-well plates, respectively.
 #'
 #' @param df Real-time dataframe
-#' @param meta Metadata to title each facet.
-#' @param well_names The well names (A1, B4, H11, etc.)
+#' @param meta Dataframe containing well IDs and Sample IDs to title each facet.
 #' @param plate Integer either 96 or 384 to denote microplate type.
 #'
 #' @return A ggplot object
