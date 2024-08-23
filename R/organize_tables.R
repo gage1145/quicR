@@ -1,3 +1,16 @@
+#' Organize MARS Tables
+#'
+#' Extracts the tables from the microplate view sheet in the MARS Excel file
+#' and adds each table to a list.
+#'
+#' @param file An Excel file exported from MARS.
+#' @param plate Integer either 96 or 384 to denote microplate type.
+#'
+#' @return A list containing tibbles.
+#'
+#' @importFrom readxl cell_cols
+#'
+#' @export
 organize_tables <- function(file, plate=96) {
 
   # Block allows input of an excel file string or a dataframe.

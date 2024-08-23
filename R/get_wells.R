@@ -1,3 +1,12 @@
+#' Get the Wells Used in the RT-QuIC Run.
+#'
+#' Returns the well IDs used in the plate.
+#'
+#' @param file Excel file exported from MARS
+#'
+#' @return A vector containing well IDs.
+#'
+#' @export
 get_wells <- function (file) {
 
   if (is.character(file)) {
@@ -7,7 +16,7 @@ get_wells <- function (file) {
     df <- file
   }
   else {
-    return ("Please enter either .xlsx string or dataframe. ")
+    stop("Please enter either .xlsx string or dataframe. ")
   }
 
 

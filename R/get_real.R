@@ -1,3 +1,15 @@
+#' Get Real-Time RT-QuIC Fluorescence Data
+#'
+#' Accepts an Excel file or a dataframe of real-time RT-QuIC data.
+#'
+#' @param file Either an Excel file or a dataframe.
+#' @param ordered Boolean, if true (default), will organize the columns by sample ID.
+#'
+#' @return A list of dataframes containing the formatted real-time data.
+#'
+#' @importFrom dplyr rename
+#'
+#' @export
 get_real <- function(file, ordered=TRUE) {
 
   if (is.character(file)) { # Read the Excel file into R.

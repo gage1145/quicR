@@ -1,3 +1,16 @@
+#' Separate Real-Time Data into separate dataframes.
+#'
+#' If multiple real-time reads were exported from MARS, separate_raw will parse
+#' them out and separate them. It will also export to an Excel file with each
+#' real-time data having its own sheet.
+#'
+#' @param file An Excel file exported from MARS.
+#' @param num_rows Number of rows in the header to ignore.
+#' @param export_name The name of the original file or an orignal name.
+#'
+#' @return An Excel file with separated raw real-time data.
+#'
+#' @export
 # Separates the raw run files in the .xlsx file.
 separate_raw <- function(file, num_rows, export_name) {
 
@@ -6,7 +19,7 @@ separate_raw <- function(file, num_rows, export_name) {
   } else if (is.data.frame(file)) {
     data <- file
   }  else {
-    return ("Please enter either .xlsx string or dataframe. ")
+    stop("Please enter either .xlsx string or dataframe. ")
   }
 
 

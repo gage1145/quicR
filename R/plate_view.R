@@ -1,4 +1,23 @@
-plate_view <- function(df, meta, well_names, plate=96, color="black") {
+#' Real-Time Plate View
+#'
+#' Converts the real-time data into a ggplot figure. The layout is either 8x12
+#' or 16x24 for 96- and 384-well plates, respectively.
+#'
+#' @param df Real-time dataframe
+#' @param meta Metadata to title each facet.
+#' @param well_names The well names (A1, B4, H11, etc.)
+#' @param plate Integer either 96 or 384 to denote microplate type.
+#'
+#' @return A ggplot object
+#'
+#' @import ggplot2
+#' @import dplyr
+#' @importFrom tidyr replace_na
+#' @importFrom tidyr separate
+#' @importFrom ggpubr theme_classic2
+#'
+#' @export
+plate_view <- function(df, meta, well_names, plate=96) {
 
   if (plate != 96 & plate != 384) {
     return ("Invalid plate layout. Format should be either 96 or 384. ")

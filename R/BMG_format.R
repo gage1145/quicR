@@ -1,10 +1,20 @@
 #' Format Table for BMG Sample ID Import
 #'
-#' BMG_format accepts a plate layout excel file and formats the Sample IDs into
+#' BMG_format accepts a plate layout .CSV file and formats the Sample IDs into
 #' a format which can be easily imported into the BMG control software.
 #'
-#' @param file An Excel file containing the plate layout of Sample IDs.
+#' @param file A .CSV file containing the plate layout of Sample IDs.
+#'
 #' @return A text file containing information for import into the BMG control software.
+#'
+#' @importFrom utils read.csv
+#' @importFrom dplyr %>%
+#' @importFrom dplyr mutate
+#' @importFrom dplyr select
+#' @importFrom dplyr left_join
+#' @importFrom tidyr unite
+#' @importFrom stats na.omit
+#' @importFrom reshape2 melt
 #'
 #' @export
 BMG_format <- function(file) {

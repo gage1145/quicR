@@ -1,3 +1,15 @@
+#' Normalize Fluorescence
+#'
+#' Normalizes the real-time RT-QuIC data against the background fluorescence of
+#' a defined cycle. All cycles are divided by the fluorescent value of the
+#' defined cycle.
+#'
+#' @param df A dataframe made from get_real.
+#' @param bg_cycle The cycle used for background fluorescence
+#'
+#' @return A dataframe containing real-time normalized fluorescence values.
+#'
+#' @export
 normalize_RFU <- function (df, bg_cycle=4) {
   # Accepts output from get_real function.
   # Apply the column names as the first row instead.

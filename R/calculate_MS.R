@@ -1,3 +1,18 @@
+#' Calculate Maximum Slope
+#'
+#' Uses a sliding window to calculate the slope of real-time reads.
+#'
+#' @param data A dataframe containing real-time reads. It is recommended to use a dataframe made from normalize_RFU.
+#' @param start_col The column containing the starting position of the real-time data.
+#'
+#' @return A dataframe containing the real-time slope values.
+#'
+#' @importFrom slider slide
+#' @importFrom dplyr %>%
+#' @importFrom dplyr slice
+#' @importFrom dplyr mutate_all
+#'
+#' @export
 calculate_MS <- function (data, start_col=3) {
   # Calculate the slope using a moving window linear regression.
   df_norm_t <- t(data)

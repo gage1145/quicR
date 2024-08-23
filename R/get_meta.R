@@ -1,3 +1,17 @@
+#' Retrieve the BMG metadata
+#'
+#' Takes the Excel file exported from MARS and compiles the metadata in the
+#' header.
+#'
+#' @param file The Excel file exported from MARS.
+#'
+#' @return A dataframe containing the Meta_ID and Meta_info
+#'
+#' @importFrom readxl read_excel
+#' @importFrom stats na.omit
+#' @importFrom stringr str_split
+#'
+#' @export
 get_meta <- function(file) {
 
   if (is.character(file)) { # Read the Excel file into R.

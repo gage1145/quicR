@@ -1,3 +1,15 @@
+#' Calculate Time to Threshold
+#'
+#' Calculates the time required to reach a defined threshold.
+#'
+#' @param data A dataframe containing real-time RT-QuIC data.
+#' @param threshold A numeric value defining the threshold.
+#' @param start_col The column containing the starting position of the real-time data.
+#' @param run_time The time in hours that the assay ran.
+#'
+#' @return A vector containing the times to threshold
+#'
+#' @export
 calculate_TtT <- function (data, threshold, start_col=3, run_time=48) {
   # Initialize the list containing the times-to-threshold.
   TtT_list <- c(rep(run_time, nrow(data)))
