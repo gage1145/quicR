@@ -3,10 +3,7 @@ library(tidyverse)
 library(ggpubr)
 library(ggplot2)
 library(gridExtra)
-
-
-
-source("~/RTQ_analysis/functions/functions.R")
+library(quicR)
 
 
 # Initialize parameters for downstream functions.###############################
