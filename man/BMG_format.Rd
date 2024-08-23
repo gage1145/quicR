@@ -7,12 +7,12 @@
 BMG_format(file)
 }
 \arguments{
-\item{file}{An Excel file containing the plate layout of Sample IDs.}
+\item{file}{A .CSV file containing the plate layout of Sample IDs.}
 }
 \value{
 A text file containing information for import into the BMG control software.
 }
 \description{
-BMG_format accepts a plate layout excel file and formats the Sample IDs into
+BMG_format accepts a plate layout .CSV file and formats the Sample IDs into
 a format which can be easily imported into the BMG control software.
 }
