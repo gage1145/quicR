@@ -4,8 +4,8 @@
 #' background fluorescence.
 #'
 #' @param data A dataframe containing the real-time fluorescence data.
-#' @param start_col The column at which the background fluorescence should be read.
-#' @param data_is_norm If the data has not been normalized, will make a call to normalize_RFU.
+#' @param start_col Integer, the column at which the background fluorescence should be read.
+#' @param data_is_norm Logical, if the data has not been normalized, will make a call to normalize_RFU.
 #' @return A vector containing MPR values.
 #'
 #' @export
