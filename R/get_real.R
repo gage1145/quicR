@@ -8,6 +8,7 @@
 #' @return A list of dataframes containing the formatted real-time data.
 #'
 #' @importFrom dplyr rename
+#' @importFrom readxl read_excel
 #'
 #' @export
 get_real <- function(file, ordered=TRUE) {
