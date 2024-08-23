@@ -73,7 +73,7 @@ df_id <- as.integer(
 )
 
 df <- data.frame(df_list[[df_id]])
-df_meta <- get_meta(file)
+# df_meta <- get_meta(file)
 
 # Specify the time column.
 time_col <- df[, 1]
