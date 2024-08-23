@@ -98,7 +98,6 @@ if (dilution_bool) {
 }
 
 # Run plate_view function which produces a plate view figure.
-# This function is from plate_view_function.R.
-plate_view(df, sample_locations, wells, plate)
+quicR::plate_view(df, sample_locations, plate)
 
 ggsave("plate_view.png", width = 3600, height = 2400, units = "px")
