@@ -5,9 +5,18 @@ Authors@R:
     person("Gage", "Rowden", , "gage.rowden1145@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-7517-0480"))
 Description: What the package does (one paragraph).
-Imports: dplyr, readxl, openxlsx, writexl, agricolae, stringr, ggplot2, ggpubr, reshape2 
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+Imports:
+  dplyr, 
+  ggplot2,
+  ggpubr,
+  openxlsx,
+  readxl,
+  reshape2,
+  slider,
+  stats,
+  stringr,
+  tidyr
+License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a license
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1
