@@ -9,9 +9,9 @@ calculate_MPR(data, start_col = 3, data_is_norm = FALSE)
 \arguments{
 \item{data}{A dataframe containing the real-time fluorescence data.}
 
-\item{start_col}{The column at which the background fluorescence should be read.}
+\item{start_col}{Integer, the column at which the background fluorescence should be read.}
 
-\item{data_is_norm}{If the data has not been normalized, will make a call to normalize_RFU.}
+\item{data_is_norm}{Logical, if the data has not been normalized, will make a call to normalize_RFU.}
 }
 \value{
 A vector containing MPR values.
