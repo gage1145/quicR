@@ -1,14 +1,8 @@
 library(testthat)
-library(usethis)
 library(quicR)
 
 
-use_r("organize_tables")
-
-files <- list.files("input files", full.names = TRUE)
-print(files)
-
-
+# use_r("organize_tables")
 
 for (i in c("test", "test2", "test3")) {
 

@@ -1,9 +1,8 @@
 library(testthat)
-library(usethis)
 library(quicR)
 
 
-use_r("BMG_format")
+# use_r("BMG_format")
 
 test_file <- "BMG formatting/plate_layout.csv"
 ref_file <- "BMG formatting/formatted.txt"
