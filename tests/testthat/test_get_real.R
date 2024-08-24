@@ -1,5 +1,4 @@
 library(testthat)
-library(readxl)
 library(quicR)
 
 
@@ -7,7 +6,7 @@ library(quicR)
 
 
 for (file in c("input_files/test.xlsx", "input_files/test2.xlsx", "input_files/test3.xlsx")) {
-  data <- read_xlsx(file, sheet = 2)
+  data <- readxl::read_xlsx(file, sheet = 2)
 
   test_that(
     "get_real accepts Excel file as input?",
