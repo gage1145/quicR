@@ -25,5 +25,5 @@ for (i in c("test", "test2", "test3")) {
 
 test_that(
   "organize_tables accepts 384 as plate arg?",
-  {expect_no_error(organize_tables("input files/test384.xlsx", plate=384))}
+  {expect_no_error(organize_tables("input_files/test384.xlsx", plate=384))}
 )
