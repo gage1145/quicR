@@ -13,7 +13,6 @@
 #' @import dplyr
 #' @importFrom tidyr replace_na
 #' @importFrom tidyr separate
-#' @importFrom ggpubr theme_classic2
 #'
 #' @export
 plate_view <- function(df, meta, plate=96) {
@@ -78,7 +77,6 @@ plate_view <- function(df, meta, plate=96) {
     geom_line() +
     labs(y = "RFU",
          x = "Time (h)") +
-    theme_classic2() +
     theme(
       panel.border = element_rect(colour="black", fill=NA, linewidth=0.5),
       strip.background = element_blank(),
@@ -90,5 +88,4 @@ plate_view <- function(df, meta, plate=96) {
                ncol=ifelse(plate == 96, 12, 24),
                labeller=ID_labeller) %>%
     suppressWarnings()
-
 }
