@@ -6,7 +6,7 @@ library(quicR)
 
 
 
-for (file in c("input files/test.xlsx", "input files/test2.xlsx", "input files/test3.xlsx")) {
+for (file in c("input_files/test.xlsx", "input_files/test2.xlsx", "input_files/test3.xlsx")) {
   data <- read_xlsx(file, sheet = 2)
 
   test_that(

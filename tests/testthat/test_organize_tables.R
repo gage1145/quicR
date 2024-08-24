@@ -6,7 +6,7 @@ library(quicR)
 
 for (i in c("test", "test2", "test3")) {
 
-  file <- paste0("input files/", i, ".xlsx")
+  file <- paste0("input_files/", i, ".xlsx")
 
   test_that(
     "organize_tables returns list?",

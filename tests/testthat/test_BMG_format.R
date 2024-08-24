@@ -4,8 +4,8 @@ library(quicR)
 
 # use_r("BMG_format")
 
-test_file <- "BMG formatting/plate_layout.csv"
-ref_file <- "BMG formatting/formatted.txt"
+test_file <- "BMG_formatting/plate_layout.csv"
+ref_file <- "BMG_formatting/formatted.txt"
 
 test_that(
   "BMG_format returns character string.",
