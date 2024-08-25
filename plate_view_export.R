@@ -1,8 +1,6 @@
 library(readxl)
-library(tidyverse)
-library(ggpubr)
+library(dplyr)
 library(ggplot2)
-library(gridExtra)
 library(quicR)
 
 
@@ -30,8 +28,8 @@ while (plate == "") {
 
 # Define the layout using the first sheet in the excel file.
 # The sheet should be formatted so that each ID in the "layout" table is unique.
-# "organize_tables" is sourced from plate_view_function.R.
-df_dic <- organize_tables(file, plate = plate)
+df_dic <- quicR::organize_tables(file, plate = plate)
+
 IDs <- t(df_dic[["Sample IDs"]])
 ID_list <- list()
 for (i in IDs) {
@@ -60,7 +58,7 @@ if (dilution_bool) {
 # Read in the real-time data.
 # "get_real" will return a list of dataframes depending on how many real-time
 # measurements the user exported from MARS.
-df_list <- get_real(file, ordered=FALSE)
+df_list <- quicR::get_real(file, ordered=FALSE)
 
 df_id <- as.integer(
   readline(
@@ -72,8 +70,7 @@ df_id <- as.integer(
   )
 )
 
-df <- data.frame(df_list[[df_id]])
-# df_meta <- get_meta(file)
+df <- as.data.frame(df_list[[df_id]])
 
 # Specify the time column.
 time_col <- df[, 1]
@@ -85,16 +82,17 @@ df <- df[, -1]
 rownames(df) <- time_col
 
 # Get the wells used in the run.
-wells <- get_wells(file)
+wells <- quicR::get_wells(file)
 
 # Take the metadata and apply it into a dataframe for the plate_view function.
-sample_locations <- na.omit(do.call(rbind, Map(data.frame, A=wells, B=ID_list)))
+sample_locations <- do.call(rbind, Map(data.frame, A = wells, B = ID_list)) %>%
+  na.omit()
 
 # Add the dilutions if applicable.
 if (dilution_bool) {
   sample_locations <- sample_locations %>%
     mutate(Dilutions = -log10(as.numeric(dilutions))) %>%
-    unite(B, B:Dilutions, sep="\n")
+    unite(B, B:Dilutions, sep = "\n")
 }
 
 # Run plate_view function which produces a plate view figure.
