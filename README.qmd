@@ -16,6 +16,7 @@ excel(Excel Export)
 
 subgraph A[Select the following export options]
   direction LR
+  
   micro(Microplate View)
   table(Table View)
   trans(Transpose Table)
