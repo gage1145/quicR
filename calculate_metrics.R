@@ -1,11 +1,7 @@
 library(slider)
 library(ggpubr)
 library(agricolae)
-
-
-
-# Users will need to adjust for their own file directory.
-source("~/RTQ_analysis/functions/functions.R")
+library(quicR)
 
 
 
@@ -36,7 +32,7 @@ while (file == "") {
 
 
 # Get the real-time data from the BMG export file.
-df <- get_real(file, ordered=FALSE)
+df <- quicR::get_real(file, ordered=FALSE)
 
 # Ask the user which real-time data set they want to use.
 df_id <- as.integer(
@@ -49,7 +45,7 @@ df_id <- as.integer(
     )
   )
 
-# Ask the user for the run-time in hours.
+# Ask the user for the threshold.
 threshold <- as.integer(
   readline(
     "Please enter the desired threshold for RAF calculation: "
@@ -66,7 +62,8 @@ df <- df[[df_id]]
 
 
 # Export the tables in the first sheet of the file.
-dic <- organize_tables(file)
+dic <- quicR::organize_tables(file)
+
 column_names <- c("Time")
 for (i in t(dic[["Sample IDs"]])) {
   for (j in i) {
@@ -75,6 +72,7 @@ for (i in t(dic[["Sample IDs"]])) {
     }
   }
 }
+
 # Apply the column names.
 colnames(df) <- column_names
 
@@ -88,7 +86,7 @@ dilution_bool <- "Dilutions" %in% names(dic)
 
 
 # Calculate the normalized real-time data.
-df_norm <- normalize_RFU(df)
+df_norm <- quicR::normalize_RFU(df)
 
 # Add dilution factors if applicable.
 if (dilution_bool) {
@@ -113,22 +111,25 @@ hours <- as.numeric(colnames(df_norm)[ncol(df_norm)])
 
 # Initialized the dataframe with the calculated metrics.
 df_analyzed <- data.frame(`Sample_ID` = df_norm$`Sample ID`) %>%
+
   mutate(
     # Add dilutions if applicable.
     Dilutions = if (dilution_bool) -log10(as.numeric(dilutions)),
     # Maxpoint Ratio
-    MPR = calculate_MPR(df_norm, start_col=3, data_is_norm=TRUE),
+    MPR = quicR::calculate_MPR(df_norm, start_col=3, data_is_norm=TRUE),
     # Max Slope
-    MS  = calculate_MS(df_norm, start_col=3),
+    MS  = quicR::calculate_MS(df_norm, start_col=3),
     # Time to Threshold
-    TtT = calculate_TtT(df_norm, threshold=threshold, start_col=3, run_time=hours)
+    TtT = quicR::calculate_TtT(df_norm, threshold=threshold, start_col=3, run_time=hours)
   ) %>%
+
   mutate(
     # Rate of Amyloid Formation
     RAF = ifelse(TtT == run_time, 0, 1 / (3600 * TtT)),
     # Crossed threshold?
     crossed = TtT != run_time
   ) %>%
+
   # Order the data frame based on Sample_ID.
   arrange(Sample_ID)
 
@@ -139,13 +140,16 @@ df_analyzed <- data.frame(`Sample_ID` = df_norm$`Sample ID`) %>%
 
 
 # Create a summary data frame.
-summary <- (if (dilution_bool) {
-  summary <- df_analyzed %>%
-    group_by(Sample_ID, Dilutions)
-} else {
-  summary <- df_analyzed %>%
-    group_by(Sample_ID)
-}) %>%
+summary <- (
+  if (dilution_bool) {
+    summary <- df_analyzed %>%
+      group_by(Sample_ID, Dilutions)
+  } else {
+    summary <- df_analyzed %>%
+      group_by(Sample_ID)
+  }
+) %>%
+
   summarise(
     reps      = n(),
     mean_TtT  = mean(TtT),
@@ -167,32 +171,50 @@ summary <- (if (dilution_bool) {
 
 metrics <- c("MPR", "MS")
 for (metric in metrics) {
-  
+
   # Create a dataframe of the individual comparisons.
   comps <- LSD.test( # Perform the post-hoc multiple comparisons test.
     # Create the statistical model using ANOVA.
-    aov(as.formula(paste0(metric, " ~ ", "Sample_ID")), 
+    aov(as.formula(paste0(metric, " ~ ", "Sample_ID")),
         data = df_analyzed),
     "Sample_ID",  p.adj = "holm", group = F
   )[["comparison"]]
-  
+
   # Initialize columns which will hold unique IDs for each sample compared.
   comps <- comps %>%
-    cbind(rownames(comps) %>%
-            strsplit(" - ") %>%
-            as.data.frame() %>%
-            t() %>%
-            as.data.frame()) %>%
+
+    cbind(
+      rownames(comps) %>%
+        strsplit(" - ") %>%
+        as.data.frame() %>%
+        t() %>%
+        as.data.frame()
+    ) %>%
+
     select(-difference) %>%
+
     # Remove all comparisons that are not against "N".
     subset(V1 == "N" | V2 == "N") %>%
-    rename("{metric}_pvalue" := pvalue,
-           "{metric}_significance" := signif.) %>%
-    mutate(V1 = replace(V1, V1=="N", NA),
-           V2 = replace(V2, V2=="N", NA)) %>%
-    unite(Sample_ID, c("V1", "V2"), sep="", na.rm=T) %>%
+
+    rename(
+      "{metric}_pvalue" := pvalue,
+      "{metric}_significance" := signif.
+    ) %>%
+
+    mutate(
+      V1 = replace(V1, V1 == "N", NA),
+      V2 = replace(V2, V2 == "N", NA)
+    ) %>%
+
+    unite(
+      Sample_ID,
+      c("V1", "V2"),
+      sep = "",
+      na.rm = T
+    ) %>%
+
     rbind(c(NA, NA, "N"))
-  
+
   summary <- left_join(summary, comps)
 }
 
@@ -227,7 +249,6 @@ saveWorkbook(wb, "summary.xlsx", overwrite = TRUE)
 
 df_analyzed %>%
   select(-crossed) %>%
-  
   {
     if (dilution_bool) {
       reshape2::melt(., id.vars = c("Sample_ID", "Dilutions")) %>%
@@ -238,10 +259,21 @@ df_analyzed %>%
         ggplot(aes(Sample_ID, value))
     }
   } +
-  
-  geom_boxplot(aes(fill=Dilutions), outlier.shape = NA, position="dodge") +
-  geom_dotplot(binaxis="y", stackdir="center", dotsize=0.5, position="dodge",
-               stackratio=0.5) +
+
+  geom_boxplot(
+    aes(fill = Dilutions),
+    outlier.shape = NA,
+    position = "dodge"
+  ) +
+
+  geom_dotplot(
+    binaxis = "y",
+    stackdir = "center",
+    dotsize = 0.5,
+    position = "dodge",
+    stackratio = 0.5
+  ) +
+
   facet_wrap(
     vars(variable),
     scales = "free",
@@ -255,16 +287,17 @@ df_analyzed %>%
     ),
     strip.position = "left"
   ) +
+
   ylim(0, NA) +
   xlab(NULL) +
   ylab(NULL) +
+
   theme(
     axis.line = element_line(colour = "black"),
     axis.text.x = element_text(angle = 45, hjust = 1),
     panel.background = element_blank(),
     panel.grid = element_line(colour = "lightgrey"),
     panel.border = element_rect(colour = "black", fill=NA, size=1),
-    # legend.position = "none",
     strip.background = element_blank(),
     strip.placement = "outside"
   )
