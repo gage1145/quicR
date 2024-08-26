@@ -4,7 +4,10 @@ library(ggplot2)
 library(quicR)
 
 
-# Initialize parameters for downstream functions.###############################
+
+# Initialize parameters for downstream functions. -------------------------
+
+
 
 file <- ""
 while (file == "") {
@@ -24,7 +27,11 @@ while (plate == "") {
   }
 }
 
-# Following block exports the plate view figure.################################
+
+
+# Following block exports the plate view figure. --------------------------
+
+
 
 # Define the layout using the first sheet in the excel file.
 # The sheet should be formatted so that each ID in the "layout" table is unique.
@@ -50,7 +57,7 @@ if (dilution_bool) {
 }
 
 # Read in the real-time data.
-# "get_real" will return a list of dataframes depending on how many real-time
+# get_real will return a list of dataframes depending on how many real-time
 # measurements the user exported from MARS.
 df_list <- quicR::get_real(file, ordered=FALSE)
 
@@ -86,7 +93,12 @@ if (dilution_bool) {
     tidyr::unite(value, value:Dilutions, sep = "\n")
 }
 
-# Run plate_view function which produces a plate view figure.
+
+
+# Run plate_view function which produces a plate view figure. -------------
+
+
+
 quicR::plate_view(df, sample_locations, plate)
 
 ggsave("plate_view.png", width = 3600, height = 2400, units = "px")
