@@ -30,29 +30,40 @@ while (plate == "") {
 # The sheet should be formatted so that each ID in the "layout" table is unique.
 df_dic <- quicR::organize_tables(file, plate = plate)
 
-IDs <- t(df_dic[["Sample IDs"]])
-ID_list <- list()
-for (i in IDs) {
-  for (j in i) {
-    if (!(is.na(j))) {
-      ID_list <- append(ID_list, j)
-    }
-  }
-}
+IDs <- df_dic[["Sample IDs"]] |>
+  t() |>
+  as.data.frame() |>
+  tidyr::gather() |>
+  dplyr::select(value)
+
+# IDs <- t(df_dic[["Sample IDs"]])
+# ID_list <- list()
+# for (i in IDs) {
+#   for (j in i) {
+#     if (!(is.na(j))) {
+#       ID_list <- append(ID_list, j)
+#     }
+#   }
+# }
 
 # Determine if there is a dilutions table.
 dilution_bool <- "Dilutions" %in% names(df_dic)
 
 # Add dilution factors if applicable.
 if (dilution_bool) {
-  dilutions <- c()
-  for (i in t(df_dic[["Dilutions"]])) {
-    for (j in i) {
-      if (!is.na(j)) {
-        dilutions <- rbind(dilutions, j)
-      }
-    }
-  }
+  dilutions <- df_dic[["Dilutions"]] |>
+    t() |>
+    as.data.frame() |>
+    tidyr::gather() |>
+    dplyr::select(value) |>
+    dplyr::mutate(value = -log10(as.numeric(value)))
+  # for (i in t(df_dic[["Dilutions"]])) {
+  #   for (j in i) {
+  #     if (!is.na(j)) {
+  #       dilutions <- rbind(dilutions, j)
+  #     }
+  #   }
+  # }
 }
 
 # Read in the real-time data.
