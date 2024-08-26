@@ -36,16 +36,6 @@ IDs <- df_dic[["Sample IDs"]] |>
   tidyr::gather() |>
   dplyr::select(value)
 
-# IDs <- t(df_dic[["Sample IDs"]])
-# ID_list <- list()
-# for (i in IDs) {
-#   for (j in i) {
-#     if (!(is.na(j))) {
-#       ID_list <- append(ID_list, j)
-#     }
-#   }
-# }
-
 # Determine if there is a dilutions table.
 dilution_bool <- "Dilutions" %in% names(df_dic)
 
@@ -57,13 +47,6 @@ if (dilution_bool) {
     tidyr::gather() |>
     dplyr::select(value) |>
     dplyr::mutate(value = -log10(as.numeric(value)))
-  # for (i in t(df_dic[["Dilutions"]])) {
-  #   for (j in i) {
-  #     if (!is.na(j)) {
-  #       dilutions <- rbind(dilutions, j)
-  #     }
-  #   }
-  # }
 }
 
 # Read in the real-time data.
@@ -83,27 +66,24 @@ df_id <- as.integer(
 
 df <- as.data.frame(df_list[[df_id]])
 
-# Specify the time column.
-time_col <- df[, 1]
+# Set the time column as the df index.
+rownames(df) <- df[, 1]
 
 # Remove the time column and ID row.
 df <- df[, -1]
 
-# Set the time column as the df index.
-rownames(df) <- time_col
-
 # Get the wells used in the run.
-wells <- quicR::get_wells(file)
+wells <- quicR::get_wells(file) |>
+  as.data.frame() |> t() |> as.data.frame()
 
 # Take the metadata and apply it into a dataframe for the plate_view function.
-sample_locations <- do.call(rbind, Map(data.frame, A = wells, B = ID_list)) %>%
-  na.omit()
+sample_locations <- cbind(wells, IDs) |> na.omit()
 
 # Add the dilutions if applicable.
 if (dilution_bool) {
-  sample_locations <- sample_locations %>%
-    mutate(Dilutions = -log10(as.numeric(dilutions))) %>%
-    unite(B, B:Dilutions, sep = "\n")
+  sample_locations <- sample_locations |>
+    dplyr::mutate(Dilutions = dilutions$value) |>
+    tidyr::unite(value, value:Dilutions, sep = "\n")
 }
 
 # Run plate_view function which produces a plate view figure.
