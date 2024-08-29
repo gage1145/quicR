@@ -126,9 +126,9 @@ df_analyzed <- data.frame(`Sample_ID` = df_norm$`Sample ID`) %>%
 
   mutate(
     # Rate of Amyloid Formation
-    RAF = ifelse(TtT == run_time, 0, 1 / (3600 * TtT)),
+    RAF = ifelse(TtT == hours, 0, 1 / (3600 * TtT)),
     # Crossed threshold?
-    crossed = TtT != run_time
+    crossed = TtT != hours
   ) %>%
 
   # Order the data frame based on Sample_ID.
