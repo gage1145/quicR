@@ -220,7 +220,11 @@ for (metric in metrics) {
 }
 
 summary <- summary %>%
-  mutate(Positive = thres_pos & MPR_pvalue <= 0.05 & MS_pvalue <= 0.05)
+  mutate(
+    MPR_pvalue = as.numeric(MPR_pvalue),
+    MS_pvalue = as.numeric(MS_pvalue),
+    Positive = thres_pos & MPR_pvalue <= 0.05 & MS_pvalue <= 0.05
+  )
 
 
 
@@ -262,7 +266,6 @@ df_analyzed %>%
   } +
 
   geom_boxplot(
-    aes(fill = Dilutions),
     outlier.shape = NA,
     position = "dodge"
   ) +
