@@ -10,7 +10,7 @@
 get_wells <- function (file) {
 
   if (is.character(file)) {
-    df <- read_excel(file, sheet = 2, col_name = FALSE)
+    df <- read_excel(file, sheet = 2, col_names = FALSE)
   }
   else if (is.data.frame(file)) {
     df <- file

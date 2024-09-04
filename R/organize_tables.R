@@ -17,7 +17,7 @@ organize_tables <- function(file, plate=96) {
   if (is.character(file)) {
     # Read the Excel file into R.
     data <- read_excel(
-      file, sheet=1, col_name=FALSE,
+      file, sheet=1, col_names=FALSE,
       if (plate == 96) {
         range = cell_cols(1:13)
       } else if (plate == 384) {

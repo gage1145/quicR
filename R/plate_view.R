@@ -24,7 +24,7 @@ plate_view <- function(df, meta, plate=96) {
   # Ensures that the input is a dataframe.
   df <- data.frame(df)
 
-  colnames(df) <- paste(meta$B, meta$A, sep=".")
+  colnames(df) <- paste(meta[,1], meta[,2], sep=".")
 
   # Create a template of all possible columns
   template_columns <- expand.grid(
@@ -38,7 +38,7 @@ plate_view <- function(df, meta, plate=96) {
 
   # Add columns with NAs if they do not exist.
   for (col in template_columns) {
-    if (!(col %in% meta$A)) {
+    if (!(col %in% meta[,1])) {
       df[[col]] <- NA
     }
   }
@@ -48,35 +48,36 @@ plate_view <- function(df, meta, plate=96) {
 
   # Combine the template_columns and sample_locations.
   template_columns <- as.data.frame(template_columns)
-  colnames(template_columns) <- "A"
+  colnames(template_columns) <- colnames(meta[1])
 
   # Create a data.frame with all the wells and IDs, even if some are missing.
-  full <- sample_locations %>%
-    full_join(as.data.frame(template_columns)) %>%
-    arrange(A)
+  full <- sample_locations |>
+    full_join(as.data.frame(template_columns)) |>
+    arrange_at(1)
 
   # Create the labeller function for the facet plot.
   ID_labeller <- function(variable, value) {
-    i <- full$B[full$A == value]
+    i <- full[,2][full[,1] == value]
     ifelse(is.na(i), " ", i)
   }
 
-  df %>%
+  df |>
     # Melt the data to help with the faceting.
-    reshape2::melt(id.vars = "Time") %>%
+    reshape2::melt(id.vars = "Time") |>
     # Separate the wells from the IDs.
-    separate(variable, c("ID", "Well"), "\\.", fill="left") %>%
+    separate(variable, c("Well", "ID"), "\\.", fill="left") |>
     # Ensures that Time and observations are numeric.
     mutate(Time = as.numeric(Time),
            value = as.numeric(value),
            ID = as.character(ID),
-           Well = as.factor(Well)) %>%
-    mutate(ID = replace_na(ID, "none")) %>%
+           Well = as.factor(Well)) |>
+    mutate(ID = replace_na(ID, "none")) |>
     # Create the facet plot.
     ggplot(aes(x=Time, y=value)) +
     geom_line() +
     labs(y = "RFU",
          x = "Time (h)") +
+    theme_classic() +
     theme(
       panel.border = element_rect(colour="black", fill=NA, linewidth=0.5),
       strip.background = element_blank(),
@@ -86,6 +87,7 @@ plate_view <- function(df, meta, plate=96) {
     facet_wrap(vars(Well),
                nrow=ifelse(plate == 96, 8, 16),
                ncol=ifelse(plate == 96, 12, 24),
-               labeller=ID_labeller) %>%
+               labeller=ID_labeller
+    ) |>
     suppressWarnings()
 }

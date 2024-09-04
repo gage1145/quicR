@@ -8,6 +8,8 @@ add_reps(df, sep = "_")
 }
 \arguments{
 \item{df}{A dataframe containing two columns for well IDs and Sample IDs}
+
+\item{sep}{a character string to separate the terms.}
 }
 \value{
 A dataframe with replicate numbers pasted to the Sample IDs

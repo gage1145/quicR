@@ -14,7 +14,7 @@
 get_real <- function(file, ordered=TRUE) {
 
   if (is.character(file)) { # Read the Excel file into R.
-    data <- read_excel(file, sheet = 2, col_name = FALSE)
+    data <- read_excel(file, sheet = 2, col_names = FALSE)
   }
   else if (is.data.frame(file)) {
     data <- file

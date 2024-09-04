@@ -4,6 +4,7 @@
 #' like so: A4, B9, H11, J24
 #'
 #' @param df A dataframe containing two columns for well IDs and Sample IDs
+#' @param sep a character string to separate the terms.
 #' @return A dataframe with replicate numbers pasted to the Sample IDs
 #'
 #' @export

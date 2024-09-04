@@ -6,7 +6,7 @@
 
 
 
-source("~/RTQ_analysis/functions/functions.R")
+library(quicR)
 
 
 
