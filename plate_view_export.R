@@ -1,6 +1,5 @@
 library(readxl)
-library(dplyr)
-library(ggplot2)
+library(tidyvers)
 library(quicR)
 
 
@@ -73,8 +72,7 @@ rownames(df) <- df[, 1]
 df <- df[, -1]
 
 # Get the wells used in the run.
-wells <- quicR::get_wells(file) |>
-  as.data.frame() |> t() |> as.data.frame()
+wells <- quicR::get_wells(file)
 
 # Take the metadata and apply it into a dataframe for the plate_view function.
 sample_locations <- cbind(wells, IDs) |> na.omit()

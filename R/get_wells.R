@@ -11,11 +11,9 @@ get_wells <- function (file) {
 
   if (is.character(file)) {
     df <- read_excel(file, sheet = 2, col_names = FALSE)
-  }
-  else if (is.data.frame(file)) {
+  } else if (is.data.frame(file)) {
     df <- file
-  }
-  else {
+  } else {
     stop("Please enter either .xlsx string or dataframe. ")
   }
 
@@ -30,5 +28,9 @@ get_wells <- function (file) {
       break
     }
   }
-  return (wells[-(1:2)])
+  wells <- wells[-(1:2)] |>
+    as.data.frame() |>
+    t() |>
+    as.data.frame()
+  return (wells)
 }
