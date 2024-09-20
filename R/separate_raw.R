@@ -13,18 +13,17 @@
 #' @export
 # Separates the raw run files in the .xlsx file.
 separate_raw <- function(file, num_rows, export_name) {
-
   if (is.character(file)) { # Read the Excel file into R.
     data <- read_excel(file, sheet = 2)
   } else if (is.data.frame(file)) {
     data <- file
-  }  else {
+  } else {
     stop("Please enter either .xlsx string or dataframe. ")
   }
 
 
   # Remove metadata.
-  tidy_data <- data[-(1:num_rows-1), -1] %>%
+  tidy_data <- data[-(1:num_rows - 1), -1] %>%
     na.omit(tidy_data)
 
 
@@ -39,7 +38,6 @@ separate_raw <- function(file, num_rows, export_name) {
   # Identify and handle duplicate column names.
   dup_cols <- colnames(tidy_data)[duplicated(colnames(tidy_data))]
   if (length(dup_cols) > 0) {
-
     # Add suffix to duplicate column names
     for (col in dup_cols) {
       indices <- which(colnames(tidy_data) == col)
@@ -62,10 +60,10 @@ separate_raw <- function(file, num_rows, export_name) {
   colnames(tidy_data) <- gsub("_\\d+$", "", colnames(tidy_data))
 
   # Designate the integers used to calculate how the data will be cut
-  cycles <- length(unique(tidy_data$Time))    # Number of cycles
-  num_rows <- cycles                          # This will change after sending
+  cycles <- length(unique(tidy_data$Time)) # Number of cycles
+  num_rows <- cycles # This will change after sending
   # one data type to a data frame
-  reads <- length(which(tidy_data$Time==0))   # Number of types of data (e.g. Raw,
+  reads <- length(which(tidy_data$Time == 0)) # Number of types of data (e.g. Raw,
   # Normalized, or Derivative)
 
   # Create a data frame with only the "Time" column with no duplicates
@@ -73,7 +71,7 @@ separate_raw <- function(file, num_rows, export_name) {
     rename(Time = 1)
 
   # Create separate data frames for different read types
-  i = 1
+  i <- 1
   while (i <= reads) {
     if (num_rows == cycles) {
       df <- cbind(time_df, tidy_data[(num_rows - cycles):num_rows, -1])
@@ -93,20 +91,22 @@ separate_raw <- function(file, num_rows, export_name) {
   # Function to write a data frame to a new sheet in the workbook
   write_to_sheet <- function(df, sheet_name, existing_file) {
     openxlsx::addWorksheet(existing_file, sheetName = sheet_name)
-    openxlsx::writeData(existing_file, sheet = sheet_name, df, startRow = 1,
-                        startCol = 1, rowNames = FALSE)
+    openxlsx::writeData(existing_file,
+      sheet = sheet_name, df, startRow = 1,
+      startCol = 1, rowNames = FALSE
+    )
   }
 
   # Write each data frame to a new sheet in the workbook
-  i = 1
+  i <- 1
   while (i <= reads) {
     df_name <- paste0("df", i)
     df <- get(df_name)
     sheet_name <- paste0("Data", i)
     write_to_sheet(df, sheet_name, existing_file)
-    i = i + 1
+    i <- i + 1
   }
-  #rm(df, df_name, i, reads, sheet_name)
+  # rm(df, df_name, i, reads, sheet_name)
 
   # Save the modified file
   openxlsx::saveWorkbook(existing_file, file, overwrite = TRUE)
