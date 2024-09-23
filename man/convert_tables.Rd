@@ -6,6 +6,7 @@
 \usage{
 convert_tables(tab)
 }
+<<<<<<< HEAD
 \description{
 convert_tables accepts a table or matrix or a list of tables and matrices
 and converts them into dataframe columns.
@@ -18,3 +19,15 @@ and converts them into dataframe columns.
 
 @export
 }
+=======
+\arguments{
+\item{tab}{A table/matrix or a list of tables/matrices.}
+}
+\value{
+A dataframe column.
+}
+\description{
+Accepts a table or matrix or a list of tables and matrices
+and converts them into dataframe columns.
+}
+>>>>>>> 113ff2ea6ae58ee14eddbbc6a2c8744f05107fe4
