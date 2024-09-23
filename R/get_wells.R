@@ -7,21 +7,18 @@
 #' @return A vector containing well IDs.
 #'
 #' @export
-get_wells <- function (file) {
-
+get_wells <- function(file) {
   if (is.character(file)) {
-    df <- read_excel(file, sheet = 2, col_name = FALSE)
-  }
-  else if (is.data.frame(file)) {
+    df <- read_excel(file, sheet = 2, col_names = FALSE)
+  } else if (is.data.frame(file)) {
     df <- file
-  }
-  else {
+  } else {
     stop("Please enter either .xlsx string or dataframe. ")
   }
 
 
   # Get the wells used in the run.
-  for (i in 1: nrow(df)) {
+  for (i in 1:nrow(df)) {
     while (is.na(df[i, 1])) {
       i <- i + 1
     }
@@ -30,5 +27,9 @@ get_wells <- function (file) {
       break
     }
   }
-  return (wells[-(1:2)])
+  wells <- wells[-(1:2)] |>
+    as.data.frame() |>
+    t() |>
+    as.data.frame()
+  return(wells)
 }

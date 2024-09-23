@@ -18,17 +18,16 @@
 #'
 #' @export
 BMG_format <- function(file) {
-
   df_ <- read.csv(file, header = F)
   colnames(df_) <- c("col", df_[1, -1])
-  df_ <- df_[-1,]
+  df_ <- df_[-1, ]
 
   locations <- c()
   samples <- c()
-  for (i in 1: (ncol(df_)-1)) {
-    for (j in 1: nrow(df_)) {
+  for (i in 1:(ncol(df_) - 1)) {
+    for (j in 1:nrow(df_)) {
       locations <- rbind(locations, paste0(LETTERS[j], i))
-      samples <- rbind(samples, df_[j, (i+1)])
+      samples <- rbind(samples, df_[j, (i + 1)])
     }
   }
 
@@ -39,11 +38,11 @@ BMG_format <- function(file) {
   colnames(locations) <- c("Wells", "Samples")
 
   dic <- df_ %>%
-    melt(id.vars=1) %>%
+    melt(id.vars = 1) %>%
     unique() %>%
     mutate(Plate_ID = "X") %>%
     na.omit() %>%
-    unite(Wells, c("col", "variable"), sep="")
+    unite(Wells, c("col", "variable"), sep = "")
 
   x <- 0
   previous <- dic$value[1]
@@ -82,5 +81,5 @@ BMG_format <- function(file) {
     apply(1, format_row) %>%
     na.omit()
 
-  return (formatted)
+  return(formatted)
 }
