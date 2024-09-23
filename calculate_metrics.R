@@ -151,13 +151,13 @@ summary <- (
   summarise(
     reps      = n(),
     mean_TtT  = mean(TtT),
-    sd_TtT    = sd(TtT),
+    # sd_TtT    = sd(TtT),
     mean_RAF  = mean(RAF),
-    sd_RAF    = sd(RAF),
+    # sd_RAF    = sd(RAF),
     mean_MPR  = mean(MPR),
-    sd_MPR    = sd(MPR),
+    # sd_MPR    = sd(MPR),
     mean_MS   = mean(MS),
-    sd_MS     = sd(MS),
+    # sd_MS     = sd(MS),
     thres_pos = sum(crossed) / n() > 0.5
   )
 
@@ -201,8 +201,8 @@ for (metric in metrics) {
       "{metric}_significance" := signif.
     ) %>%
     mutate(
-      V1 = replace(V1, V1 == "N", NA),
-      V2 = replace(V2, V2 == "N", NA)
+      V1 = replace(V1, V1 == "N" | str_detect(V1, "N_"), NA),
+      V2 = replace(V2, V2 == "N" | str_detect(V2, "N_"), NA)
     ) %>%
     unite(
       Sample_ID,
