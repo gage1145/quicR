@@ -70,7 +70,7 @@ plate_view <- function(df, meta, plate = 96) {
     # Melt the data to help with the faceting.
     reshape2::melt(id.vars = "Time") |>
     # Separate the wells from the IDs.
-    separate(variable, c("Well", "ID"), "\\.", fill = "left") |>
+    separate(variable, c("Well", "ID"), "\\.", fill = "right") |>
     # Ensures that Time and observations are numeric.
     mutate(
       Time = as.numeric(Time),
