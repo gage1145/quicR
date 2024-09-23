@@ -3,6 +3,7 @@ library(ggpubr)
 library(openxlsx)
 library(agricolae)
 library(tidyr)
+library(stringr)
 library(quicR)
 
 
@@ -189,7 +190,12 @@ for (metric in metrics) {
     ) %>%
     select(-difference) %>%
     # Remove all comparisons that are not against "N".
-    subset(V1 == "N" | V2 == "N") %>%
+    subset(
+      V1 == "N" |
+        V2 == "N" |
+        str_detect(V1, "N_") |
+        str_detect(V2, "N_")
+    ) %>%
     rename(
       "{metric}_pvalue" := pvalue,
       "{metric}_significance" := signif.
@@ -257,7 +263,8 @@ df_analyzed %>%
 
   geom_boxplot(
     outlier.shape = NA,
-    position = "dodge"
+    position = "dodge",
+    fill = "lightgrey"
   ) +
 
   geom_dotplot(
