@@ -1,14 +1,16 @@
-#'  Convert tables into a single column in a dataframe.
+#' Convert tables into a single column in a dataframe.
 #'
-#'  convert_tables accepts a table or matrix or a list of tables and matrices
-#'  and converts them into dataframe columns.
+#' Accepts a table or matrix or a list of tables and matrices
+#' and converts them into dataframe columns.
 #'
-#'  @param tab A table/matrix or a list of tables/matrices.
+#' @param tab A table/matrix or a list of tables/matrices.
 #'
-#'  @importFrom tidyr gather
-#'  @importFrom dplyr select
+#' @return A dataframe column.
 #'
-#'  @export
+#' @importFrom tidyr gather
+#' @importFrom dplyr select
+#'
+#' @export
 convert_tables <- function(tab) {
   df_list <- data.frame()
   if (is.vector(tab)) {
