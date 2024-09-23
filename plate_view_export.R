@@ -106,6 +106,9 @@ if (dilution_bool) {
     tidyr::unite(IDs, IDs:Dilutions, sep = "\n")
 }
 
+sample_locations <- sample_locations |>
+  mutate(IDs = ifelse(stringr::str_length(IDs) > 12, gsub(" ", "\n", IDs), IDs))
+
 
 
 # Run plate_view function which produces a plate view figure. -------------
