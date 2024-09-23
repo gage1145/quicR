@@ -2,6 +2,7 @@ library(slider)
 library(ggpubr)
 library(openxlsx)
 library(agricolae)
+library(tidyr)
 library(quicR)
 
 
