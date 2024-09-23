@@ -69,14 +69,18 @@ if (dilution_bool) {
 # measurements the user exported from MARS.
 df_list <- quicR::get_real(file, ordered = FALSE)
 
-df_id <- as.integer(
-  readline(
-    paste(
-      "There are",
-      length(df_list),
-      "real-time data sets. Please enter a number in that range: "
+df_id <- ifelse(
+  length(df_list) > 1,
+  as.integer(
+    readline(
+      paste(
+        "There are",
+        length(df_list),
+        "real-time data sets. Please enter a number in that range: "
+      )
     )
-  )
+  ),
+  1
 )
 
 df <- as.data.frame(df_list[[df_id]])
