@@ -45,7 +45,7 @@ df_dic <- quicR::organize_tables(file, plate = plate)
 #   tidyr::gather() |>
 #   dplyr::select(value)
 
-IDs <- convert_tables(df_dic)$`Sample IDs`
+IDs <- quicR::convert_tables(df_dic)$`Sample IDs`
 
 # Determine if there is a dilutions table.
 dilution_bool <- "Dilutions" %in% names(df_dic)
@@ -58,7 +58,7 @@ if (dilution_bool) {
   #   tidyr::gather() |>
   #   dplyr::select(value) |>
   #   dplyr::mutate(value = -log10(as.numeric(value)))
-  dilutions <- convert_tables(df_dic)$Dilutions |>
+  dilutions <- quicR::convert_tables(df_dic)$Dilutions |>
     as.numeric() |>
     log10() * -1
 }
