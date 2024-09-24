@@ -1,4 +1,4 @@
-# This script takes an .csv file plate layout and formats it into a .txt file 
+# This script takes an .csv file plate layout and formats it into a .txt file
 # that can be imported into the BMG control software.
 
 # See "formatted.txt" in the BMG formatting folder for the output example.
@@ -6,7 +6,7 @@
 
 
 
-source("~/RTQ_analysis/functions/functions.R")
+library(quicR)
 
 
 
