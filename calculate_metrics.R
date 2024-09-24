@@ -38,14 +38,18 @@ while (file == "") {
 df <- quicR::get_real(file, ordered = FALSE)
 
 # Ask the user which real-time data set they want to use.
-df_id <- as.integer(
-  readline(
-    paste(
-      "There are",
-      length(df),
-      "real-time data sets. Please enter a number in that range: "
+df_id <- ifelse(
+  length(df_list) > 1,
+  as.integer(
+    readline(
+      paste(
+        "There are",
+        length(df_list),
+        "real-time data sets. Please enter a number in that range: "
+      )
     )
-  )
+  ),
+  1
 )
 
 # Ask the user for the threshold.
