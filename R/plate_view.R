@@ -15,30 +15,35 @@
 #' @importFrom tidyr separate
 #'
 #' @export
-plate_view <- function(df, meta, plate=96) {
-
+plate_view <- function(df, meta, plate = 96) {
   if (plate != 96 & plate != 384) {
-    return ("Invalid plate layout. Format should be either 96 or 384. ")
+    return("Invalid plate layout. Format should be either 96 or 384. ")
   }
 
   # Ensures that the input is a dataframe.
   df <- data.frame(df)
 
-  colnames(df) <- paste(meta[,1], meta[,2], sep=".")
+  colnames(df) <- paste(meta[, 1], meta[, 2], sep = ".")
 
   # Create a template of all possible columns
   template_columns <- expand.grid(
-    if (plate == 96) {Var1 = LETTERS[1:8]}
-    else {Var1 = LETTERS[1:16]},
-    if (plate == 96) {Var2 = sprintf("%02d", 1:12)}
-    else {Var2 = sprintf("%02d", 1:24)}
+    if (plate == 96) {
+      Var1 <- LETTERS[1:8]
+    } else {
+      Var1 <- LETTERS[1:16]
+    },
+    if (plate == 96) {
+      Var2 <- sprintf("%02d", 1:12)
+    } else {
+      Var2 <- sprintf("%02d", 1:24)
+    }
   )
   template_columns <- sort(paste0(template_columns$Var1, template_columns$Var2))
   rm(Var1, Var2)
 
   # Add columns with NAs if they do not exist.
   for (col in template_columns) {
-    if (!(col %in% meta[,1])) {
+    if (!(col %in% meta[, 1])) {
       df[[col]] <- NA
     }
   }
@@ -51,13 +56,13 @@ plate_view <- function(df, meta, plate=96) {
   colnames(template_columns) <- colnames(meta[1])
 
   # Create a data.frame with all the wells and IDs, even if some are missing.
-  full <- sample_locations |>
+  full <- meta |>
     full_join(as.data.frame(template_columns)) |>
     arrange_at(1)
 
   # Create the labeller function for the facet plot.
   ID_labeller <- function(variable, value) {
-    i <- full[,2][full[,1] == value]
+    i <- full[, 2][full[, 1] == value]
     ifelse(is.na(i), " ", i)
   }
 
@@ -65,29 +70,33 @@ plate_view <- function(df, meta, plate=96) {
     # Melt the data to help with the faceting.
     reshape2::melt(id.vars = "Time") |>
     # Separate the wells from the IDs.
-    separate(variable, c("Well", "ID"), "\\.", fill="left") |>
+    separate(variable, c("Well", "ID"), "\\.", fill = "right") |>
     # Ensures that Time and observations are numeric.
-    mutate(Time = as.numeric(Time),
-           value = as.numeric(value),
-           ID = as.character(ID),
-           Well = as.factor(Well)) |>
+    mutate(
+      Time = as.numeric(Time),
+      value = as.numeric(value),
+      ID = as.character(ID),
+      Well = as.factor(Well)
+    ) |>
     mutate(ID = replace_na(ID, "none")) |>
     # Create the facet plot.
-    ggplot(aes(x=Time, y=value)) +
+    ggplot(aes(x = Time, y = value)) +
     geom_line() +
-    labs(y = "RFU",
-         x = "Time (h)") +
+    labs(
+      y = "RFU",
+      x = "Time (h)"
+    ) +
     theme_classic() +
     theme(
-      panel.border = element_rect(colour="black", fill=NA, linewidth=0.5),
+      panel.border = element_rect(colour = "black", fill = NA, linewidth = 0.5),
       strip.background = element_blank(),
       axis.text.x = element_blank(),
       axis.text.y = element_blank()
     ) +
     facet_wrap(vars(Well),
-               nrow=ifelse(plate == 96, 8, 16),
-               ncol=ifelse(plate == 96, 12, 24),
-               labeller=ID_labeller
+      nrow = ifelse(plate == 96, 8, 16),
+      ncol = ifelse(plate == 96, 12, 24),
+      labeller = ID_labeller
     ) |>
     suppressWarnings()
 }
