@@ -2,12 +2,9 @@ library(slider)
 library(ggpubr)
 library(openxlsx)
 library(agricolae)
-<<<<<<< HEAD
 library(tidyverse)
-=======
 library(tidyr)
 library(stringr)
->>>>>>> a3ebded29b4d3f4b593aed9c7ae7bad6a87715a4
 library(quicR)
 
 
