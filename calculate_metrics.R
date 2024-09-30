@@ -2,7 +2,12 @@ library(slider)
 library(ggpubr)
 library(openxlsx)
 library(agricolae)
+<<<<<<< HEAD
 library(tidyverse)
+=======
+library(tidyr)
+library(stringr)
+>>>>>>> a3ebded29b4d3f4b593aed9c7ae7bad6a87715a4
 library(quicR)
 
 
@@ -34,18 +39,22 @@ while (file == "") {
 
 
 # Get the real-time data from the BMG export file.
-df <- quicR::get_real(file, ordered=FALSE)
+df <- quicR::get_real(file, ordered = FALSE)
 
 # Ask the user which real-time data set they want to use.
-df_id <- as.integer(
-  readline(
-    paste(
-      "There are",
-      length(df),
-      "real-time data sets. Please enter a number in that range: "
+df_id <- ifelse(
+  length(df_list) > 1,
+  as.integer(
+    readline(
+      paste(
+        "There are",
+        length(df_list),
+        "real-time data sets. Please enter a number in that range: "
       )
     )
-  )
+  ),
+  1
+)
 
 # Ask the user for the threshold.
 threshold <- as.integer(
@@ -113,25 +122,22 @@ hours <- as.numeric(colnames(df_norm)[ncol(df_norm)])
 
 # Initialized the dataframe with the calculated metrics.
 df_analyzed <- data.frame(`Sample_ID` = df_norm$`Sample ID`) %>%
-
   mutate(
     # Add dilutions if applicable.
     Dilutions = if (dilution_bool) -log10(as.numeric(dilutions)),
     # Maxpoint Ratio
-    MPR = quicR::calculate_MPR(df_norm, start_col=3, data_is_norm=TRUE),
+    MPR = quicR::calculate_MPR(df_norm, start_col = 3, data_is_norm = TRUE),
     # Max Slope
-    MS  = quicR::calculate_MS(df_norm, start_col=3),
+    MS = quicR::calculate_MS(df_norm, start_col = 3),
     # Time to Threshold
-    TtT = quicR::calculate_TtT(df_norm, threshold=threshold, start_col=3, run_time=hours)
+    TtT = quicR::calculate_TtT(df_norm, threshold = threshold, start_col = 3, run_time = hours)
   ) %>%
-
   mutate(
     # Rate of Amyloid Formation
     RAF = ifelse(TtT == hours, 0, 1 / (3600 * TtT)),
     # Crossed threshold?
     crossed = TtT != hours
   ) %>%
-
   # Order the data frame based on Sample_ID.
   arrange(Sample_ID)
 
@@ -149,19 +155,17 @@ summary <- (
   } else {
     summary <- df_analyzed %>%
       group_by(Sample_ID)
-  }
-) %>%
-
+  }) %>%
   summarise(
     reps      = n(),
     mean_TtT  = mean(TtT),
-    sd_TtT    = sd(TtT),
+    # sd_TtT    = sd(TtT),
     mean_RAF  = mean(RAF),
-    sd_RAF    = sd(RAF),
+    # sd_RAF    = sd(RAF),
     mean_MPR  = mean(MPR),
-    sd_MPR    = sd(MPR),
+    # sd_MPR    = sd(MPR),
     mean_MS   = mean(MS),
-    sd_MS     = sd(MS),
+    # sd_MS     = sd(MS),
     thres_pos = sum(crossed) / n() > 0.5
   )
 
@@ -173,18 +177,18 @@ summary <- (
 
 metrics <- c("MPR", "MS")
 for (metric in metrics) {
-
   # Create a dataframe of the individual comparisons.
   comps <- LSD.test( # Perform the post-hoc multiple comparisons test.
     # Create the statistical model using ANOVA.
     aov(as.formula(paste0(metric, " ~ ", "Sample_ID")),
-        data = df_analyzed),
-    "Sample_ID",  p.adj = "holm", group = F
+      data = df_analyzed
+    ),
+    "Sample_ID",
+    p.adj = "holm", group = F
   )[["comparison"]]
 
   # Initialize columns which will hold unique IDs for each sample compared.
   comps <- comps %>%
-
     cbind(
       rownames(comps) %>%
         strsplit(" - ") %>%
@@ -192,29 +196,28 @@ for (metric in metrics) {
         t() %>%
         as.data.frame()
     ) %>%
-
     select(-difference) %>%
-
     # Remove all comparisons that are not against "N".
-    subset(V1 == "N" | V2 == "N") %>%
-
+    subset(
+      V1 == "N" |
+        V2 == "N" |
+        str_detect(V1, "N_") |
+        str_detect(V2, "N_")
+    ) %>%
     rename(
       "{metric}_pvalue" := pvalue,
       "{metric}_significance" := signif.
     ) %>%
-
     mutate(
-      V1 = replace(V1, V1 == "N", NA),
-      V2 = replace(V2, V2 == "N", NA)
+      V1 = replace(V1, V1 == "N" | str_detect(V1, "N_"), NA),
+      V2 = replace(V2, V2 == "N" | str_detect(V2, "N_"), NA)
     ) %>%
-
     unite(
       Sample_ID,
       c("V1", "V2"),
       sep = "",
       na.rm = T
     ) %>%
-
     rbind(c(NA, NA, "N"))
 
   summary <- left_join(summary, comps)
@@ -268,7 +271,8 @@ df_analyzed %>%
 
   geom_boxplot(
     outlier.shape = NA,
-    position = "dodge"
+    position = "dodge",
+    fill = "lightgrey"
   ) +
 
   geom_dotplot(
@@ -302,7 +306,7 @@ df_analyzed %>%
     axis.text.x = element_text(angle = 45, hjust = 1),
     panel.background = element_blank(),
     panel.grid = element_line(colour = "lightgrey"),
-    panel.border = element_rect(colour = "black", fill=NA, size=1),
+    panel.border = element_rect(colour = "black", fill = NA, size = 1),
     strip.background = element_blank(),
     strip.placement = "outside"
   )
