@@ -101,7 +101,7 @@ sample_locations <- cbind(wells, IDs) |>
 # Add the dilutions if applicable.
 if (dilution_bool) {
   sample_locations <- sample_locations |>
-    dplyr::mutate(Dilutions = dilutions) |>
+    dplyr::mutate(Dilutions = dilutions |> na.omit()) |>
     dplyr::mutate(IDs = as.character(IDs)) |>
     tidyr::unite(IDs, IDs:Dilutions, sep = "\n")
 }
