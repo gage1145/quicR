@@ -40,7 +40,7 @@ df <- quicR::get_real(file, ordered = FALSE)
 
 # Ask the user which real-time data set they want to use.
 df_id <- ifelse(
-  length(df_list) > 1,
+  length(df) > 1,
   as.integer(
     readline(
       paste(
