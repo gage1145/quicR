@@ -13,7 +13,7 @@
 #' @importFrom dplyr mutate_all
 #'
 #' @export
-calculate_MS <- function(data, start_col = 3) {
+calculate_MS <- function(data, start_col = 3, window = 3) {
   # Calculate the slope using a moving window linear regression.
   df_norm_t <- t(data)
   colnames(df_norm_t) <- df_norm_t[1, ]
@@ -35,13 +35,21 @@ calculate_MS <- function(data, start_col = 3) {
 
   df_deriv <- df_norm_t$Time
 
+  for (row_start in 1:length(df_deriv)) {
+    if (!is.na(df_deriv[row_start] == "0")) {
+      row_start <- row_start - 1
+      break
+    }
+  }
+
   # Make sure there are no "-" in the sample IDs. This affects the formula below.
   for (i in colnames(df_norm_t)[-1]) {
-    slope_column <- slide(df_norm_t,
-      ~ lm(as.formula(paste0("`", i, "`", " ~ Time")),
-        data = .x
+    slope_column <- slide(
+      df_norm_t[-c(1:row_start),],
+      ~lm(as.formula(paste0("`", i, "`", " ~ Time")),
+          data = .x
       )[[1]][[2]] / 3600,
-      .before = 3,
+      .before = window,
       .complete = TRUE
     )
     df_deriv <- cbind(df_deriv, slope_column)
@@ -52,22 +60,22 @@ calculate_MS <- function(data, start_col = 3) {
     as.data.frame() %>%
     t() %>%
     as.data.frame() %>%
-    slice(-c(1))
+    slice(-c(1)) %>%
+    select_at(-c(1:row_start))
 
-  df_deriv <- cbind(data$`Sample ID`, df_deriv)
+  df_deriv <- cbind(data[1:(row_start + 1)], df_deriv)
   colnames(df_deriv) <- colnames(data)
 
   # Convert df_deriv to numeric values.
-  df_deriv[, -1] <- mutate_all(
-    df_deriv[, -1],
+  df_deriv[-c(1:(row_start + 1))] <- mutate_all(
+    df_deriv[-c(1:(row_start + 1))],
     function(x) as.numeric(as.character(x))
   )
 
   # Initialize the list containing the max slope.
-  MS_list <- c(rep(NA, nrow(data)))
+  df_deriv_1 <- df_deriv[colSums(!is.na(df_deriv)) > 0]
 
-  for (i in 1:nrow(df_deriv)) {
-    MS_list[i] <- max(df_deriv[i, 5:(ncol(df_deriv))])
-  }
+  MS_list <- apply(df_deriv[-(1:(row_start + window + 1))], 1, max)
+
   return(MS_list)
 }
