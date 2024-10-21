@@ -72,7 +72,7 @@ calculate_MS <- function(data, window = 3) {
     as.character
   )
 
-  MS_list <- apply(df_deriv_1[-(1:(row_start + window + 1))], 1, max)
+  MS_list <- apply(df_deriv_1[-(1:(row_start + window + 1))], 1, function(x) max(as.numeric(x)))
 
   return(MS_list)
 }
