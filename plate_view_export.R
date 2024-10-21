@@ -45,7 +45,8 @@ df_dic <- quicR::organize_tables(file, plate = plate)
 #   tidyr::gather() |>
 #   dplyr::select(value)
 
-IDs <- quicR::convert_tables(df_dic)$`Sample IDs`
+IDs <- quicR::convert_tables(df_dic)$`Sample IDs` |>
+  na.omit()
 
 # Determine if there is a dilutions table.
 dilution_bool <- "Dilutions" %in% names(df_dic)
@@ -68,14 +69,18 @@ if (dilution_bool) {
 # measurements the user exported from MARS.
 df_list <- quicR::get_real(file, ordered = FALSE)
 
-df_id <- as.integer(
-  readline(
-    paste(
-      "There are",
-      length(df_list),
-      "real-time data sets. Please enter a number in that range: "
+df_id <- ifelse(
+  length(df_list) > 1,
+  as.integer(
+    readline(
+      paste(
+        "There are",
+        length(df_list),
+        "real-time data sets. Please enter a number in that range: "
+      )
     )
-  )
+  ),
+  1
 )
 
 df <- as.data.frame(df_list[[df_id]])
@@ -90,14 +95,19 @@ df <- df[, -1]
 wells <- quicR::get_wells(file)
 
 # Take the metadata and apply it into a dataframe for the plate_view function.
-sample_locations <- cbind(wells, IDs) |> na.omit()
+sample_locations <- cbind(wells, IDs) |>
+  na.omit()
 
 # Add the dilutions if applicable.
 if (dilution_bool) {
   sample_locations <- sample_locations |>
-    dplyr::mutate(Dilutions = dilutions$value) |>
-    tidyr::unite(value, value:Dilutions, sep = "\n")
+    dplyr::mutate(Dilutions = dilutions) |>
+    dplyr::mutate(IDs = as.character(IDs)) |>
+    tidyr::unite(IDs, IDs:Dilutions, sep = "\n")
 }
+
+sample_locations <- sample_locations |>
+  mutate(IDs = ifelse(stringr::str_length(IDs) > 12, gsub(" ", "\n", IDs), IDs))
 
 
 

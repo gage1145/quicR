@@ -56,7 +56,7 @@ plate_view <- function(df, meta, plate = 96) {
   colnames(template_columns) <- colnames(meta[1])
 
   # Create a data.frame with all the wells and IDs, even if some are missing.
-  full <- sample_locations |>
+  full <- meta |>
     full_join(as.data.frame(template_columns)) |>
     arrange_at(1)
 
@@ -70,7 +70,7 @@ plate_view <- function(df, meta, plate = 96) {
     # Melt the data to help with the faceting.
     reshape2::melt(id.vars = "Time") |>
     # Separate the wells from the IDs.
-    separate(variable, c("Well", "ID"), "\\.", fill = "left") |>
+    separate(variable, c("Well", "ID"), "\\.", fill = "right") |>
     # Ensures that Time and observations are numeric.
     mutate(
       Time = as.numeric(Time),

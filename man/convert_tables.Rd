@@ -6,6 +6,20 @@
 \usage{
 convert_tables(tab)
 }
+<<<<<<< HEAD
+\description{
+convert_tables accepts a table or matrix or a list of tables and matrices
+and converts them into dataframe columns.
+}
+\details{
+@param tab A table/matrix or a list of tables/matrices.
+
+@importFrom tidyr gather
+@importFrom dplyr select
+
+@export
+}
+=======
 \arguments{
 \item{tab}{A table/matrix or a list of tables/matrices.}
 }
@@ -16,3 +30,4 @@ A dataframe column.
 Accepts a table or matrix or a list of tables and matrices
 and converts them into dataframe columns.
 }
+>>>>>>> 113ff2ea6ae58ee14eddbbc6a2c8744f05107fe4
