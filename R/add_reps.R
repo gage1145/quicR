@@ -12,14 +12,14 @@ add_reps <- function(df, sep = "_") {
   if (ncol(df) > 2) {
     stop("Dataframe should only have two columns with well IDs and Sample IDs.")
   }
-  df[, "C"] = NA
+  df[, "C"] <- NA
   count_list <- list()
-  for (i in 1: nrow(df)) {
+  for (i in 1:nrow(df)) {
     samp <- df[i, 2]
     count_list <- append(count_list, samp)
     df[i, 3] <- sum(count_list == samp)
   }
   df[, "B"] <- paste(df$B, df$C, sep = sep)
   df <- df[, 1:2]
-  return (df)
+  return(df)
 }

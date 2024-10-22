@@ -9,7 +9,7 @@
 #' @return A vector containing MPR values.
 #'
 #' @export
-calculate_MPR <- function (data, start_col=3, data_is_norm=FALSE) {
+calculate_MPR <- function(data, start_col = 3, data_is_norm = FALSE) {
   if (data_is_norm == FALSE) {
     # Calculate the normalized real-time data.
     data <- normalize_RFU(data)
@@ -19,9 +19,9 @@ calculate_MPR <- function (data, start_col=3, data_is_norm=FALSE) {
   MPR_list <- c(rep(NA, nrow(data)))
 
   # Identify the maxpoint ratio.
-  for (i in 1: nrow(data)) {
+  for (i in 1:nrow(data)) {
     maximum <- max(data[i, start_col:(ncol(data))])
     MPR_list[i] <- maximum
   }
-  return (MPR_list)
+  return(MPR_list)
 }

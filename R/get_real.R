@@ -11,16 +11,13 @@
 #' @importFrom readxl read_excel
 #'
 #' @export
-get_real <- function(file, ordered=TRUE) {
-
+get_real <- function(file, ordered = TRUE) {
   if (is.character(file)) { # Read the Excel file into R.
     data <- read_excel(file, sheet = 2, col_names = FALSE)
-  }
-  else if (is.data.frame(file)) {
+  } else if (is.data.frame(file)) {
     data <- file
-  }
-  else {
-    return ("Please enter either .xlsx string or dataframe. ")
+  } else {
+    return("Please enter either .xlsx string or dataframe. ")
   }
 
   # Determines the number of rows to remove.
@@ -32,14 +29,14 @@ get_real <- function(file, ordered=TRUE) {
   }
 
   # Remove metadata.
-  tidy_data <- data[-(1:(num_rows-1)), -1] %>%
+  tidy_data <- data[-(1:(num_rows - 1)), -1] %>%
     na.omit(tidy_data)
 
 
   # Set the first row as column names.
   colnames(tidy_data) <- tidy_data[1, ]
   tidy_data <- tidy_data[-1, ]
-  #tidy_data <- tidy_data[1:65,]
+  # tidy_data <- tidy_data[1:65,]
 
   # Add leading "0" before single digits in column names.
   colnames(tidy_data) <- gsub(" X(\\d)$", " X0\\1", colnames(tidy_data))
@@ -68,10 +65,10 @@ get_real <- function(file, ordered=TRUE) {
   colnames(tidy_data) <- gsub("_\\d+$", "", colnames(tidy_data))
 
   # Designate the integers used to calculate how the data will be cut
-  cycles <- length(unique(tidy_data$Time))    # Number of cycles
-  num_rows <- cycles                          # This will change after sending
+  cycles <- length(unique(tidy_data$Time)) # Number of cycles
+  num_rows <- cycles # This will change after sending
   # one data type to a data frame
-  reads <- length(which(tidy_data$Time==0))   # Number of types of data (e.g. Raw,
+  reads <- length(which(tidy_data$Time == 0)) # Number of types of data (e.g. Raw,
   # Normalized, or Derivative)
 
   # Create a data frame with only the "Time" column with no duplicates
@@ -79,7 +76,7 @@ get_real <- function(file, ordered=TRUE) {
     rename(Time = 1)
 
   # Create separate data frames for different read types
-  i = 1
+  i <- 1
   df_list <- list()
   while (i <= reads) {
     if (num_rows == cycles) {
@@ -92,5 +89,5 @@ get_real <- function(file, ordered=TRUE) {
     i <- i + 1
     df_list <- append(df_list, list(df))
   }
-  return (df_list)
+  return(df_list)
 }

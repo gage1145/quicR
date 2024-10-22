@@ -4,12 +4,12 @@
 \alias{calculate_MS}
 \title{Calculate Maximum Slope}
 \usage{
-calculate_MS(data, start_col = 3)
+calculate_MS(data, window = 3)
 }
 \arguments{
 \item{data}{A dataframe containing real-time reads. It is recommended to use a dataframe made from normalize_RFU.}
 
-\item{start_col}{The column containing the starting position of the real-time data.}
+\item{window}{Integer designating how wide you want the sliding window to be for calculating the moving average slope.}
 }
 \value{
 A dataframe containing the real-time slope values.
