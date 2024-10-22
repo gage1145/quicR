@@ -30,7 +30,7 @@ calculate_MS <- function(data, window = 3) {
 
   for (i in colnames(df_norm_t)[-ncol(df_norm_t)]) {
 
-    formula <- as.formula(paste0(i, " ~ Time"))
+    formula <- as.formula(paste0("`", i, "`", " ~ Time"))
 
     slope_column <- df_norm_t %>%
       slide(
