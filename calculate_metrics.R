@@ -1,11 +1,11 @@
-library(slider)
-library(ggpubr)
-library(openxlsx)
-library(agricolae)
-library(tidyverse)
-library(tidyr)
-library(stringr)
-library(quicR)
+require(slider)
+require(ggpubr)
+require(openxlsx)
+require(agricolae)
+require(tidyverse)
+require(tidyr)
+require(stringr)
+require(quicR)
 
 
 

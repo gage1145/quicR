@@ -1,6 +1,6 @@
-library(readxl)
-library(tidyvers)
-library(quicR)
+require(readxl)
+require(tidyverse)
+require(quicR)
 
 
 
