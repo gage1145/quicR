@@ -13,7 +13,7 @@ library(quicR)
 
 
 
-# For testing, use "test".
+# For testing, use "tests/testthat/input_files/test.xlsx".
 # Request the user to input the file name for analysis.
 file <- ""
 while (file == "") {
@@ -72,17 +72,8 @@ df <- df[[df_id]]
 # Export the tables in the first sheet of the file.
 dic <- quicR::organize_tables(file)
 
-column_names <- c("Time")
-for (i in t(dic[["Sample IDs"]])) {
-  for (j in i) {
-    if (!is.na(j)) {
-      column_names <- cbind(column_names, j)
-    }
-  }
-}
-
 # Apply the column names.
-colnames(df) <- column_names
+colnames(df) <- cbind("Time", convert_tables(dic)$`Sample IDs` |> t())
 
 # Determine if there is a dilutions table.
 dilution_bool <- "Dilutions" %in% names(dic)
@@ -93,20 +84,7 @@ dilution_bool <- "Dilutions" %in% names(dic)
 
 
 
-# Calculate the normalized real-time data.
 df_norm <- quicR::normalize_RFU(df)
-
-# Add dilution factors if applicable.
-if (dilution_bool) {
-  dilutions <- c()
-  for (i in t(dic[["Dilutions"]])) {
-    for (j in i) {
-      if (!is.na(j)) {
-        dilutions <- rbind(dilutions, j)
-      }
-    }
-  }
-}
 
 
 
@@ -121,15 +99,15 @@ hours <- as.numeric(colnames(df_norm)[ncol(df_norm)])
 df_analyzed <- data.frame(`Sample_ID` = df_norm$`Sample ID`) %>%
   mutate(
     # Add dilutions if applicable.
-    Dilutions = if (dilution_bool) -log10(as.numeric(dilutions)),
+    Dilutions = if (dilution_bool) {
+      -log10(as.numeric(convert_tables(dic)$Dilutions))
+    },
     # Maxpoint Ratio
-    MPR = quicR::calculate_MPR(df_norm, start_col = 3, data_is_norm = TRUE),
+    MPR = quicR::calculate_MPR(df_norm, 3, TRUE),
     # Max Slope
-    MS = quicR::calculate_MS(df_norm, start_col = 3),
+    MS = quicR::calculate_MS(df_norm),
     # Time to Threshold
-    TtT = quicR::calculate_TtT(df_norm, threshold = threshold, start_col = 3, run_time = hours)
-  ) %>%
-  mutate(
+    TtT = quicR::calculate_TtT(df_norm, threshold, 3, hours),
     # Rate of Amyloid Formation
     RAF = ifelse(TtT == hours, 0, 1 / (3600 * TtT)),
     # Crossed threshold?
@@ -181,7 +159,7 @@ for (metric in metrics) {
       data = df_analyzed
     ),
     "Sample_ID",
-    p.adj = "holm", group = F
+    p.adj = "none", group = F
   )[["comparison"]]
 
   # Initialize columns which will hold unique IDs for each sample compared.
@@ -193,7 +171,7 @@ for (metric in metrics) {
         t() %>%
         as.data.frame()
     ) %>%
-    select(-difference) %>%
+    select(-c(difference, LCL, UCL)) %>%
     # Remove all comparisons that are not against "N".
     subset(
       V1 == "N" |
@@ -224,7 +202,9 @@ summary <- summary %>%
   mutate(
     MPR_pvalue = as.numeric(MPR_pvalue),
     MS_pvalue = as.numeric(MS_pvalue),
-    Positive = thres_pos & MPR_pvalue <= 0.05 & MS_pvalue <= 0.05
+    Positive = thres_pos &
+      str_detect(MPR_significance, "\\*") &
+      str_detect(MS_significance, "\\*")
   )
 
 
