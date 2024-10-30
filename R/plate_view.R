@@ -49,7 +49,7 @@ plate_view <- function(df, meta, plate = 96) {
   }
 
   # Add a "Time" column. This is important for the melt function.
-  df <- cbind(Time = rownames(df), df)
+  df <- cbind("Time" = rownames(df), df)
 
   # Combine the template_columns and sample_locations.
   template_columns <- as.data.frame(template_columns)
@@ -70,17 +70,17 @@ plate_view <- function(df, meta, plate = 96) {
     # Melt the data to help with the faceting.
     reshape2::melt(id.vars = "Time") |>
     # Separate the wells from the IDs.
-    separate(variable, c("Well", "ID"), "\\.", fill = "right") |>
+    separate("variable", c("Well", "ID"), "\\.", fill = "right") |>
     # Ensures that Time and observations are numeric.
     mutate(
-      Time = as.numeric(Time),
-      value = as.numeric(value),
-      ID = as.character(ID),
-      Well = as.factor(Well)
+      "Time" = as.numeric(.data[["Time"]]),
+      "value" = as.numeric(.data[["value"]]),
+      "ID" = as.character(.data[["ID"]]),
+      "Well" = as.factor(.data[["Well"]])
     ) |>
-    mutate(ID = replace_na(ID, "none")) |>
+    mutate(ID = replace_na(.data[["ID"]], "none")) |>
     # Create the facet plot.
-    ggplot(aes(x = Time, y = value)) +
+    ggplot(aes(x = .data[["Time"]], y = .data[["value"]])) +
     geom_line() +
     labs(
       y = "RFU",
@@ -93,7 +93,7 @@ plate_view <- function(df, meta, plate = 96) {
       axis.text.x = element_blank(),
       axis.text.y = element_blank()
     ) +
-    facet_wrap(vars(Well),
+    facet_wrap(vars(.data[["Well"]]),
       nrow = ifelse(plate == 96, 8, 16),
       ncol = ifelse(plate == 96, 12, 24),
       labeller = ID_labeller
