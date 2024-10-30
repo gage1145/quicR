@@ -12,6 +12,7 @@
 #' @importFrom dplyr slice
 #' @importFrom dplyr mutate_all
 #' @importFrom dplyr select_at
+#' @importFrom stats as.formula
 #'
 #' @export
 calculate_MS <- function(data, window = 3) {
