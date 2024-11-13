@@ -21,3 +21,15 @@ A vector containing the times to threshold
 \description{
 Calculates the time required to reach a defined threshold.
 }
+\examples{
+file <- system.file(
+"extdata/input_files",
+file = "test.xlsx",
+package = "quicR"
+)
+df_ <- get_real(file)[[1]] |>
+  normalize_RFU()
+calculate_TtT(df_, threshold = 2)
+
+
+}

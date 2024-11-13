@@ -3,15 +3,24 @@
 #' Accepts an Excel file or a dataframe of real-time RT-QuIC data.
 #'
 #' @param file Either an Excel file or a dataframe.
-#' @param ordered Boolean, if true (default), will organize the columns by sample ID.
+#' @param ordered Logical, if true, will organize the columns by sample ID.
 #'
 #' @return A list of dataframes containing the formatted real-time data.
 #'
 #' @importFrom dplyr rename
 #' @importFrom readxl read_excel
 #'
+#' @examples
+#' file <- system.file(
+#' "extdata/input_files",
+#' file = "test.xlsx",
+#' package = "quicR"
+#' )
+#' get_real(file)
+#'
+#'
 #' @export
-get_real <- function(file, ordered = TRUE) {
+get_real <- function(file, ordered = FALSE) {
   if (is.character(file)) { # Read the Excel file into R.
     data <- read_excel(file, sheet = 2, col_names = FALSE)
   } else if (is.data.frame(file)) {

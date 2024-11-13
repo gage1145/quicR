@@ -4,6 +4,9 @@
 #' a format which can be easily imported into the BMG control software.
 #'
 #' @param file A .CSV file containing the plate layout of Sample IDs.
+#' @param save_path The path to the directory that you want the file saved.
+#' @param save_name The name of the output file. Should have the ".txt" extension.
+#' @param write_file Logical. If true, function will write a .txt file; otherwise it will return a character vector.
 #'
 #' @return A text file containing information for import into the BMG control software.
 #'
@@ -15,8 +18,17 @@
 #' @importFrom stats na.omit
 #' @importFrom reshape2 melt
 #'
+#' @examples
+#' layout_file <- system.file(
+#'   "extdata/BMG_formatting",
+#'   file = "plate_layout.csv",
+#'   package = "quicR"
+#'   )
+#' BMG_format(layout_file)
+#'
+#'
 #' @export
-BMG_format <- function(file) {
+BMG_format <- function(file, save_path = "./", save_name = "formatted.txt", write_file = FALSE) {
   df_ <- read.csv(file, header = F)
   colnames(df_) <- c("col", df_[1, -1])
   df_ <- df_[-1, ]
@@ -65,10 +77,7 @@ BMG_format <- function(file) {
 
   dic <- select(dic, -"value")
 
-  # colnames(dic) <- c("Samples", "Plate_ID")
   locations <- left_join(locations, dic)
-
-  # locations <- locations[, c("Wells", "Plate_ID", "Samples")]
 
   # Function to format each row
   format_row <- function(row) {
@@ -79,6 +88,9 @@ BMG_format <- function(file) {
   formatted <- locations |>
     apply(1, format_row) |>
     na.omit()
-
-  return(formatted)
+  if (write_file == TRUE) {
+    writeLines(paste(save_path, save_name))
+  } else {
+    return(formatted)
+  }
 }

@@ -20,3 +20,14 @@ A vector containing MPR values.
 Maxpoint ratio is defined as the maximum relative fluorescence divided by the
 background fluorescence.
 }
+\examples{
+file <- system.file(
+  "extdata/input_files",
+  file = "test.xlsx",
+  package = "quicR"
+  )
+df_ <- quicR::get_real(file)[[1]]
+print(calculate_MPR(df_))
+
+
+}

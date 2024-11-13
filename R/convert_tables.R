@@ -10,6 +10,11 @@
 #' @importFrom tidyr gather
 #' @importFrom dplyr select
 #'
+#' @examples
+#' tab <- organize_tables(file)
+#' convert_tables(tab)
+#'
+#'
 #' @export
 convert_tables <- function(tab) {
   df_list <- data.frame()
@@ -21,11 +26,10 @@ convert_tables <- function(tab) {
         as.data.frame() |>
         tidyr::gather() |>
         dplyr::select("value")
-      print(i)
       df_list <- append(df_list, column)
     }
+    df_ <- as.data.frame(df_list)
+    colnames(df_) <- names(tab)
+    return(df_)
   }
-  df_ <- as.data.frame(df_list)
-  colnames(df_) <- names(tab)
-  return(df_)
 }

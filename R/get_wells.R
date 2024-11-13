@@ -6,6 +6,15 @@
 #'
 #' @return A vector containing well IDs.
 #'
+#' @examples
+#' file <- system.file(
+#' "extdata/input_files",
+#' file = "test.xlsx",
+#' package = "quicR"
+#' )
+#' get_wells(file)
+#'
+#'
 #' @export
 get_wells <- function(file) {
   if (is.character(file)) {

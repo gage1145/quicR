@@ -17,3 +17,15 @@ A dataframe containing the real-time slope values.
 \description{
 Uses a sliding window to calculate the slope of real-time reads.
 }
+\examples{
+file <- system.file(
+"extdata/input_files",
+file = "test.xlsx",
+package = "quicR"
+)
+df_ <- get_real(file)[[1]] |>
+  normalize_RFU()
+calculate_MS(df_)
+
+
+}

@@ -16,3 +16,9 @@ A dataframe column.
 Accepts a table or matrix or a list of tables and matrices
 and converts them into dataframe columns.
 }
+\examples{
+tab <- organize_tables(file)
+convert_tables(tab)
+
+
+}

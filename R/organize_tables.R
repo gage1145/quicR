@@ -10,6 +10,15 @@
 #'
 #' @importFrom readxl cell_cols
 #'
+#' @examples
+#' file <- system.file(
+#' "extdata/input_files",
+#' file = "test.xlsx",
+#' package = "quicR"
+#' )
+#' organize_tables(file)
+#'
+#'
 #' @export
 organize_tables <- function(file, plate = 96) {
   # Block allows input of an excel file string or a dataframe.

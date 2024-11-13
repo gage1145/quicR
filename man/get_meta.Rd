@@ -16,3 +16,13 @@ A dataframe containing the Meta_ID and Meta_info
 Takes the Excel file exported from MARS and compiles the metadata in the
 header.
 }
+\examples{
+file <- system.file(
+"extdata/input_files",
+file = "test.xlsx",
+package = "quicR"
+)
+get_meta(file)
+
+
+}

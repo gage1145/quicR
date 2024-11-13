@@ -11,6 +11,15 @@
 #' @importFrom stats na.omit
 #' @importFrom tidyr separate_wider_delim
 #'
+#' @examples
+#' file <- system.file(
+#' "extdata/input_files",
+#' file = "test.xlsx",
+#' package = "quicR"
+#' )
+#' get_meta(file)
+#'
+#'
 #' @export
 get_meta <- function(file) {
   if (is.character(file)) { # Read the Excel file into R.
@@ -25,7 +34,7 @@ get_meta <- function(file) {
       break
     }
   }
-  data1 <- data[1:i, 1] |>
+  data <- data[1:i, 1] |>
     as.data.frame() |>
     na.omit() |>
     separate_wider_delim(

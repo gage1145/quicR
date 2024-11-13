@@ -8,6 +8,16 @@
 #' @param data_is_norm Logical, if the data has not been normalized, will make a call to normalize_RFU.
 #' @return A vector containing MPR values.
 #'
+#' @examples
+#' file <- system.file(
+#'   "extdata/input_files",
+#'   file = "test.xlsx",
+#'   package = "quicR"
+#'   )
+#' df_ <- quicR::get_real(file)[[1]]
+#' print(calculate_MPR(df_))
+#'
+#'
 #' @export
 calculate_MPR <- function(data, start_col = 3, data_is_norm = FALSE) {
   if (data_is_norm == FALSE) {

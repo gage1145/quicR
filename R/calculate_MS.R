@@ -13,6 +13,17 @@
 #' @importFrom dplyr select_at
 #' @importFrom stats as.formula
 #'
+#' @examples
+#' file <- system.file(
+#' "extdata/input_files",
+#' file = "test.xlsx",
+#' package = "quicR"
+#' )
+#' df_ <- get_real(file)[[1]] |>
+#'   normalize_RFU()
+#' calculate_MS(df_)
+#'
+#'
 #' @export
 calculate_MS <- function(data, window = 3) {
 
