@@ -38,13 +38,7 @@ while (plate == "") {
 # The sheet should be formatted so that each ID in the "layout" table is unique.
 df_dic <- quicR::organize_tables(file, plate = plate)
 
-# IDs <- df_dic[["Sample IDs"]] |>
-#   t() |>
-#   as.data.frame() |>
-#   tidyr::gather() |>
-#   dplyr::select(value)
-
-IDs <- quicR::convert_tables(df_dic)$`Sample IDs` |>
+IDs <- quicR::convert_tables(df_dic)[["Sample IDs"]] |>
   na.omit()
 
 # Determine if there is a dilutions table.
@@ -52,12 +46,6 @@ dilution_bool <- "Dilutions" %in% names(df_dic)
 
 # Add dilution factors if applicable.
 if (dilution_bool) {
-  # dilutions <- df_dic[["Dilutions"]] |>
-  #   t() |>
-  #   as.data.frame() |>
-  #   tidyr::gather() |>
-  #   dplyr::select(value) |>
-  #   dplyr::mutate(value = -log10(as.numeric(value)))
   dilutions <- quicR::convert_tables(df_dic)$Dilutions |>
     as.numeric() |>
     log10() * -1
