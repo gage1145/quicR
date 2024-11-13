@@ -13,6 +13,7 @@
 #' @export
 # Separates the raw run files in the .xlsx file.
 separate_raw <- function(file, num_rows, export_name) {
+
   if (is.character(file)) { # Read the Excel file into R.
     data <- read_excel(file, sheet = 2)
   } else if (is.data.frame(file)) {
@@ -21,9 +22,8 @@ separate_raw <- function(file, num_rows, export_name) {
     stop("Please enter either .xlsx string or dataframe. ")
   }
 
-
   # Remove metadata.
-  tidy_data <- data[-(1:num_rows - 1), -1] %>%
+  tidy_data <- data[-(1:num_rows - 1), -1] |>
     na.omit(tidy_data)
 
 
@@ -46,29 +46,29 @@ separate_raw <- function(file, num_rows, export_name) {
   }
 
   # Rename the first column as "Time"
-  tidy_data <- tidy_data %>%
-    rename(Time = 1)
+  tidy_data <- tidy_data |>
+    rename("Time" = 1)
 
   # Convert tidy_data to numeric.
   tidy_data <- as.data.frame(sapply(tidy_data, as.numeric))
 
   # Rearrange columns to group replicates of the same sample
-  tidy_data <- tidy_data %>%
-    select(Time, order(colnames(tidy_data), decreasing = FALSE))
+  tidy_data <- tidy_data |>
+    select("Time", order(colnames(tidy_data), decreasing = FALSE))
 
   # Remove suffixes from column names
   colnames(tidy_data) <- gsub("_\\d+$", "", colnames(tidy_data))
 
   # Designate the integers used to calculate how the data will be cut
-  cycles <- length(unique(tidy_data$Time)) # Number of cycles
+  cycles <- length(unique(tidy_data[["Time"]])) # Number of cycles
   num_rows <- cycles # This will change after sending
   # one data type to a data frame
-  reads <- length(which(tidy_data$Time == 0)) # Number of types of data (e.g. Raw,
+  reads <- length(which(tidy_data[["Time"]] == 0)) # Number of types of data (e.g. Raw,
   # Normalized, or Derivative)
 
   # Create a data frame with only the "Time" column with no duplicates
-  time_df <- data.frame(unique(tidy_data$Time)) %>%
-    rename(Time = 1)
+  time_df <- data.frame(unique(tidy_data[["Time"]])) |>
+    rename("Time" = 1)
 
   # Create separate data frames for different read types
   i <- 1

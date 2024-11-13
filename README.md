@@ -1,6 +1,5 @@
 # quicR
 
-
 ## Description
 
 quicR is a package made for the analysis of real-time quaking-induced
@@ -44,7 +43,9 @@ plate view into a format importable into the BMG control software.
 
 For example .CSV file, see:
 
-    tests -> testthat -> BMG_formatting -> plate_layout.csv
+```         
+tests -> testthat -> BMG_formatting -> plate_layout.csv
+```
 
 The file, “formatted.txt” in the same folder, is how the export should
 look to be imported into the BMG software.
@@ -56,7 +57,9 @@ from an Excel file made in MARS.
 
 For example .CSV files, see:
 
-    tests -> testthat -> input_files
+```         
+tests -> testthat -> input_files
+```
 
 ### Calculations
 
@@ -69,7 +72,9 @@ data. A plot of the summarized data will also be created.
 
 For example .CSV files, see:
 
-    tests -> testthat -> input_files
+```         
+tests -> testthat -> input_files
+```
 
 ## Author
 

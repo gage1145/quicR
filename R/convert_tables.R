@@ -20,7 +20,7 @@ convert_tables <- function(tab) {
         t() |>
         as.data.frame() |>
         tidyr::gather() |>
-        dplyr::select(value)
+        dplyr::select("value")
       print(i)
       df_list <- append(df_list, column)
     }

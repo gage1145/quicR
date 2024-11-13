@@ -8,71 +8,48 @@
 #' @return A dataframe containing the real-time slope values.
 #'
 #' @importFrom slider slide
-#' @importFrom dplyr %>%
 #' @importFrom dplyr slice
 #' @importFrom dplyr mutate_all
 #' @importFrom dplyr select_at
+#' @importFrom stats as.formula
 #'
 #' @export
 calculate_MS <- function(data, window = 3) {
-  # Calculate the slope using a moving window linear regression.
-  df_norm_t <- t(data)
-  colnames(df_norm_t) <- df_norm_t[1, ]
-  df_norm_t <- df_norm_t[-1, ]
-  df_norm_t <- cbind(Time = as.numeric(rownames(df_norm_t)), df_norm_t)
-  df_norm_t <- as.data.frame(df_norm_t)
 
-  unique_cols <- colnames(df_norm_t)[1]
+  df_norm_t <- data |>
+    t() |>
+    as.data.frame() |>
+    mutate_all(
+      ~ as.numeric(as.character(.x))
+    ) |>
+    suppressWarnings() |>
+    na.omit()
 
-  x <- 1
-  for (i in colnames(df_norm_t)[-1]) {
-    unique_cols <- cbind(unique_cols, paste0(i, "_", x))
-    x <- x + 1
-  }
+  df_norm_t$Time <- rownames(df_norm_t)
+  df_deriv <- data.frame(Time = df_norm_t$Time)
 
-  unique_cols <- gsub("-", "_", unique_cols, fixed = TRUE)
+  for (i in colnames(df_norm_t)[-ncol(df_norm_t)]) {
 
-  colnames(df_norm_t) <- unique_cols
+    formula <- as.formula(paste0("`", i, "`", " ~ Time"))
 
-  df_deriv <- df_norm_t$Time
-
-  for (row_start in 1:length(df_deriv)) {
-    if (!is.na(df_deriv[row_start] == "0")) {
-      row_start <- row_start - 1
-      break
-    }
-  }
-
-  # Make sure there are no "-" in the sample IDs. This affects the formula below.
-  for (i in colnames(df_norm_t)[-1]) {
-    slope_column <- slide(
-      df_norm_t[-(1:row_start),],
-      ~lm(as.formula(paste0("`", i, "`", " ~ Time")),
-          data = .x
-      )[[1]][[2]] / 3600,
-      .before = window,
-      .complete = TRUE
-    )
+    slope_column <- df_norm_t |>
+      slide(
+        ~lm(formula, data = .x)[[1]][[2]] / 3600,
+        .before = window,
+        .complete = TRUE
+      ) |>
+      as.character()
     df_deriv <- cbind(df_deriv, slope_column)
   }
 
-  # Reformat df_deriv to match data formatting.
-  df_deriv_1 <- df_deriv %>%
-    as.data.frame() %>%
-    t() %>%
-    as.data.frame() %>%
-    slice(-1)
-  df_deriv_1 <- select(df_deriv_1, 1:(ncol(df_deriv_1) - window))
+  df_deriv <- df_deriv |>
+    t() |>
+    as.data.frame() |>
+    slice(-1) |>
+    select(-all_of(1:window)) |>
+    mutate_all(as.numeric)
 
-  df_deriv_1 <- cbind(data[1:(row_start + 1)], df_deriv_1)
-  colnames(df_deriv_1) <- colnames(data)
-
-  df_deriv_1 <- mutate_all(
-    df_deriv_1,
-    as.character
-  )
-
-  MS_list <- apply(df_deriv_1[-(1:(row_start + window + 1))], 1, max)
+  MS_list <- apply(df_deriv, 1, function(x) max(as.numeric(x)))
 
   return(MS_list)
 }

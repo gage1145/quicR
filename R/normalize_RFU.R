@@ -14,9 +14,9 @@ normalize_RFU <- function(df, bg_cycle = 4) {
   # Accepts output from get_real function.
   # Apply the column names as the first row instead.
   df <- rbind(colnames(df), df)
-  df <- df %>%
-    unname() %>%
-    t() %>%
+  df <- df |>
+    unname() |>
+    t() |>
     as.data.frame()
 
   # Rename first cell as "Sample ID".

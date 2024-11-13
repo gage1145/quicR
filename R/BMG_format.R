@@ -8,7 +8,6 @@
 #' @return A text file containing information for import into the BMG control software.
 #'
 #' @importFrom utils read.csv
-#' @importFrom dplyr %>%
 #' @importFrom dplyr mutate
 #' @importFrom dplyr select
 #' @importFrom dplyr left_join
@@ -31,24 +30,24 @@ BMG_format <- function(file) {
     }
   }
 
-  locations <- locations %>%
-    cbind(samples) %>%
+  locations <- locations |>
+    cbind(samples) |>
     as.data.frame()
 
   colnames(locations) <- c("Wells", "Samples")
 
-  dic <- df_ %>%
-    melt(id.vars = 1) %>%
-    unique() %>%
-    mutate(Plate_ID = "X") %>%
-    na.omit() %>%
-    unite(Wells, c("col", "variable"), sep = "")
+  dic <- df_ |>
+    melt(id.vars = 1) |>
+    unique() |>
+    mutate(Plate_ID = "X") |>
+    na.omit() |>
+    unite("Wells", c("col", "variable"), sep = "")
 
   x <- 0
-  previous <- dic$value[1]
+  previous <- dic[["value"]][1]
   current <- ""
   for (i in 1:nrow(dic)) {
-    current <- dic$value[i]
+    current <- dic[["value"]][i]
     if (tolower(current) == "n") {
       dic[i, "Plate_ID"] <- "N"
     } else if (tolower(current) == "p") {
@@ -64,7 +63,7 @@ BMG_format <- function(file) {
     previous <- current
   }
 
-  dic <- select(dic, -value)
+  dic <- select(dic, -"value")
 
   # colnames(dic) <- c("Samples", "Plate_ID")
   locations <- left_join(locations, dic)
@@ -77,8 +76,8 @@ BMG_format <- function(file) {
   }
 
   # Apply the function to each row of the data frame
-  formatted <- locations %>%
-    apply(1, format_row) %>%
+  formatted <- locations |>
+    apply(1, format_row) |>
     na.omit()
 
   return(formatted)

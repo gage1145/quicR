@@ -31,5 +31,4 @@ get_wells <- function(file) {
     as.data.frame() |>
     t() |>
     as.data.frame()
-  return(wells)
 }
