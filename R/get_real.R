@@ -29,7 +29,7 @@ get_real <- function(file, ordered = TRUE) {
   }
 
   # Remove metadata.
-  tidy_data <- data[-(1:(num_rows - 1)), -1] %>%
+  tidy_data <- data[-(1:(num_rows - 1)), -1] |>
     na.omit(tidy_data)
 
 
@@ -52,12 +52,12 @@ get_real <- function(file, ordered = TRUE) {
   }
 
   # Rename the first column as "Time"
-  tidy_data <- tidy_data %>%
+  tidy_data <- tidy_data |>
     rename("Time" = 1)
 
   # Rearrange columns to group replicates of the same sample
   if (ordered == TRUE) {
-    tidy_data <- tidy_data %>%
+    tidy_data <- tidy_data |>
       select("Time", order(colnames(tidy_data), decreasing = FALSE))
   }
 
@@ -72,7 +72,7 @@ get_real <- function(file, ordered = TRUE) {
   # Normalized, or Derivative)
 
   # Create a data frame with only the "Time" column with no duplicates
-  time_df <- data.frame(unique(tidy_data[["Time"]])) %>%
+  time_df <- data.frame(unique(tidy_data[["Time"]])) |>
     rename("Time" = 1)
 
   # Create separate data frames for different read types

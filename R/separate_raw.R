@@ -23,7 +23,7 @@ separate_raw <- function(file, num_rows, export_name) {
   }
 
   # Remove metadata.
-  tidy_data <- data[-(1:num_rows - 1), -1] %>%
+  tidy_data <- data[-(1:num_rows - 1), -1] |>
     na.omit(tidy_data)
 
 
@@ -46,14 +46,14 @@ separate_raw <- function(file, num_rows, export_name) {
   }
 
   # Rename the first column as "Time"
-  tidy_data <- tidy_data %>%
+  tidy_data <- tidy_data |>
     rename("Time" = 1)
 
   # Convert tidy_data to numeric.
   tidy_data <- as.data.frame(sapply(tidy_data, as.numeric))
 
   # Rearrange columns to group replicates of the same sample
-  tidy_data <- tidy_data %>%
+  tidy_data <- tidy_data |>
     select("Time", order(colnames(tidy_data), decreasing = FALSE))
 
   # Remove suffixes from column names
@@ -67,7 +67,7 @@ separate_raw <- function(file, num_rows, export_name) {
   # Normalized, or Derivative)
 
   # Create a data frame with only the "Time" column with no duplicates
-  time_df <- data.frame(unique(tidy_data[["Time"]])) %>%
+  time_df <- data.frame(unique(tidy_data[["Time"]])) |>
     rename("Time" = 1)
 
   # Create separate data frames for different read types

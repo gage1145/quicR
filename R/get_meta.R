@@ -9,7 +9,7 @@
 #'
 #' @importFrom readxl read_excel
 #' @importFrom stats na.omit
-#' @importFrom stringr str_split
+#' @importFrom tidyr separate_wider_delim
 #'
 #' @export
 get_meta <- function(file) {
@@ -20,18 +20,20 @@ get_meta <- function(file) {
   } else {
     return("Please enter either .xlsx string or dataframe. ")
   }
-
   for (i in 1:nrow(data[, 1])) {
-    if (!(is.na(data[i, 2]))) {
+    if (is.na(data[i, 1])) {
       break
     }
   }
-  data <- na.omit(data.frame(data[1:i, 1]))
-  colnames(data) <- c("a")
-  data <- data.frame(within(data, {
-    new_columns <- str_split(a, ":", n = 2, simplify = TRUE)
-  })[, -1])
-  colnames(data) <- c("Meta_ID", "Meta_info")
-
+  data1 <- data[1:i, 1] |>
+    as.data.frame() |>
+    na.omit() |>
+    separate_wider_delim(
+      1,
+      ":",
+      names = c("Meta_ID", "Meta_info"),
+      too_few = "align_start",
+      too_many = "merge"
+    )
   return(data)
 }
