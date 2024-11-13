@@ -5,7 +5,7 @@ Authors@R:
     person("Gage", "Rowden", , "gage.rowden1145@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-7517-0480"))
 Description:
-  quicR is an R package made for the curation and analysis of data generated from real-time quaking-induced conversion (RT-QuIC) assays.
+  An R package made for the curation and analysis of data generated from real-time quaking-induced conversion (RT-QuIC) assays.
 Imports:
   dplyr, 
   ggplot2,
@@ -16,7 +16,7 @@ Imports:
   stats,
   stringr,
   tidyr
-License: GPL-3 + file LICENSE
+License: GPL-3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
