@@ -15,12 +15,11 @@
 #'
 #' @examples
 #' file <- system.file(
-#' "extdata/input_files",
-#' file = "test.xlsx",
-#' package = "quicR"
+#'   "extdata/input_files",
+#'   file = "rt_data.csv",
+#'   package = "quicR"
 #' )
-#' df_ <- get_real(file)[[1]] |>
-#'   normalize_RFU()
+#' df_ <- read.csv(file, check.names = FALSE)
 #' calculate_MS(df_)
 #'
 #'
