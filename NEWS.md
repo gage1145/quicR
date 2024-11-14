@@ -1,3 +1,5 @@
+# quicR (development version)
+
 # quicR 1.0.2
 
 # quicR 1.0.1
