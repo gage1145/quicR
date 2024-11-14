@@ -16,6 +16,8 @@
 #' @importFrom stringr str_length
 #'
 #' @examples
+#' # This test takes >5 sec
+#' \donttest{
 #' file <- system.file(
 #' "extdata/input_files",
 #' file = "test.xlsx",
@@ -48,6 +50,7 @@
 #'
 #' # Make the plate view figure.
 #' plate_view(df_, sample_locations, plate = 96)
+#' }
 #'
 #'
 #' @export

@@ -21,6 +21,8 @@ Converts the real-time data into a ggplot figure. The layout is either 8x12
 or 16x24 for 96- and 384-well plates, respectively.
 }
 \examples{
+# This test takes >5 sec
+\donttest{
 file <- system.file(
 "extdata/input_files",
 file = "test.xlsx",
@@ -53,6 +55,7 @@ sample_locations <- sample_locations |>
 
 # Make the plate view figure.
 plate_view(df_, sample_locations, plate = 96)
+}
 
 
 }

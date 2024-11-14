@@ -18,13 +18,16 @@ A dataframe containing the real-time slope values.
 Uses a sliding window to calculate the slope of real-time reads.
 }
 \examples{
-file <- system.file(
-  "extdata/input_files",
-  file = "rt_data.csv",
-  package = "quicR"
+# This test takes >5 sec
+\donttest{
+  file <- system.file(
+    "extdata/input_files",
+    file = "rt_data.csv",
+    package = "quicR"
 )
 df_ <- read.csv(file, check.names = FALSE)
 calculate_MS(df_)
+}
 
 
 }

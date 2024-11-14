@@ -20,6 +20,8 @@ a defined cycle. All cycles are divided by the fluorescent value of the
 defined cycle.
 }
 \examples{
+# This test takes >5 sec
+\donttest{
 file <- system.file(
   "extdata/input_files",
   file = "test.xlsx",
@@ -35,6 +37,7 @@ colnames(df_) <- cbind("Time", convert_tables(dic)$`Sample IDs` |> t())
 
 # Normalize the raw data against the background reading.
 normalize_RFU(df_)
+}
 
 
 }

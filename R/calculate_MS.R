@@ -14,13 +14,16 @@
 #' @importFrom stats as.formula
 #'
 #' @examples
-#' file <- system.file(
-#'   "extdata/input_files",
-#'   file = "rt_data.csv",
-#'   package = "quicR"
+#' # This test takes >5 sec
+#' \donttest{
+#'   file <- system.file(
+#'     "extdata/input_files",
+#'     file = "rt_data.csv",
+#'     package = "quicR"
 #' )
 #' df_ <- read.csv(file, check.names = FALSE)
 #' calculate_MS(df_)
+#' }
 #'
 #'
 #' @export
