@@ -2,10 +2,15 @@ Package: quicR
 Title: RT-QuIC Data Formatting and Analysis
 Version: 1.0.1
 Authors@R: 
-    person("Gage", "Rowden", , "gage.rowden1145@gmail.com", role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0002-7517-0480"))
+    person(
+      given = "Gage",
+      family = "Rowden",
+      email = "gage.rowden1145@gmail.com",
+      role = c("aut", "cre"),
+      comment = c(ORCID = "0000-0002-7517-0480")
+    )
 Description:
-  An R package made for the curation and analysis of data generated from real-time quaking-induced conversion (RT-QuIC) assays.
+  Designed for the curation and analysis of data generated from real-time quaking-induced conversion (RT-QuIC) assays first described by Atarashi et al. (2011) <doi:10.1038/nm.2294>. 'quicR' calculates useful metrics such as maxpoint ratio: Rowden et al. (2023) <doi:10.1099/vir.0.069906-0>; time-to-threshold: Shi et al. (2013) <doi:10.1186/2051-5960-1-44>; and maximum slope. Integration with the output from plate readers allows for seemless input of raw data into the R environment.
 Imports:
   dplyr, 
   ggplot2,
