@@ -20,7 +20,7 @@ convert_tables <- function(tab) {
   df_list <- data.frame()
   if (is.vector(tab)) {
     for (i in 1:length(tab)) {
-      print(names(tab[i]))
+      message(paste0(i, ": ", names(tab[i])))
       column <- tab[[i]] |>
         t() |>
         as.data.frame() |>
