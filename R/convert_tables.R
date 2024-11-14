@@ -11,8 +11,13 @@
 #' @importFrom dplyr select
 #'
 #' @examples
-#' tab <- organize_tables(file)
-#' convert_tables(tab)
+#' file <- system.file(
+#' "extdata/input_files",
+#' file = "test.xlsx",
+#' package = "quicR"
+#' )
+#' tabs <- organize_tables(file)
+#' convert_tables(tabs)
 #'
 #'
 #' @export
