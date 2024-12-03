@@ -1,11 +1,11 @@
-require(slider)
-require(ggpubr)
-require(openxlsx)
-require(agricolae)
-require(tidyverse)
-require(tidyr)
-require(stringr)
-require(quicR)
+library(slider)
+library(ggpubr)
+library(openxlsx)
+library(agricolae)
+library(tidyverse)
+library(tidyr)
+library(stringr)
+library(quicR)
 
 
 
@@ -13,7 +13,7 @@ require(quicR)
 
 
 
-# For testing, use "tests/testthat/input_files/test.xlsx".
+# For testing, use "test".
 # Request the user to input the file name for analysis.
 file <- ""
 while (file == "") {
@@ -72,8 +72,17 @@ df <- df[[df_id]]
 # Export the tables in the first sheet of the file.
 dic <- quicR::organize_tables(file)
 
+column_names <- c("Time")
+for (i in t(dic[["Sample IDs"]])) {
+  for (j in i) {
+    if (!is.na(j)) {
+      column_names <- cbind(column_names, j)
+    }
+  }
+}
+
 # Apply the column names.
-colnames(df) <- cbind("Time", convert_tables(dic)$`Sample IDs` |> t())
+colnames(df) <- column_names
 
 # Determine if there is a dilutions table.
 dilution_bool <- "Dilutions" %in% names(dic)
@@ -84,7 +93,20 @@ dilution_bool <- "Dilutions" %in% names(dic)
 
 
 
+# Calculate the normalized real-time data.
 df_norm <- quicR::normalize_RFU(df)
+
+# Add dilution factors if applicable.
+if (dilution_bool) {
+  dilutions <- c()
+  for (i in t(dic[["Dilutions"]])) {
+    for (j in i) {
+      if (!is.na(j)) {
+        dilutions <- rbind(dilutions, j)
+      }
+    }
+  }
+}
 
 
 
@@ -99,15 +121,15 @@ hours <- as.numeric(colnames(df_norm)[ncol(df_norm)])
 df_analyzed <- data.frame(`Sample_ID` = df_norm$`Sample ID`) %>%
   mutate(
     # Add dilutions if applicable.
-    Dilutions = if (dilution_bool) {
-      -log10(as.numeric(convert_tables(dic)$Dilutions))
-    },
+    Dilutions = if (dilution_bool) -log10(as.numeric(dilutions)),
     # Maxpoint Ratio
-    MPR = quicR::calculate_MPR(df_norm, 3, TRUE),
+    MPR = quicR::calculate_MPR(df_norm, start_col = 3, data_is_norm = TRUE),
     # Max Slope
-    MS = quicR::calculate_MS(df_norm),
+    MS = quicR::calculate_MS(df_norm, start_col = 3),
     # Time to Threshold
-    TtT = quicR::calculate_TtT(df_norm, threshold, 3, hours),
+    TtT = quicR::calculate_TtT(df_norm, threshold = threshold, start_col = 3, run_time = hours)
+  ) %>%
+  mutate(
     # Rate of Amyloid Formation
     RAF = ifelse(TtT == hours, 0, 1 / (3600 * TtT)),
     # Crossed threshold?
@@ -152,14 +174,17 @@ summary <- (
 
 metrics <- c("MPR", "MS")
 for (metric in metrics) {
+  formula <- as.formula(
+    paste0(
+      metric, " ~ ", "Sample_ID + ", ifelse(dilution_bool, "Dilutions", "")
+    )
+  )
   # Create a dataframe of the individual comparisons.
   comps <- LSD.test( # Perform the post-hoc multiple comparisons test.
     # Create the statistical model using ANOVA.
-    aov(as.formula(paste0(metric, " ~ ", "Sample_ID")),
-      data = df_analyzed
-    ),
-    "Sample_ID",
-    p.adj = "none", group = F
+    aov(formula, data = df_analyzed),
+    c("Sample_ID", "Dilutions"),
+    p.adj = "holm", group = F
   )[["comparison"]]
 
   # Initialize columns which will hold unique IDs for each sample compared.
@@ -171,13 +196,21 @@ for (metric in metrics) {
         t() %>%
         as.data.frame()
     ) %>%
-    select(-c(difference, LCL, UCL)) %>%
+    select(-difference) %>%
     # Remove all comparisons that are not against "N".
     subset(
       V1 == "N" |
-        V2 == "N" |
+        str_detect(V1, "N:") |
         str_detect(V1, "N_") |
+        V2 == "N" |
+        str_detect(V2, "N:") |
         str_detect(V2, "N_")
+    ) %>%
+    mutate(
+      V1_dilutions = str_split_i(V1, ":", 2),
+      V1 = str_split_i(V1, ":", 1),
+      V2_dilutions = str_split_i(V2, ":", 2),
+      V2 = str_split_i(V2, ":", 1)
     ) %>%
     rename(
       "{metric}_pvalue" := pvalue,
@@ -185,15 +218,24 @@ for (metric in metrics) {
     ) %>%
     mutate(
       V1 = replace(V1, V1 == "N" | str_detect(V1, "N_"), NA),
-      V2 = replace(V2, V2 == "N" | str_detect(V2, "N_"), NA)
+      V2 = replace(V2, V2 == "N" | str_detect(V2, "N_"), NA),
+      V1_dilutions = ifelse(is.na(V1), NA, V1_dilutions),
+      V2_dilutions = ifelse(is.na(V2), NA, V2_dilutions)
     ) %>%
     unite(
       Sample_ID,
       c("V1", "V2"),
       sep = "",
-      na.rm = T
+      na.rm = TRUE
     ) %>%
-    rbind(c(NA, NA, "N"))
+    unite(
+      Dilutions,
+      c("V1_dilutions", "V2_dilutions"),
+      sep = "",
+      na.rm = TRUE
+    ) %>%
+    rbind(c(NA, NA, "N", -3)) %>%
+    mutate_at(c(1, 4), as.double)
 
   summary <- left_join(summary, comps)
 }
@@ -202,9 +244,7 @@ summary <- summary %>%
   mutate(
     MPR_pvalue = as.numeric(MPR_pvalue),
     MS_pvalue = as.numeric(MS_pvalue),
-    Positive = thres_pos &
-      str_detect(MPR_significance, "\\*") &
-      str_detect(MS_significance, "\\*")
+    Positive = thres_pos & MPR_pvalue <= 0.05 & MS_pvalue <= 0.05
   )
 
 
@@ -249,7 +289,7 @@ df_analyzed %>%
   geom_boxplot(
     outlier.shape = NA,
     position = "dodge",
-    fill = "lightgrey"
+    # fill = "lightgrey"
   ) +
 
   geom_dotplot(
