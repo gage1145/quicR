@@ -125,7 +125,7 @@ df_analyzed <- data.frame(`Sample_ID` = df_norm$`Sample ID`) %>%
     # Maxpoint Ratio
     MPR = quicR::calculate_MPR(df_norm, start_col = 3, data_is_norm = TRUE),
     # Max Slope
-    MS = quicR::calculate_MS(df_norm, start_col = 3),
+    MS = quicR::calculate_MS(df_norm, data_is_norm = TRUE),
     # Time to Threshold
     TtT = quicR::calculate_TtT(df_norm, threshold = threshold, start_col = 3, run_time = hours)
   ) %>%
