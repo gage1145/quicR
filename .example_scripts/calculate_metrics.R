@@ -45,7 +45,7 @@ df_id <- ifelse(
     readline(
       paste(
         "There are",
-        length(df_list),
+        length(df),
         "real-time data sets. Please enter a number in that range: "
       )
     )
@@ -176,14 +176,15 @@ metrics <- c("MPR", "MS")
 for (metric in metrics) {
   formula <- as.formula(
     paste0(
-      metric, " ~ ", "Sample_ID + ", ifelse(dilution_bool, "Dilutions", "")
+      metric, " ~ ", "Sample_ID", ifelse(dilution_bool, "+ Dilutions", "")
     )
   )
   # Create a dataframe of the individual comparisons.
   comps <- LSD.test( # Perform the post-hoc multiple comparisons test.
     # Create the statistical model using ANOVA.
     aov(formula, data = df_analyzed),
-    c("Sample_ID", "Dilutions"),
+    ifelse(dilution_bool, c("Sample_ID", "Dilutions"), c("Sample_ID")),
+    # c("Sample_ID", "Dilutions"),
     p.adj = "holm", group = F
   )[["comparison"]]
 
