@@ -4,12 +4,12 @@
 \alias{get_real}
 \title{Get Real-Time RT-QuIC Fluorescence Data}
 \usage{
-get_real(file, ordered = FALSE)
+get_real(data, ordered = FALSE)
 }
 \arguments{
-\item{file}{Either an Excel file or a dataframe.}
+\item{data}{Either an Excel file or a dataframe.}
 
-\item{ordered}{Logical, if true, will organize the columns by sample ID.}
+\item{ordered}{Logical, if true, will organize the columns by sample ID rather than by well.}
 }
 \value{
 A list of dataframes containing the formatted real-time data.

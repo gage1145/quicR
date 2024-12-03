@@ -8,6 +8,9 @@
 #' @param data_is_norm Logical, if the data has not been normalized, will make a call to normalize_RFU.
 #' @return A vector containing MPR values.
 #'
+#' @importFrom dplyr select
+#' @importFrom dplyr %>%
+#'
 #' @examples
 #' # This test takes >5 sec
 #' \donttest{
@@ -21,19 +24,10 @@
 #' }
 #'
 #' @export
-calculate_MPR <- function(data, start_col = 3, data_is_norm = FALSE) {
-  if (data_is_norm == FALSE) {
-    # Calculate the normalized real-time data.
-    data <- normalize_RFU(data)
-  }
-
-  # Initialize the list containing the maxpoint ratios.
-  MPR_list <- c(rep(NA, nrow(data)))
-
-  # Identify the maxpoint ratio.
-  for (i in 1:nrow(data)) {
-    maximum <- max(data[i, start_col:(ncol(data))])
-    MPR_list[i] <- maximum
-  }
-  return(MPR_list)
+calculate_MPR <- function(data, start_col = 3, data_is_norm = TRUE) {
+  data %>%
+    {if(data_is_norm) . else quicR::normalize_RFU(.)} %>%
+    select(start_col:ncol(.)) %>%
+    apply(1, max) %>%
+    return()
 }

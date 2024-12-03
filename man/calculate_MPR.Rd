@@ -4,7 +4,7 @@
 \alias{calculate_MPR}
 \title{Calculate the Maxpoint Ratio}
 \usage{
-calculate_MPR(data, start_col = 3, data_is_norm = FALSE)
+calculate_MPR(data, start_col = 3, data_is_norm = TRUE)
 }
 \arguments{
 \item{data}{A dataframe containing the real-time fluorescence data.}
