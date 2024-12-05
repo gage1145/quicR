@@ -13,12 +13,11 @@
 #'
 #' @examples
 #' file <- system.file(
-#' "extdata/input_files",
-#' file = "test.xlsx",
-#' package = "quicR"
+#'   "extdata/input_files",
+#'   file = "test.xlsx",
+#'   package = "quicR"
 #' )
 #' get_meta(file)
-#'
 #'
 #' @export
 get_meta <- function(file) {
