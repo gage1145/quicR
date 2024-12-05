@@ -3,8 +3,6 @@ library(ggpubr)
 library(openxlsx)
 library(agricolae)
 library(tidyverse)
-library(tidyr)
-library(stringr)
 library(quicR)
 
 
@@ -41,24 +39,20 @@ df <- quicR::get_real(file, ordered = FALSE)
 # Ask the user which real-time data set they want to use.
 df_id <- ifelse(
   length(df) > 1,
-  as.integer(
-    readline(
-      paste(
-        "There are",
-        length(df),
-        "real-time data sets. Please enter a number in that range: "
-      )
-    )
-  ),
+  paste(
+    "There are",
+    length(df),
+    "real-time data sets. Please enter a number in that range: "
+  ) %>%
+    readline() %>%
+    as.integer(),
   1
 )
 
 # Ask the user for the threshold.
-threshold <- as.integer(
-  readline(
-    "Please enter the desired threshold for RAF calculation: "
-  )
-)
+threshold <- "Please enter the desired threshold for RAF calculation: " %>%
+  readline() %>%
+  as.integer()
 
 # Select the real-time data set that the user signified.
 df <- df[[df_id]]
@@ -70,16 +64,18 @@ df <- df[[df_id]]
 
 
 # Export the tables in the first sheet of the file.
-dic <- quicR::organize_tables(file)
+dic <- file %>%
+  quicR::organize_tables() %>%
+  quicR::convert_tables()
 
-column_names <- c("Time")
-for (i in t(dic[["Sample IDs"]])) {
-  for (j in i) {
-    if (!is.na(j)) {
-      column_names <- cbind(column_names, j)
-    }
-  }
-}
+column_names <- c("Time", dic$`Sample IDs`)
+# for (i in t(dic[["Sample IDs"]])) {
+#   for (j in i) {
+#     if (!is.na(j)) {
+#       column_names <- cbind(column_names, j)
+#     }
+#   }
+# }
 
 # Apply the column names.
 colnames(df) <- column_names
@@ -91,10 +87,14 @@ dilution_bool <- "Dilutions" %in% names(dic)
 
 # Calculate the normalized real-time data ---------------------------------
 
+df_norm <- df %>%
+  transpose_real() %>%
+  normalize_RFU()
 
 
 # Calculate the normalized real-time data.
-df_norm <- quicR::normalize_RFU(df)
+# df_norm <- quicR::normalize_RFU(df)
+# df_norm <- normalize_RFU(df_t)
 
 # Add dilution factors if applicable.
 if (dilution_bool) {
@@ -127,7 +127,10 @@ df_analyzed <- data.frame(`Sample_ID` = df_norm$`Sample ID`) %>%
     # Max Slope
     MS = quicR::calculate_MS(df_norm, data_is_norm = TRUE),
     # Time to Threshold
-    TtT = quicR::calculate_TtT(df_norm, threshold = threshold, start_col = 3, run_time = hours)
+    TtT = quicR::calculate_TtT(
+      df_norm,
+      threshold = threshold, start_col = 3, run_time = hours
+    )
   ) %>%
   mutate(
     # Rate of Amyloid Formation
@@ -156,13 +159,9 @@ summary <- (
   summarise(
     reps      = n(),
     mean_TtT  = mean(TtT),
-    # sd_TtT    = sd(TtT),
     mean_RAF  = mean(RAF),
-    # sd_RAF    = sd(RAF),
     mean_MPR  = mean(MPR),
-    # sd_MPR    = sd(MPR),
     mean_MS   = mean(MS),
-    # sd_MS     = sd(MS),
     thres_pos = sum(crossed) / n() > 0.5
   )
 
@@ -184,8 +183,7 @@ for (metric in metrics) {
     # Create the statistical model using ANOVA.
     aov(formula, data = df_analyzed),
     ifelse(dilution_bool, c("Sample_ID", "Dilutions"), c("Sample_ID")),
-    # c("Sample_ID", "Dilutions"),
-    p.adj = "holm", group = F
+    p.adj = "holm", group = FALSE
   )[["comparison"]]
 
   # Initialize columns which will hold unique IDs for each sample compared.
@@ -289,8 +287,7 @@ df_analyzed %>%
 
   geom_boxplot(
     outlier.shape = NA,
-    position = "dodge",
-    # fill = "lightgrey"
+    position = "dodge"
   ) +
 
   geom_dotplot(
