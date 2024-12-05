@@ -10,26 +10,34 @@
 #'
 #' @importFrom readxl cell_cols
 #'
+#' @examples
+#' file <- system.file(
+#'   "extdata/input_files",
+#'   file = "test.xlsx",
+#'   package = "quicR"
+#' )
+#' organize_tables(file)
+#'
 #' @export
 organize_tables <- function(file, plate = 96) {
+  if (plate != 96 & plate != 384) {
+    stop("Please enter either 96 or 384 for the plate argument. ")
+  }
+  if (!is.character(file) & !is.data.frame(file)) {
+    stop("Please enter either an excel file string or a dataframe. ")
+  }
   # Block allows input of an excel file string or a dataframe.
   if (is.character(file)) {
     # Read the Excel file into R.
     data <- read_excel(
       file,
-      sheet = 1, col_names = FALSE,
-      if (plate == 96) {
-        range <- cell_cols(1:13)
-      } else if (plate == 384) {
-        range <- cell_cols(1:25)
-      } else {
-        return(print("Please enter either 96 or 384 for the plate argument. "))
-      }
-    )
-  } else if (is.data.frame(file)) {
-    data <- ifelse(plate == 96, file[, 1:13], file[, 1:25])
+      sheet = 1,
+      col_names = FALSE,
+      if (plate == 96) range <- cell_cols(1:13) else range <- cell_cols(1:25)
+    ) |>
+      suppressMessages()
   } else {
-    return("Please enter either an excel file string or a dataframe. ")
+    data <- ifelse(plate == 96, file[, 1:13], file[, 1:25])
   }
 
   # Separate data from metadata.

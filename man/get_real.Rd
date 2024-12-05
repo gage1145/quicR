@@ -4,16 +4,26 @@
 \alias{get_real}
 \title{Get Real-Time RT-QuIC Fluorescence Data}
 \usage{
-get_real(file, ordered = TRUE)
+get_real(data, ordered = FALSE)
 }
 \arguments{
-\item{file}{Either an Excel file or a dataframe.}
+\item{data}{Either an Excel file or a dataframe.}
 
-\item{ordered}{Boolean, if true (default), will organize the columns by sample ID.}
+\item{ordered}{Logical, if true, will organize the columns by sample ID rather than by well.}
 }
 \value{
 A list of dataframes containing the formatted real-time data.
 }
 \description{
 Accepts an Excel file or a dataframe of real-time RT-QuIC data.
+}
+\examples{
+file <- system.file(
+"extdata/input_files",
+file = "test.xlsx",
+package = "quicR"
+)
+get_real(file)
+
+
 }

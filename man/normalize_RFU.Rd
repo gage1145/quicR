@@ -4,10 +4,10 @@
 \alias{normalize_RFU}
 \title{Normalize Fluorescence}
 \usage{
-normalize_RFU(df, bg_cycle = 4)
+normalize_RFU(data, bg_cycle = 4)
 }
 \arguments{
-\item{df}{A dataframe made from get_real.}
+\item{data}{A dataframe generated from get_real.}
 
 \item{bg_cycle}{The cycle used for background fluorescence}
 }
@@ -18,4 +18,30 @@ A dataframe containing real-time normalized fluorescence values.
 Normalizes the real-time RT-QuIC data against the background fluorescence of
 a defined cycle. All cycles are divided by the fluorescent value of the
 defined cycle.
+}
+\examples{
+# This test takes >5 sec
+\donttest{
+  file <- system.file(
+    "extdata/input_files",
+    file = "test2.xlsx",
+    package = "quicR"
+  )
+  df_ <- get_real(file)[[1]]
+
+  # Export the tables in the first sheet of the file.
+  dic <- quicR::organize_tables(file)
+
+  # Apply the column names.
+  sample_ids <- convert_tables(dic)$`Sample IDs`
+  colnames(df_) <- c("Time", sample_ids)
+
+  # Transpose the table
+  df_ <- quicR::transpose_real(df_)
+
+  # Normalize the raw data against the background reading.
+  normalize_RFU(df_)
+}
+
+
 }

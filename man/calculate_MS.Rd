@@ -4,16 +4,32 @@
 \alias{calculate_MS}
 \title{Calculate Maximum Slope}
 \usage{
-calculate_MS(data, window = 3)
+calculate_MS(data, window = 3, data_is_norm = TRUE)
 }
 \arguments{
 \item{data}{A dataframe containing real-time reads. It is recommended to use a dataframe made from normalize_RFU.}
 
 \item{window}{Integer designating how wide you want the sliding window to be for calculating the moving average slope.}
+
+\item{data_is_norm}{Logical, if the data has not been normalized, will make a call to normalize_RFU.}
 }
 \value{
 A dataframe containing the real-time slope values.
 }
 \description{
 Uses a sliding window to calculate the slope of real-time reads.
+}
+\examples{
+# This test takes >5 sec
+\donttest{
+  file <- system.file(
+    "extdata/input_files",
+    file = "rt_data.csv",
+    package = "quicR"
+)
+df_ <- read.csv(file, check.names = FALSE)
+calculate_MS(df_)
+}
+
+
 }

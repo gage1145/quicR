@@ -2,92 +2,73 @@
 #'
 #' Accepts an Excel file or a dataframe of real-time RT-QuIC data.
 #'
-#' @param file Either an Excel file or a dataframe.
-#' @param ordered Boolean, if true (default), will organize the columns by sample ID.
+#' @param data Either an Excel file or a dataframe.
+#' @param ordered Logical, if true, will organize the columns by sample ID rather than by well.
 #'
 #' @return A list of dataframes containing the formatted real-time data.
 #'
+#' @importFrom dplyr select
+#' @importFrom dplyr %>%
 #' @importFrom dplyr rename
 #' @importFrom readxl read_excel
+#' @importFrom janitor row_to_names
+#' @importFrom janitor clean_names
+#'
+#' @examples
+#' file <- system.file(
+#'   "extdata/input_files",
+#'   file = "test.xlsx",
+#'   package = "quicR"
+#' )
+#' get_real(file)
 #'
 #' @export
-get_real <- function(file, ordered = TRUE) {
-  if (is.character(file)) { # Read the Excel file into R.
-    data <- read_excel(file, sheet = 2, col_names = FALSE)
-  } else if (is.data.frame(file)) {
-    data <- file
-  } else {
-    return("Please enter either .xlsx string or dataframe. ")
-  }
-
-  # Determines the number of rows to remove.
-  for (i in 1:nrow(data)) {
-    if (!(is.na(data[i, 2]))) {
-      num_rows <- i
-      break
-    }
-  }
-
-  # Remove metadata.
-  tidy_data <- data[-(1:(num_rows - 1)), -1] |>
-    na.omit(tidy_data)
-
-
-  # Set the first row as column names.
-  colnames(tidy_data) <- tidy_data[1, ]
-  tidy_data <- tidy_data[-1, ]
-  # tidy_data <- tidy_data[1:65,]
-
-  # Add leading "0" before single digits in column names.
-  colnames(tidy_data) <- gsub(" X(\\d)$", " X0\\1", colnames(tidy_data))
-
-  # Identify and handle duplicate column names.
-  dup_cols <- colnames(tidy_data)[duplicated(colnames(tidy_data))]
-  if (length(dup_cols) > 0) {
-    # Add suffix to duplicate column names
-    for (col in dup_cols) {
-      indices <- which(colnames(tidy_data) == col)
-      colnames(tidy_data)[indices] <- paste0(col, "_", indices)
-    }
-  }
-
-  # Rename the first column as "Time"
-  tidy_data <- tidy_data |>
-    rename("Time" = 1)
-
-  # Rearrange columns to group replicates of the same sample
-  if (ordered == TRUE) {
-    tidy_data <- tidy_data |>
-      select("Time", order(colnames(tidy_data), decreasing = FALSE))
-  }
-
-  # Remove suffixes from column names
-  colnames(tidy_data) <- gsub("_\\d+$", "", colnames(tidy_data))
-
-  # Designate the integers used to calculate how the data will be cut
-  cycles <- length(unique(tidy_data[["Time"]])) # Number of cycles
-  num_rows <- cycles # This will change after sending
-  # one data type to a data frame
-  reads <- length(which(tidy_data[["Time"]] == 0)) # Number of types of data (e.g. Raw,
-  # Normalized, or Derivative)
-
-  # Create a data frame with only the "Time" column with no duplicates
-  time_df <- data.frame(unique(tidy_data[["Time"]])) |>
-    rename("Time" = 1)
-
-  # Create separate data frames for different read types
-  i <- 1
-  df_list <- list()
-  while (i <= reads) {
-    if (num_rows == cycles) {
-      df <- cbind(time_df, tidy_data[(num_rows - cycles):num_rows, -1])
-      num_rows <- num_rows + cycles
+get_real <- function(data, ordered = FALSE) {
+  check_format <- function(x) {
+    if (is.character(x)) { # Read the Excel file into R.
+      return(suppressMessages(read_excel(x, sheet = 2, col_names = FALSE)))
+    } else if (is.data.frame(x)) {
+      return(x)
     } else {
-      df <- cbind(time_df, tidy_data[(1 + num_rows - cycles):num_rows, -1])
+      stop("Please enter either .xlsx string or dataframe. ")
+    }
+  }
+
+  curate <- function(x) {
+    x %>%
+      na.omit() %>%
+      select(-1) %>%
+      row_to_names(1) %>%
+      clean_names() %>%
+      rename("Time" = 1) %>%
+      {
+        if (ordered) {
+          select(., "Time", order(colnames(.[colnames(.) != "Time"])))
+        } else {
+          .
+        }
+      } %>%
+      suppressWarnings()
+  }
+
+  split_real_time <- function(x) {
+    # Number of types of data (e.g. Raw, Normalized, or Derivative)
+    reads <- length(which(x[["Time"]] == 0))
+    if (reads == 1) {
+      return(list(x))
+    }
+
+    # Designate the integers used to calculate how the data will be cut
+    num_rows <- cycles <- length(unique(x[["Time"]]))
+
+    # Create separate data frames for different read types
+    df_list <- list()
+    for (i in 1:reads) {
+      df_list <- append(df_list, list(x[(1 + num_rows - cycles):num_rows, ]))
       num_rows <- num_rows + cycles
     }
-    i <- i + 1
-    df_list <- append(df_list, list(df))
+    return(df_list)
   }
-  return(df_list)
+
+  return(split_real_time(curate(check_format(data))))
 }

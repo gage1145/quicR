@@ -4,10 +4,21 @@
 \alias{BMG_format}
 \title{Format Table for BMG Sample ID Import}
 \usage{
-BMG_format(file)
+BMG_format(
+  file,
+  save_path = "./",
+  save_name = "formatted.txt",
+  write_file = FALSE
+)
 }
 \arguments{
 \item{file}{A .CSV file containing the plate layout of Sample IDs.}
+
+\item{save_path}{The path to the directory that you want the file saved.}
+
+\item{save_name}{The name of the output file. Should have the ".txt" extension.}
+
+\item{write_file}{Logical. If true, function will write a .txt file; otherwise it will return a character vector.}
 }
 \value{
 A text file containing information for import into the BMG control software.
@@ -15,4 +26,14 @@ A text file containing information for import into the BMG control software.
 \description{
 BMG_format accepts a plate layout .CSV file and formats the Sample IDs into
 a format which can be easily imported into the BMG control software.
+}
+\examples{
+layout_file <- system.file(
+  "extdata/BMG_formatting",
+  file = "plate_layout.csv",
+  package = "quicR"
+  )
+BMG_format(layout_file)
+
+
 }

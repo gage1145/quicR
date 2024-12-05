@@ -9,6 +9,20 @@
 #'
 #' @return A vector containing the times to threshold
 #'
+#' @examples
+#' # This test takes >5 sec
+#' \donttest{
+#' file <- system.file(
+#'   "extdata/input_files",
+#'   file = "test2.xlsx",
+#'   package = "quicR"
+#' )
+#' df_ <- get_real(file)[[1]] |>
+#'   quicR::transpose_real() |>
+#'   quicR::normalize_RFU()
+#' calculate_TtT(df_, threshold = 2)
+#' }
+#'
 #' @export
 calculate_TtT <- function(data, threshold, start_col = 3, run_time = 48) {
   # Initialize the list containing the times-to-threshold.

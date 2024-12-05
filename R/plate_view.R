@@ -13,6 +13,44 @@
 #' @import dplyr
 #' @importFrom tidyr replace_na
 #' @importFrom tidyr separate
+#' @importFrom stringr str_length
+#'
+#' @examples
+#' # This test takes >5 sec
+#' \donttest{
+#' file <- system.file(
+#'   "extdata/input_files",
+#'   file = "test2.xlsx",
+#'   package = "quicR"
+#' )
+#'
+#' tab <- organize_tables(file)
+#' IDs <- quicR::convert_tables(tab)[["Sample IDs"]] |>
+#'   na.omit()
+#'
+#' # Get the real-time data.
+#' df_ <- get_real(file, ordered = FALSE)[[1]] |> as.data.frame()
+#'
+#' # Set the time column as the df index.
+#' rownames(df_) <- df_[, 1]
+#'
+#' # Remove the time column and ID row.
+#' df_ <- df_[, -1]
+#'
+#' # Get the wells used in the run.
+#' wells <- get_wells(file)
+#'
+#' # Take the metadata and apply it into a dataframe for the plate_view function.
+#' sample_locations <- cbind(wells, IDs) |>
+#'   stats::na.omit()
+#'
+#' # Wrap the text if it is too long.
+#' sample_locations <- sample_locations |>
+#'   dplyr::mutate(IDs = ifelse(stringr::str_length(IDs) > 12, gsub(" ", "\n", IDs), IDs))
+#'
+#' # Make the plate view figure.
+#' plate_view(df_, sample_locations, plate = 96)
+#' }
 #'
 #' @export
 plate_view <- function(df, meta, plate = 96) {

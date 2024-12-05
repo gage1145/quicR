@@ -10,22 +10,30 @@
 #' @importFrom tidyr gather
 #' @importFrom dplyr select
 #'
+#' @examples
+#' file <- system.file(
+#'   "extdata/input_files",
+#'   file = "test.xlsx",
+#'   package = "quicR"
+#' )
+#' tabs <- organize_tables(file)
+#' convert_tables(tabs)
+#'
 #' @export
 convert_tables <- function(tab) {
   df_list <- data.frame()
   if (is.vector(tab)) {
     for (i in 1:length(tab)) {
-      print(names(tab[i]))
+      message(paste0(i, ": ", names(tab[i])))
       column <- tab[[i]] |>
         t() |>
         as.data.frame() |>
         tidyr::gather() |>
         dplyr::select("value")
-      print(i)
       df_list <- append(df_list, column)
     }
+    df_ <- as.data.frame(df_list)
+    colnames(df_) <- names(tab)
+    return(df_)
   }
-  df_ <- as.data.frame(df_list)
-  colnames(df_) <- names(tab)
-  return(df_)
 }
