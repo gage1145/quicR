@@ -27,6 +27,11 @@ while (file == "") {
   }
 }
 
+# Ask the user for the threshold.
+threshold <- "Please enter the desired threshold for RAF calculation: " %>%
+  readline() %>%
+  as.integer()
+
 
 
 # Identify the raw real-time data -----------------------------------------
@@ -49,11 +54,6 @@ df_id <- ifelse(
   1
 )
 
-# Ask the user for the threshold.
-threshold <- "Please enter the desired threshold for RAF calculation: " %>%
-  readline() %>%
-  as.integer()
-
 # Select the real-time data set that the user signified.
 df <- df[[df_id]]
 
@@ -69,44 +69,31 @@ dic <- file %>%
   quicR::convert_tables()
 
 column_names <- c("Time", dic$`Sample IDs`)
-# for (i in t(dic[["Sample IDs"]])) {
-#   for (j in i) {
-#     if (!is.na(j)) {
-#       column_names <- cbind(column_names, j)
-#     }
-#   }
-# }
 
 # Apply the column names.
 colnames(df) <- column_names
 
-# Determine if there is a dilutions table.
-dilution_bool <- "Dilutions" %in% names(dic)
-
 
 
 # Calculate the normalized real-time data ---------------------------------
+
+
 
 df_norm <- df %>%
   transpose_real() %>%
   normalize_RFU()
 
 
-# Calculate the normalized real-time data.
-# df_norm <- quicR::normalize_RFU(df)
-# df_norm <- normalize_RFU(df_t)
 
-# Add dilution factors if applicable.
-if (dilution_bool) {
-  dilutions <- c()
-  for (i in t(dic[["Dilutions"]])) {
-    for (j in i) {
-      if (!is.na(j)) {
-        dilutions <- rbind(dilutions, j)
-      }
-    }
-  }
-}
+# Add dilution factors if applicable ---------------------------------------
+
+
+
+
+# Determine if there is a dilutions table.
+dilution_bool <- "Dilutions" %in% names(dic)
+
+if (dilution_bool) dilutions <- dic$Dilutions
 
 
 
@@ -118,7 +105,7 @@ if (dilution_bool) {
 hours <- as.numeric(colnames(df_norm)[ncol(df_norm)])
 
 # Initialized the dataframe with the calculated metrics.
-df_analyzed <- data.frame(`Sample_ID` = df_norm$`Sample ID`) %>%
+df_analyzed <- data.frame("Sample_ID" = df_norm$`Sample ID`) %>%
   mutate(
     # Add dilutions if applicable.
     Dilutions = if (dilution_bool) -log10(as.numeric(dilutions)),
@@ -130,9 +117,7 @@ df_analyzed <- data.frame(`Sample_ID` = df_norm$`Sample ID`) %>%
     TtT = quicR::calculate_TtT(
       df_norm,
       threshold = threshold, start_col = 3, run_time = hours
-    )
-  ) %>%
-  mutate(
+    ),
     # Rate of Amyloid Formation
     RAF = ifelse(TtT == hours, 0, 1 / (3600 * TtT)),
     # Crossed threshold?
