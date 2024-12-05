@@ -25,7 +25,7 @@ or 16x24 for 96- and 384-well plates, respectively.
 \donttest{
 file <- system.file(
 "extdata/input_files",
-file = "test.xlsx",
+file = "test2.xlsx",
 package = "quicR"
 )
 
@@ -34,7 +34,7 @@ IDs <- quicR::convert_tables(tab)[["Sample IDs"]] |>
 na.omit()
 
 # Get the real-time data.
-df_ <- get_real(file, ordered = FALSE)[[1]]
+df_ <- get_real(file, ordered = FALSE)[[1]] |> as.data.frame()
 
 # Set the time column as the df index.
 rownames(df_) <- df_[, 1]
