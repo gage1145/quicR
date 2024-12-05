@@ -1,3 +1,11 @@
+# quicR 1.1.0
+
+-   Added a new function "transpose_real.R" which takes the output of "get_real.R" and transposes it. This format makes it such that each read is a column labelled with the time of the read.
+
+-   Removed the transposition sub-function from "normalize_RFU.R" to be its own separate function.
+
+-   Updated example scripts to incorporate the new transposition function.
+
 # quicR 1.0.3
 
 -   Added janitor as a dependency.
