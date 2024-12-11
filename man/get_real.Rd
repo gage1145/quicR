@@ -19,11 +19,10 @@ Accepts an Excel file or a dataframe of real-time RT-QuIC data.
 }
 \examples{
 file <- system.file(
-"extdata/input_files",
-file = "test.xlsx",
-package = "quicR"
+  "extdata/input_files",
+  file = "test.xlsx",
+  package = "quicR"
 )
 get_real(file)
-
 
 }

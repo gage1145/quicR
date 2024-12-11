@@ -18,11 +18,10 @@ header.
 }
 \examples{
 file <- system.file(
-"extdata/input_files",
-file = "test.xlsx",
-package = "quicR"
+  "extdata/input_files",
+  file = "test.xlsx",
+  package = "quicR"
 )
 get_meta(file)
-
 
 }

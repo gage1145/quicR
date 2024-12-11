@@ -23,13 +23,13 @@ background fluorescence.
 \examples{
 # This test takes >5 sec
 \donttest{
-  file <- system.file(
-    "extdata/input_files",
-    file = "test.xlsx",
-    package = "quicR"
-    )
-  df_ <- quicR::get_real(file)[[1]]
-  print(calculate_MPR(df_))
+file <- system.file(
+  "extdata/input_files",
+  file = "test.xlsx",
+  package = "quicR"
+)
+df_ <- quicR::get_real(file)[[1]]
+print(calculate_MPR(df_))
 }
 
 }

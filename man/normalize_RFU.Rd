@@ -24,12 +24,12 @@ defined cycle.
 \examples{
 # This test takes >5 sec
 \donttest{
-  file <- system.file(
-    "extdata/input_files",
-    file = "test2.xlsx",
-    package = "quicR"
-  )
-  df_ <- get_real(file)[[1]]
+file <- system.file(
+  "extdata/input_files",
+  file = "test2.xlsx",
+  package = "quicR"
+)
+df_ <- get_real(file)[[1]]
 
 # Export the tables in the first sheet of the file.
 dic <- quicR::organize_tables(file)
@@ -37,6 +37,5 @@ dic <- quicR::organize_tables(file)
   # Normalize the raw data against the background reading.
   normalize_RFU(df_)
 }
-
 
 }
