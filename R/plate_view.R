@@ -29,7 +29,8 @@
 #' na.omit()
 #'
 #' # Get the real-time data.
-#' df_ <- get_real(file, ordered = FALSE)[[1]]
+#' df_ <- get_real(file, ordered = FALSE)[[1]] |>
+#'   as.data.frame()
 #'
 #' # Set the time column as the df index.
 #' rownames(df_) <- df_[, 1]
