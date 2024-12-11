@@ -6,6 +6,7 @@
 #'
 #' @param data A dataframe generated from get_real.
 #' @param bg_cycle The cycle used for background fluorescence
+#' @param transposed Logical, TRUE if cycle values are shown as column names.
 #'
 #' @return A dataframe containing real-time normalized fluorescence values.
 #'
@@ -27,16 +28,13 @@
 #' # Export the tables in the first sheet of the file.
 #' dic <- quicR::organize_tables(file)
 #'
-#' # Apply the column names.
-#' colnames(df_) <- cbind("Time", convert_tables(dic)$`Sample IDs` %>% t())
-#'
 #' # Normalize the raw data against the background reading.
 #' normalize_RFU(df_)
 #' }
 #'
 #'
 #' @export
-normalize_RFU <- function(data, bg_cycle = 4) {
+normalize_RFU <- function(data, bg_cycle = 4, transposed = FALSE) {
 
   curate <- function(x) {
 
@@ -63,5 +61,5 @@ normalize_RFU <- function(data, bg_cycle = 4) {
     return(df_norm)
   }
 
-  return(normalize(curate(data)))
+  if (transposed) normalize(data) else normalize(curate(data))
 }
