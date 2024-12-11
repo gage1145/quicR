@@ -12,12 +12,11 @@
 #'
 #' @examples
 #' file <- system.file(
-#' "extdata/input_files",
-#' file = "test.xlsx",
-#' package = "quicR"
+#'   "extdata/input_files",
+#'   file = "test.xlsx",
+#'   package = "quicR"
 #' )
 #' organize_tables(file)
-#'
 #'
 #' @export
 organize_tables <- function(file, plate = 96) {
@@ -34,7 +33,7 @@ organize_tables <- function(file, plate = 96) {
       file,
       sheet = 1,
       col_names = FALSE,
-      if (plate == 96) range = cell_cols(1:13) else range = cell_cols(1:25)
+      if (plate == 96) range <- cell_cols(1:13) else range <- cell_cols(1:25)
     ) |>
       suppressMessages()
   } else {

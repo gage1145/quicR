@@ -13,7 +13,6 @@
 #' @export
 # Separates the raw run files in the .xlsx file.
 separate_raw <- function(file, num_rows, export_name) {
-
   if (is.character(file)) { # Read the Excel file into R.
     data <- read_excel(file, sheet = 2)
   } else if (is.data.frame(file)) {

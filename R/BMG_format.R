@@ -23,9 +23,8 @@
 #'   "extdata/BMG_formatting",
 #'   file = "plate_layout.csv",
 #'   package = "quicR"
-#'   )
+#' )
 #' BMG_format(layout_file)
-#'
 #'
 #' @export
 BMG_format <- function(file, save_path = "./", save_name = "formatted.txt", write_file = FALSE) {

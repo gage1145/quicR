@@ -16,16 +16,14 @@
 #'
 #' @examples
 #' file <- system.file(
-#' "extdata/input_files",
-#' file = "test.xlsx",
-#' package = "quicR"
+#'   "extdata/input_files",
+#'   file = "test.xlsx",
+#'   package = "quicR"
 #' )
 #' get_real(file)
 #'
-#'
 #' @export
 get_real <- function(data, ordered = FALSE) {
-
   check_format <- function(x) {
     if (is.character(x)) { # Read the Excel file into R.
       return(suppressMessages(read_excel(x, sheet = 2, col_names = FALSE)))
@@ -46,16 +44,19 @@ get_real <- function(data, ordered = FALSE) {
       {
         if (ordered) {
           select(., "Time", order(colnames(.[colnames(.) != "Time"])))
-        } else .
+        } else {
+          .
+        }
       } %>%
       suppressWarnings()
   }
 
   split_real_time <- function(x) {
-
     # Number of types of data (e.g. Raw, Normalized, or Derivative)
     reads <- length(which(x[["Time"]] == 0))
-    if (reads == 1) return(list(x))
+    if (reads == 1) {
+      return(list(x))
+    }
 
     # Designate the integers used to calculate how the data will be cut
     num_rows <- cycles <- length(unique(x[["Time"]]))

@@ -25,7 +25,7 @@ or 16x24 for 96- and 384-well plates, respectively.
 \donttest{
 file <- system.file(
 "extdata/input_files",
-file = "test.xlsx",
+file = "test2.xlsx",
 package = "quicR"
 )
 

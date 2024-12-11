@@ -18,23 +18,22 @@
 #' @examples
 #' # This test takes >5 sec
 #' \donttest{
-#'   file <- system.file(
-#'     "extdata/input_files",
-#'     file = "rt_data.csv",
-#'     package = "quicR"
+#' file <- system.file(
+#'   "extdata/input_files",
+#'   file = "rt_data.csv",
+#'   package = "quicR"
 #' )
 #' df_ <- read.csv(file, check.names = FALSE)
 #' calculate_MS(df_)
 #' }
 #'
-#'
 #' @export
 calculate_MS <- function(data, window = 3, data_is_norm = TRUE) {
-
   curate <- function(x) {
-
     x %>%
-      {if(data_is_norm) . else normalize_RFU(.)} %>%
+      {
+        if (data_is_norm) . else normalize_RFU(.)
+      } %>%
       t() %>%
       as.data.frame() %>%
       mutate_all(~ as.numeric(as.character(.))) %>%
@@ -44,18 +43,17 @@ calculate_MS <- function(data, window = 3, data_is_norm = TRUE) {
   }
 
   slope <- function(x) {
-
     max_slopes <- c()
 
     for (i in colnames(x)[-ncol(x)]) {
-
       max_slopes <- max_slopes %>%
         rbind(
           x %>%
             slide(
-              ~lm(
+              ~ lm(
                 as.formula(paste0("`", i, "`", " ~ Time")),
-                data = .x)[[1]][[2]] / 3600,
+                data = .x
+              )[[1]][[2]] / 3600,
               .before = window,
               .complete = TRUE
             ) %>%

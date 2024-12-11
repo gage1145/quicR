@@ -19,14 +19,14 @@
 #' # This test takes >5 sec
 #' \donttest{
 #' file <- system.file(
-#' "extdata/input_files",
-#' file = "test.xlsx",
-#' package = "quicR"
+#'   "extdata/input_files",
+#'   file = "test2.xlsx",
+#'   package = "quicR"
 #' )
 #'
 #' tab <- organize_tables(file)
 #' IDs <- quicR::convert_tables(tab)[["Sample IDs"]] |>
-#' na.omit()
+#'   na.omit()
 #'
 #' # Get the real-time data.
 #' df_ <- get_real(file, ordered = FALSE)[[1]] |>
@@ -52,7 +52,6 @@
 #' # Make the plate view figure.
 #' plate_view(df_, sample_locations, plate = 96)
 #' }
-#'
 #'
 #' @export
 plate_view <- function(df, meta, plate = 96) {
