@@ -22,14 +22,13 @@ Uses a sliding window to calculate the slope of real-time reads.
 \examples{
 # This test takes >5 sec
 \donttest{
-  file <- system.file(
-    "extdata/input_files",
-    file = "rt_data.csv",
-    package = "quicR"
+file <- system.file(
+  "extdata/input_files",
+  file = "rt_data.csv",
+  package = "quicR"
 )
 df_ <- read.csv(file, check.names = FALSE)
 calculate_MS(df_)
 }
-
 
 }

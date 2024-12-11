@@ -17,11 +17,10 @@ Returns the well IDs used in the plate.
 }
 \examples{
 file <- system.file(
-"extdata/input_files",
-file = "test.xlsx",
-package = "quicR"
+  "extdata/input_files",
+  file = "test.xlsx",
+  package = "quicR"
 )
 get_wells(file)
-
 
 }

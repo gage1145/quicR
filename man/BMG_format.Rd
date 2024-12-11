@@ -32,8 +32,7 @@ layout_file <- system.file(
   "extdata/BMG_formatting",
   file = "plate_layout.csv",
   package = "quicR"
-  )
+)
 BMG_format(layout_file)
-
 
 }

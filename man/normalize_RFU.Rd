@@ -26,7 +26,7 @@ defined cycle.
 \donttest{
 file <- system.file(
   "extdata/input_files",
-  file = "test.xlsx",
+  file = "test2.xlsx",
   package = "quicR"
 )
 df_ <- get_real(file)[[1]]
@@ -37,6 +37,5 @@ dic <- quicR::organize_tables(file)
 # Normalize the raw data against the background reading.
 normalize_RFU(df_)
 }
-
 
 }

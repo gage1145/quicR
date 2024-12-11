@@ -18,7 +18,8 @@
 #' package = "quicR"
 #' )
 #' df_ <- get_real(file)[[1]] |>
-#'   normalize_RFU()
+#'   quicR::transpose_real() |>
+#'   quicR::normalize_RFU(transposed = TRUE)
 #' calculate_TtT(df_, threshold = 2)
 #' }
 #'

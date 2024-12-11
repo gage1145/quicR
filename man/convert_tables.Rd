@@ -18,12 +18,11 @@ and converts them into dataframe columns.
 }
 \examples{
 file <- system.file(
-"extdata/input_files",
-file = "test.xlsx",
-package = "quicR"
+  "extdata/input_files",
+  file = "test.xlsx",
+  package = "quicR"
 )
 tabs <- organize_tables(file)
 convert_tables(tabs)
-
 
 }

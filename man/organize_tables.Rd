@@ -20,11 +20,10 @@ and adds each table to a list.
 }
 \examples{
 file <- system.file(
-"extdata/input_files",
-file = "test.xlsx",
-package = "quicR"
+  "extdata/input_files",
+  file = "test.xlsx",
+  package = "quicR"
 )
 organize_tables(file)
-
 
 }

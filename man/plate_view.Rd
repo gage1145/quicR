@@ -24,14 +24,14 @@ or 16x24 for 96- and 384-well plates, respectively.
 # This test takes >5 sec
 \donttest{
 file <- system.file(
-"extdata/input_files",
-file = "test.xlsx",
-package = "quicR"
+  "extdata/input_files",
+  file = "test2.xlsx",
+  package = "quicR"
 )
 
 tab <- organize_tables(file)
 IDs <- quicR::convert_tables(tab)[["Sample IDs"]] |>
-na.omit()
+  na.omit()
 
 # Get the real-time data.
 df_ <- get_real(file, ordered = FALSE)[[1]] |>
@@ -57,6 +57,5 @@ sample_locations <- sample_locations |>
 # Make the plate view figure.
 plate_view(df_, sample_locations, plate = 96)
 }
-
 
 }

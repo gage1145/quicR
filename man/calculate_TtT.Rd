@@ -25,14 +25,14 @@ Calculates the time required to reach a defined threshold.
 # This test takes >5 sec
 \donttest{
 file <- system.file(
-"extdata/input_files",
-file = "test.xlsx",
-package = "quicR"
+  "extdata/input_files",
+  file = "test2.xlsx",
+  package = "quicR"
 )
 df_ <- get_real(file)[[1]] |>
-  normalize_RFU()
+  quicR::transpose_real() |>
+  quicR::normalize_RFU(transposed = TRUE)
 calculate_TtT(df_, threshold = 2)
 }
-
 
 }
