@@ -25,9 +25,9 @@
 #'
 #'
 #' @export
-calculate_TtT <- function(data, threshold, start_col = 3, run_time = 48) {
+calculate_TtT <- function(data, threshold, start_col = 3) {
   # Initialize the list containing the times-to-threshold.
-  TtT_list <- c(rep(run_time, nrow(data)))
+  TtT_list <- c(rep(NA, nrow(data)))
 
   # Set the cycle interval.
   cycle_interval <- diff(as.numeric(colnames(data[, start_col:(start_col + 1)])))
@@ -38,7 +38,12 @@ calculate_TtT <- function(data, threshold, start_col = 3, run_time = 48) {
       # Use the threshold argument.
       current_read <- data[i, j]
 
-      if (TtT_list[i] == run_time & current_read >= threshold) {
+      if (is.na(current_read)) {
+        TtT_list[i] <- as.numeric(colnames(data[j - 1]))
+        break
+      }
+
+      if (current_read >= threshold) {
         previous_read <- data[i, j - 1]
 
         delta_rfu <- current_read - previous_read
@@ -51,6 +56,10 @@ calculate_TtT <- function(data, threshold, start_col = 3, run_time = 48) {
         TtT_list[i] <- previous_cycle + delta_t
 
         break
+      }
+
+      if (j == ncol(data)) {
+        TtT_list[i] <- as.numeric(colnames(data[j]))
       }
     }
   }
