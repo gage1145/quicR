@@ -4,13 +4,14 @@ library(quicR)
 
 # use_r("organize_tables")
 
-for (i in c("test", "test2", "test3")) {
+for (i in c("test", "test_no_meta")) {
   file <- paste0("input_files/", i, ".xlsx")
+  df_list <- organize_tables(file)
 
   test_that(
     "organize_tables returns list?",
     {
-      expect_type(organize_tables(file), "list")
+      expect_type(df_list, "list")
     }
   )
 
@@ -18,9 +19,9 @@ for (i in c("test", "test2", "test3")) {
     "organize_tables returns list of tibbles?",
     {
       expect_true(
-        class(organize_tables(file)[[1]])[1] == "tbl_df" &
-          class(organize_tables(file)[[1]])[2] == "tbl" &
-          class(organize_tables(file)[[1]])[3] == "data.frame"
+        class(df_list[[1]])[1] == "tbl_df" &
+          class(df_list[[1]])[2] == "tbl" &
+          class(df_list[[1]])[3] == "data.frame"
       )
     }
   )
