@@ -5,7 +5,6 @@
 #' @param data A dataframe containing real-time RT-QuIC data.
 #' @param threshold A numeric value defining the threshold.
 #' @param start_col The column containing the starting position of the real-time data.
-#' @param run_time The time in hours that the assay ran.
 #'
 #' @return A vector containing the times to threshold
 #'
