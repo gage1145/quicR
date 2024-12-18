@@ -30,6 +30,9 @@ for (i in c("test", "test_no_meta")) {
 test_that(
   "organize_tables accepts 384 as plate arg?",
   {
-    expect_no_error(organize_tables("input_files/test384.xlsx", plate = 384))
+    expect_type(
+      organize_tables("input_files/test384.xlsx", plate = 384), "list"
+    )
   }
 )
+
