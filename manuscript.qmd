@@ -1,0 +1,48 @@
+---
+title: "quicR: An R Package for the Analysis of Real-Time Quaking Induced Conversion (RT-QuIC) Assays"
+author:
+    - name: 
+        given: Gage
+        family: Rowden
+      id: GR
+      orcid: 0000-0002-7517-0480
+      email: rowde002@umn.edu
+      affiliation:
+          name: University of Minnesota
+          city: Saint Paul
+          state: MN
+      corresponding: true
+abstract: Real-time quaking induced conversion (RT-QuIC) has quickly become an emerging diagnostic tool for protein misfolding disorders such as Creutzfeldt-Jakob disease and Parkinson's disease. Given that the technology is still relatively new, academic and industry standards have yet to be established. 'quicR' was developed to fill this lack of standardization by providing functions for both data curation and analysis.
+keywords: quicR, R package, RT-QuIC, prion, CJD, Parkinson's
+bibliography:
+    references.bib
+bibliographystyle: 
+    apa
+---
+
+# Introduction
+
+# Methods
+This package requires the following dependencies: dplyr, ggplot2, janitor, openxlsx, readxl, reshape2, slider, stats, stringr, tidyr. Because the MARS software (BMG Labtech, Ortenberg, Germany) exports data as an Excel workbook, the packages, openxlsx and readxl, were fundamental to performing downstream handling. The tidyverse packages (dplyr, ggplot2, stringr, and tidyr), were vital for writing easy-to-read code and for data visualization. The janitor package has useful functions for performing quick data cleaning
+
+## Development
+The quicR package was developed to address the need for efficient data conversion and analysis of RT-QuIC data. The functions were designed with usability and reproducibility in mind, ensuring compatibility between multiple labs. Currently, the package accepts data exported from the MARS software as an Excel workbook.
+
+The two types of functionality in this package revolve around data curation and metric calculations. 
+
+# Implementation
+
+# Usage
+
+# Validation & Performance
+
+# Discussion
+
+# Conclusion
+
+# Acknowledgments
+
+# References
+::: {#refs}
+:::
+
