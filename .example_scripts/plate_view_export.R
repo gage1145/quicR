@@ -1,4 +1,4 @@
-require(readxl)
+# require(readxl)
 require(tidyverse)
 require(quicR)
 
@@ -38,18 +38,8 @@ while (plate == "") {
 # The sheet should be formatted so that each ID in the "layout" table is unique.
 df_dic <- quicR::organize_tables(file, plate = plate)
 
-IDs <- quicR::convert_tables(df_dic)[["Sample IDs"]] |>
-  na.omit()
-
 # Determine if there is a dilutions table.
 dilution_bool <- "Dilutions" %in% names(df_dic)
-
-# Add dilution factors if applicable.
-if (dilution_bool) {
-  dilutions <- quicR::convert_tables(df_dic)$Dilutions |>
-    as.numeric() |>
-    log10() * -1
-}
 
 # Read in the real-time data.
 # get_real will return a list of dataframes depending on how many real-time
@@ -70,31 +60,11 @@ df_id <- ifelse(
   1
 )
 
-df <- as.data.frame(df_list[[df_id]])
+df <- df_list[[df_id]] %>%
+  as.data.frame %>%
+  column_to_rownames("Time")
 
-# Set the time column as the df index.
-rownames(df) <- df[, 1]
-
-# Remove the time column and ID row.
-df <- df[, -1]
-
-# Get the wells used in the run.
-wells <- quicR::get_wells(file)
-
-# Take the metadata and apply it into a dataframe for the plate_view function.
-sample_locations <- cbind(wells, IDs) |>
-  na.omit()
-
-# Add the dilutions if applicable.
-if (dilution_bool) {
-  sample_locations <- sample_locations |>
-    dplyr::mutate(Dilutions = dilutions |> na.omit()) |>
-    dplyr::mutate(IDs = as.character(IDs)) |>
-    tidyr::unite(IDs, IDs:Dilutions, sep = "\n")
-}
-
-sample_locations <- sample_locations |>
-  mutate(IDs = ifelse(stringr::str_length(IDs) > 12, gsub(" ", "\n", IDs), IDs))
+sample_locations <- get_sample_locations(file, "Sample IDs", dilution_bool)
 
 
 
