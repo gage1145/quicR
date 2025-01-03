@@ -33,7 +33,7 @@ mainfont: Calibri
 bibliography: references.bib
 bibliographystyle: apa
 ---
-```{r, echo=FALSE, message=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 library(quicR)
 library(dplyr)
 library(kableExtra)
@@ -191,7 +191,6 @@ data.frame("Sample IDs" = samples) %>%
   head(15) %>%
   kable(row.names = FALSE)
 ```
-
 
 ## Visualization
 
