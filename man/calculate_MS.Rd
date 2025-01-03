@@ -11,7 +11,7 @@ calculate_MS(data, window = 3, data_is_norm = TRUE)
 
 \item{window}{Integer designating how wide you want the sliding window to be for calculating the moving average slope.}
 
-\item{data_is_norm}{Logical, if the data has not been normalized, will make a call to normalize_RFU.}
+\item{data_is_norm}{Logical; if FALSE, will make a call to normalize_RFU.}
 }
 \value{
 A dataframe containing the real-time slope values.

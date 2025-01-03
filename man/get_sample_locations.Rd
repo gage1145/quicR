@@ -4,7 +4,12 @@
 \alias{get_sample_locations}
 \title{Get the well locations of the samples used in the RT-QuIC run.}
 \usage{
-get_sample_locations(file, tab_name, dilution_bool = FALSE, plate = 96)
+get_sample_locations(
+  file,
+  tab_name = "Sample IDs",
+  dilution_bool = FALSE,
+  plate = 96
+)
 }
 \arguments{
 \item{file}{Excel file exported from MARS}
