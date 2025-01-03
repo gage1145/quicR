@@ -16,6 +16,7 @@ Imports:
   ggplot2,
   janitor,
   openxlsx,
+  purrr,
   readxl,
   reshape2,
   slider,

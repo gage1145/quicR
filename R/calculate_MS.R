@@ -6,14 +6,15 @@
 #' @param window Integer designating how wide you want the sliding window to be for calculating the moving average slope.
 #' @param data_is_norm Logical; if FALSE, will make a call to normalize_RFU.
 #'
-#' @return A dataframe containing the real-time slope values.
+#' @return A dataframe containing the real-time slope values as ΔRFU/sec.
 #'
-#' @importFrom slider slide
-#' @importFrom dplyr slice
+#' @importFrom slider slide_dbl
+#' @importFrom purrr map_dbl
 #' @importFrom dplyr mutate_all
+#' @importFrom dplyr mutate
+#' @importFrom dplyr relocate
 #' @importFrom dplyr %>%
-#' @importFrom dplyr select_at
-#' @importFrom stats as.formula
+#' @importFrom dplyr select
 #'
 #' @examples
 #' # This test takes >5 sec
@@ -37,31 +38,25 @@ calculate_MS <- function(data, window = 3, data_is_norm = TRUE) {
       mutate_all(~ as.numeric(as.character(.))) %>%
       suppressWarnings() %>%
       na.omit() %>%
-      mutate(Time = rownames(.))
+      mutate(Time = as.numeric(rownames(.))) %>%
+      relocate("Time", .before = 1)
   }
 
   slope <- function(x) {
-    max_slopes <- c()
-
-    for (i in colnames(x)[-ncol(x)]) {
-      max_slopes <- max_slopes %>%
-        rbind(
-          x %>%
-            slide(
-              ~ lm(
-                as.formula(paste0("`", i, "`", " ~ Time")),
-                data = .x
-              )[[1]][[2]] / 3600,
-              .before = window,
-              .complete = TRUE
-            ) %>%
-            replace(. == "NULL", NA) %>%
-            as.numeric() %>%
-            max(na.rm = TRUE)
-        )
-    }
-
-    return(max_slopes)
+    x %>%
+      select(-"Time") %>%
+      map_dbl(~ {
+        slide_dbl(
+          .x = seq_along(.x),
+          .f = function(idx) {
+            if (length(idx) < 2) return(NA)
+            diff(range(.x[idx])) / diff(range(x[["Time"]][idx]))
+          },
+          .before = window,
+          .complete = TRUE
+        ) %>%
+          max(na.rm = TRUE)
+      })
   }
 
   return(slope(curate(data)))

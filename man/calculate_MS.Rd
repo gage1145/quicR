@@ -14,7 +14,7 @@ calculate_MS(data, window = 3, data_is_norm = TRUE)
 \item{data_is_norm}{Logical; if FALSE, will make a call to normalize_RFU.}
 }
 \value{
-A dataframe containing the real-time slope values.
+A dataframe containing the real-time slope values as ΔRFU/sec.
 }
 \description{
 Uses a sliding window to calculate the slope of real-time reads.
