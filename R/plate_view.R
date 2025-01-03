@@ -14,6 +14,7 @@
 #' @importFrom tidyr replace_na
 #' @importFrom tidyr separate
 #' @importFrom stringr str_length
+#' @importFrom reshape2 melt
 #'
 #' @examples
 #' # This test takes >5 sec
@@ -62,7 +63,7 @@ plate_view <- function(df, meta, plate = 96) {
   # Ensures that the input is a dataframe.
   df <- data.frame(df)
 
-  colnames(df) <- paste(meta[, 1], meta[, 2], sep = ".")
+  colnames(df) <- c("Time", paste(meta[[1]], meta[[2]], sep = "."))
 
   # Create a template of all possible columns
   template_columns <- expand.grid(
@@ -82,13 +83,13 @@ plate_view <- function(df, meta, plate = 96) {
 
   # Add columns with NAs if they do not exist.
   for (col in template_columns) {
-    if (!(col %in% meta[, 1])) {
-      df[[col]] <- NA
+    if (!(col %in% meta[[1]])) {
+      df[col] <- NA
     }
   }
 
   # Add a "Time" column. This is important for the melt function.
-  df <- cbind("Time" = rownames(df), df)
+  # df <- cbind("Time" = rownames(df), df)
 
   # Combine the template_columns and sample_locations.
   template_columns <- as.data.frame(template_columns)
@@ -97,7 +98,8 @@ plate_view <- function(df, meta, plate = 96) {
   # Create a data.frame with all the wells and IDs, even if some are missing.
   full <- meta |>
     full_join(as.data.frame(template_columns)) |>
-    arrange_at(1)
+    arrange_at(1) %>%
+    suppressMessages()
 
   # Create the labeller function for the facet plot.
   ID_labeller <- function(variable, value) {
@@ -119,7 +121,7 @@ plate_view <- function(df, meta, plate = 96) {
     ) |>
     mutate(ID = replace_na(.data[["ID"]], "none")) |>
     # Create the facet plot.
-    ggplot(aes(x = .data[["Time"]], y = .data[["value"]])) +
+    ggplot(aes(x = Time, y = value)) +
     geom_line() +
     labs(
       y = "RFU",
@@ -132,7 +134,7 @@ plate_view <- function(df, meta, plate = 96) {
       axis.text.x = element_blank(),
       axis.text.y = element_blank()
     ) +
-    facet_wrap(vars(.data[["Well"]]),
+    facet_wrap(vars(Well),
       nrow = ifelse(plate == 96, 8, 16),
       ncol = ifelse(plate == 96, 12, 24),
       labeller = ID_labeller
