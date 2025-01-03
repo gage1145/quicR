@@ -1,5 +1,5 @@
 ---
-title: "quicR: An R Package for the Analysis of Real-Time Quaking Induced Conversion (RT-QuIC) Assays"
+title: "quicR: An R Package for Real-Time Quaking Induced Conversion (RT-QuIC) Assays"
 author:
     - name: 
         given: Gage
@@ -8,16 +8,30 @@ author:
       orcid: 0000-0002-7517-0480
       email: rowde002@umn.edu
       affiliation:
-          name: University of Minnesota
-          city: Saint Paul
-          state: MN
+        name: University of Minnesota
+        city: Saint Paul
+        state: MN
+      roles:
+        Conceptualization
+        Methodology
+        Software
+        Validation
+        Formal analysis
+        Investigation
+        Resources
+        Data curation
+        Writing--original draft preparation
+        Writing--review and editing
+        Visualization
+        Supervision
+        Prject administration
       corresponding: true
 abstract: Real-time quaking induced conversion (RT-QuIC) has quickly become an emerging diagnostic tool for protein misfolding disorders such as Creutzfeldt-Jakob disease and Parkinson's disease. Given that the technology is still relatively new, academic and industry standards have yet to be established. 'quicR' was developed to fill this lack of standardization by providing functions for both data curation and analysis.
 keywords: quicR, R package, RT-QuIC, prion, CJD, Parkinson's
-bibliography:
-    references.bib
-bibliographystyle: 
-    apa
+format: pdf
+mainfont: Calibri
+bibliography: references.bib
+bibliographystyle: apa
 ---
 ```{r, echo=FALSE, message=FALSE}
 library(quicR)
@@ -26,8 +40,8 @@ library(kableExtra)
 library(readxl)
 library(readr)
 
-file <- "inst/extdata/input_files/test3.xlsx"
-sample_file <- "inst/extdata/BMG_formatting/plate_layout.csv"
+file <- "../../inst/extdata/input_files/test3.xlsx"
+sample_file <- "../../inst/extdata/BMG_formatting/plate_layout.csv"
 ```
 
 
@@ -39,7 +53,7 @@ While standard metrics for determining a diagnosis have not been universally est
 # Methods
 This package requires the following dependencies: dplyr, ggplot2, janitor, openxlsx, readxl, reshape2, slider, stats, stringr, tidyr. Because the MARS software (BMG Labtech, Ortenberg, Germany) exports data as an Excel workbook, the packages, openxlsx and readxl, were fundamental to performing downstream handling. The tidyverse packages (dplyr, ggplot2, stringr, and tidyr), were vital for writing easy-to-read code and for data visualization. The janitor package has useful functions for performing quick data cleaning
 
-## Development
+# Development
 The quicR package was developed to address the need for efficient data conversion and analysis of RT-QuIC data. The functions were designed with usability and reproducibility in mind, ensuring compatibility between multiple labs. Currently, the package accepts data exported from the MARS software as an Excel workbook.
 
 The functionality in this package revolves around data curation, metric calculations, and visualization. 
@@ -52,16 +66,32 @@ MARS allows input of a TXT file containing sample IDs, dilution factors, and the
 
 ### Example Plate Layout
 
-```{r, echo=FALSE, message=FALSE}
-read_csv(sample_file, name_repair = "minimal") %>% kable()
-```
+\begin{table}[ht]
+\centering
+\begin{tabular}{c|cccccccccccc}
+   & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 \\ 
+  \hline
+  A & N & S01 & S02 & S03 & S04 & S05 & S06 & S07 & S08 & S09 & S10 & S11 \\ 
+  B & N & S01 & S02 & S03 & S04 & S05 & S06 & S07 & S08 & S09 & S10 & S11 \\ 
+  C & N & S01 & S02 & S03 & S04 & S05 & S06 & S07 & S08 & S09 & S10 & S11 \\ 
+  D & N & S01 & S02 & S03 & S04 & S05 & S06 & S07 & S08 & S09 & S10 & S11 \\ 
+  E & P & S12 & S13 & S14 & S15 & S16 & S17 & S18 & S19 & S20 & S21 & S22 \\ 
+  F & P & S12 & S13 & S14 & S15 & S16 & S17 & S18 & S19 & S20 & S21 & S22 \\ 
+  G & P & S12 & S13 & S14 & S15 & S16 & S17 & S18 & S19 & S20 & S21 & S22 \\ 
+  H & P & S12 & S13 & S14 & S15 & S16 & S17 & S18 & S19 & S20 & S21 & S22 \\ 
+   \hline
+\end{tabular}
+\end{table}
+
+\newpage
 
 ### Formatted Plate Layout for MARS Input
 
-"BMG_format" includes the logical argument "write_file". If this argument is true, it will write a TXT file to the "save_path" as "save_name". 
+The function, "BMG_format", includes the logical argument "write_file". If true, it will create a TXT file. The path can be given to the "save_path" argument, and the file name can be supplied to the "save_name" argument. 
 
-```{r}
-BMG_format(sample_file, write_file = FALSE)[1:18]
+```{r, message=FALSE}
+BMG_format(sample_file, write_file = FALSE)[1:18] %>% 
+  as.data.frame()
 ```
 
 ## Data Cleaning and Transformation
@@ -81,8 +111,7 @@ tabs <- organize_tables(file)[-1]
 tabs
 
 tabs <- convert_tables(tabs)
-tabs %>% 
-  head(15)
+tabs %>% head(15) %>% kable(row.names = FALSE)
 ```
 
 #### Sample-Independent Metadata
@@ -101,7 +130,7 @@ The raw data is typically found on the second sheet of the Excel workbook. The r
 ```{r}
 df_ <- get_real(file, ordered = FALSE)[[1]] %>% as.data.frame()
 
-df_[1:15, 1:6]
+df_[1:15, 1:6] %>% kable(row.names = FALSE)
 ```
 
 #### Transpose Raw Data
@@ -109,7 +138,7 @@ df_[1:15, 1:6]
 This data is structured such that each sample is its own column as well as the time points. This format can be non-ideal, and should be transposed for downstream manipulation using the function, "transpose_real". After transposition, each time point has its own column, and there is a single column for every sample ID.
 
 ```{r}
-transpose_real(df_)[1:15, 1:13]
+transpose_real(df_)[1:15, 1:13] %>% kable(row.names = FALSE)
 ```
 
 #### Normalize Raw Data
@@ -120,7 +149,8 @@ The function "normalize_RFU" will convert the raw data into a background normali
 df_norm <- normalize_RFU(df_, bg_cycle = 4, transposed = FALSE)
 
 df_norm[1:15, 1:12] %>%
-  mutate_at(2:ncol(.), ~round(as.numeric(.), 2))
+  mutate_at(2:ncol(.), ~round(as.numeric(.), 2)) %>%
+  kable(row.names = FALSE)
 ```
 
 The reader will notice that the fourth time column is all "1's" since this was designated the background cycle.
@@ -129,11 +159,15 @@ The reader will notice that the fourth time column is all "1's" since this was d
 There are three analytical metrics with dedicated functions: time-to-threshold, maxpoint ratio, and maximum slope. The rate of amyloid formation does not have a designated function since it is simply the inverse of the time-to-threshold. Each function below accepts input from the "transpose_real" or the "normalize_RFU" functions.
 
 ### Time-to-threshold
-Time-to-threshold is calculated using the "calculate_TtT" function.
+Time-to-threshold is calculated using the "calculate_TtT" function. The function must be supplied a threshold; default value is 2 (i.e. twice the background fluorescence if the data is normalized). A starting column should also be given as an integer; default value is 3. This is essentially asking how many columns of metadata are included before the fluorescence reads begin. 
+
+Time-to-threshold is calculated by iterating through each row and checking if a value is greater than the threshold. If the value is greater, the slope of the previous timepoint to the current timepoint is calculated, and the time intersection of the current read is returned.
 
 ### Maxpoint Ratio
+Maxpoint ratios (MPR) are calculated by the "calculate_MPR" function. Data must be normalized in order to derive this metric. In a normalized data set, the MPR is simply the maximum value achieved during the run.
 
 ### Maximum Slope
+The Maximum Slope (MS) is calculated by the "calculate_MS" function. The data can be either raw or normalized. The function iterates through each row using a rolling window which can be adjusted (default value is 3). Given the window size, a linear model is developed on those data points, and the slope of the model is recorded. The MS is simply the largest slope value recorded.
 
 ```{r}
 samples <- tabs$`Sample IDs` %>% na.omit()
@@ -154,7 +188,8 @@ data.frame("Sample IDs" = samples) %>%
     # Crossed threshold?
     crossed = TtT != hours
   ) %>%
-  head(15)
+  head(15) %>%
+  kable(row.names = FALSE)
 ```
 
 
