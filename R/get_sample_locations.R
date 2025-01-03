@@ -23,7 +23,7 @@
 #' get_sample_locations(file, "Sample IDs", TRUE, 96)
 #'
 #' @export
-get_sample_locations <- function(file, tab_name, dilution_bool = FALSE, plate = 96) {
+get_sample_locations <- function(file, tab_name = "Sample IDs", dilution_bool = FALSE, plate = 96) {
 
   return(
     data.frame(
