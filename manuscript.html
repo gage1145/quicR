@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Gage Rowden">
+<meta name="keywords" content="quicR, R package, RT-QuIC, prion, CJD, Parkinson’s">
+
+<title>quicR: An R Package for the Analysis of Real-Time Quaking Induced Conversion (RT-QuIC) Assays</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="manuscript_files/libs/clipboard/clipboard.min.js"></script>
+<script src="manuscript_files/libs/quarto-html/quarto.js"></script>
+<script src="manuscript_files/libs/quarto-html/popper.min.js"></script>
+<script src="manuscript_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="manuscript_files/libs/quarto-html/anchor.min.js"></script>
+<link href="manuscript_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="manuscript_files/libs/quarto-html/quarto-syntax-highlighting-29e2c20b02301cfff04dc8050bf30c7e.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="manuscript_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="manuscript_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="manuscript_files/libs/bootstrap/bootstrap-933a14f46f0e4d1503cecf416b5e09b4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">quicR: An R Package for the Analysis of Real-Time Quaking Induced Conversion (RT-QuIC) Assays</h1>
+</div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author">Gage Rowden <a href="mailto:rowde002@umn.edu" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> <a href="https://orcid.org/0000-0002-7517-0480" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            University of Minnesota
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+  
+    
+  </div>
+  
+<div>
+  <div class="abstract">
+    <div class="block-title">Abstract</div>
+    Real-time quaking induced conversion (RT-QuIC) has quickly become an emerging diagnostic tool for protein misfolding disorders such as Creutzfeldt-Jakob disease and Parkinson’s disease. Given that the technology is still relatively new, academic and industry standards have yet to be established. ‘quicR’ was developed to fill this lack of standardization by providing functions for both data curation and analysis.
+  </div>
+</div>
+
+<div>
+  <div class="keywords">
+    <div class="block-title">Keywords</div>
+    <p>quicR, R package, RT-QuIC, prion, CJD, Parkinson’s</p>
+  </div>
+</div>
+
+</header>
+
+
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>Real-time quaking induced conversion is a diagnostic assay that converts recombinant protein substrate into a misfolded aggregate in the presence of a misfolded seed <span class="citation" data-cites="Atarashi2011">(<a href="#ref-Atarashi2011" role="doc-biblioref">Atarashi et al. 2011</a>)</span>.</p>
+<p>While standard metrics for determining a diagnosis have not been universally established, there are certain metrics that many research groups have found useful. These include time-to-threshold (TtT)<span class="citation" data-cites="Orru2015">(<a href="#ref-Orru2015" role="doc-biblioref">Orrú et al. 2015</a>)</span>, rate of amyloid formation (RAF)<span class="citation" data-cites="Gallups2022">(<a href="#ref-Gallups2022" role="doc-biblioref">Gallups and Harms 2022</a>)</span>, maxpoint ratio (MPR)<span class="citation" data-cites="Rowden2023">(<a href="#ref-Rowden2023" role="doc-biblioref">Rowden et al. 2023</a>)</span>, and maximum slope (MS)<span class="citation" data-cites="Henderson2015">(<a href="#ref-Henderson2015" role="doc-biblioref">Henderson et al. 2015</a>)</span>. All together, these metrics provide insight into the general kinetics of an RT-QuIC reaction, and can be used together to draw a more robust diagnostic decision.</p>
+</section>
+<section id="methods" class="level1">
+<h1>Methods</h1>
+<p>This package requires the following dependencies: dplyr, ggplot2, janitor, openxlsx, readxl, reshape2, slider, stats, stringr, tidyr. Because the MARS software (BMG Labtech, Ortenberg, Germany) exports data as an Excel workbook, the packages, openxlsx and readxl, were fundamental to performing downstream handling. The tidyverse packages (dplyr, ggplot2, stringr, and tidyr), were vital for writing easy-to-read code and for data visualization. The janitor package has useful functions for performing quick data cleaning</p>
+<section id="development" class="level2">
+<h2 class="anchored" data-anchor-id="development">Development</h2>
+<p>The quicR package was developed to address the need for efficient data conversion and analysis of RT-QuIC data. The functions were designed with usability and reproducibility in mind, ensuring compatibility between multiple labs. Currently, the package accepts data exported from the MARS software as an Excel workbook.</p>
+<p>The functionality in this package revolves around data curation, metric calculations, and visualization.</p>
+</section>
+</section>
+<section id="implementation" class="level1">
+<h1>Implementation</h1>
+<section id="input-of-sample-ids-into-mars" class="level2">
+<h2 class="anchored" data-anchor-id="input-of-sample-ids-into-mars">Input of Sample IDs into MARS</h2>
+<p>MARS allows input of a TXT file containing sample IDs, dilution factors, and their well locations. This file is uniquely formatted, and not easily reproduced manually. The function “BMG_format” allows for input of a CSV file containing the plate layout, and exports the formatted TXT file.</p>
+<section id="example-plate-layout" class="level3">
+<h3 class="anchored" data-anchor-id="example-plate-layout">Example Plate Layout</h3>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;">1</th>
+<th style="text-align: left;">2</th>
+<th style="text-align: left;">3</th>
+<th style="text-align: left;">4</th>
+<th style="text-align: left;">5</th>
+<th style="text-align: left;">6</th>
+<th style="text-align: left;">7</th>
+<th style="text-align: left;">8</th>
+<th style="text-align: left;">9</th>
+<th style="text-align: left;">10</th>
+<th style="text-align: left;">11</th>
+<th style="text-align: left;">12</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">A</td>
+<td style="text-align: left;">N</td>
+<td style="text-align: left;">S01</td>
+<td style="text-align: left;">S02</td>
+<td style="text-align: left;">S03</td>
+<td style="text-align: left;">S04</td>
+<td style="text-align: left;">S05</td>
+<td style="text-align: left;">S06</td>
+<td style="text-align: left;">S07</td>
+<td style="text-align: left;">S08</td>
+<td style="text-align: left;">S09</td>
+<td style="text-align: left;">S10</td>
+<td style="text-align: left;">S11</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">B</td>
+<td style="text-align: left;">N</td>
+<td style="text-align: left;">S01</td>
+<td style="text-align: left;">S02</td>
+<td style="text-align: left;">S03</td>
+<td style="text-align: left;">S04</td>
+<td style="text-align: left;">S05</td>
+<td style="text-align: left;">S06</td>
+<td style="text-align: left;">S07</td>
+<td style="text-align: left;">S08</td>
+<td style="text-align: left;">S09</td>
+<td style="text-align: left;">S10</td>
+<td style="text-align: left;">S11</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">C</td>
+<td style="text-align: left;">N</td>
+<td style="text-align: left;">S01</td>
+<td style="text-align: left;">S02</td>
+<td style="text-align: left;">S03</td>
+<td style="text-align: left;">S04</td>
+<td style="text-align: left;">S05</td>
+<td style="text-align: left;">S06</td>
+<td style="text-align: left;">S07</td>
+<td style="text-align: left;">S08</td>
+<td style="text-align: left;">S09</td>
+<td style="text-align: left;">S10</td>
+<td style="text-align: left;">S11</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">D</td>
+<td style="text-align: left;">N</td>
+<td style="text-align: left;">S01</td>
+<td style="text-align: left;">S02</td>
+<td style="text-align: left;">S03</td>
+<td style="text-align: left;">S04</td>
+<td style="text-align: left;">S05</td>
+<td style="text-align: left;">S06</td>
+<td style="text-align: left;">S07</td>
+<td style="text-align: left;">S08</td>
+<td style="text-align: left;">S09</td>
+<td style="text-align: left;">S10</td>
+<td style="text-align: left;">S11</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">E</td>
+<td style="text-align: left;">P</td>
+<td style="text-align: left;">S12</td>
+<td style="text-align: left;">S13</td>
+<td style="text-align: left;">S14</td>
+<td style="text-align: left;">S15</td>
+<td style="text-align: left;">S16</td>
+<td style="text-align: left;">S17</td>
+<td style="text-align: left;">S18</td>
+<td style="text-align: left;">S19</td>
+<td style="text-align: left;">S20</td>
+<td style="text-align: left;">S21</td>
+<td style="text-align: left;">S22</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">F</td>
+<td style="text-align: left;">P</td>
+<td style="text-align: left;">S12</td>
+<td style="text-align: left;">S13</td>
+<td style="text-align: left;">S14</td>
+<td style="text-align: left;">S15</td>
+<td style="text-align: left;">S16</td>
+<td style="text-align: left;">S17</td>
+<td style="text-align: left;">S18</td>
+<td style="text-align: left;">S19</td>
+<td style="text-align: left;">S20</td>
+<td style="text-align: left;">S21</td>
+<td style="text-align: left;">S22</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">G</td>
+<td style="text-align: left;">P</td>
+<td style="text-align: left;">S12</td>
+<td style="text-align: left;">S13</td>
+<td style="text-align: left;">S14</td>
+<td style="text-align: left;">S15</td>
+<td style="text-align: left;">S16</td>
+<td style="text-align: left;">S17</td>
+<td style="text-align: left;">S18</td>
+<td style="text-align: left;">S19</td>
+<td style="text-align: left;">S20</td>
+<td style="text-align: left;">S21</td>
+<td style="text-align: left;">S22</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">H</td>
+<td style="text-align: left;">P</td>
+<td style="text-align: left;">S12</td>
+<td style="text-align: left;">S13</td>
+<td style="text-align: left;">S14</td>
+<td style="text-align: left;">S15</td>
+<td style="text-align: left;">S16</td>
+<td style="text-align: left;">S17</td>
+<td style="text-align: left;">S18</td>
+<td style="text-align: left;">S19</td>
+<td style="text-align: left;">S20</td>
+<td style="text-align: left;">S21</td>
+<td style="text-align: left;">S22</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="formatted-plate-layout-for-mars-input" class="level3">
+<h3 class="anchored" data-anchor-id="formatted-plate-layout-for-mars-input">Formatted Plate Layout for MARS Input</h3>
+<p>“BMG_format” includes the logical argument “write_file”. If this argument is true, it will write a TXT file to the “save_path” as “save_name”.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">BMG_format</span>(sample_file, <span class="at">write_file =</span> <span class="cn">FALSE</span>)[<span class="dv">1</span><span class="sc">:</span><span class="dv">18</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Joining with `by = join_by(Wells)`</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "A1  N      N"   "B1  N      N"   "C1  N      N"   "D1  N      N"  
+ [5] "E1  P      P"   "F1  P      P"   "G1  P      P"   "H1  P      P"  
+ [9] "A2  X1     S01" "B2  X1     S01" "C2  X1     S01" "D2  X1     S01"
+[13] "E2  X2     S12" "F2  X2     S12" "G2  X2     S12" "H2  X2     S12"
+[17] "A3  X3     S02" "B3  X3     S02"</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="data-cleaning-and-transformation" class="level2">
+<h2 class="anchored" data-anchor-id="data-cleaning-and-transformation">Data Cleaning and Transformation</h2>
+<p>The MARS software (BMG Labtech, Ortenberg, Germany) exports real-time data as an Excel workbook. Typically, the first sheet in the workbook will include microplate views of data. The two tables that are most relevant on this sheet are the “Sample IDs” table and the “Dilutions” table (if included). For much of the downstream analysis, it is crucial the the “Sample IDs” table was exported. If there is no table, the user can simply add it manually.</p>
+<section id="retrieving-metadata" class="level3">
+<h3 class="anchored" data-anchor-id="retrieving-metadata">Retrieving Metadata</h3>
+<p>The metadata is defined as either sample-dependent or -independent. Sample-dependent metadata includes information such as sample IDs and dilution factors, whereas sample-independent metadata includes the date, time, reaction ID, etc.</p>
+<section id="sample-dependent-metadata" class="level4">
+<h4 class="anchored" data-anchor-id="sample-dependent-metadata">Sample-Dependent Metadata</h4>
+<p>The dependent metadata can be retrieved using the “organize_tables” and “convert_tables” functions. The former returns a list of tables, and the ladder converts each table into a column in a single data frame.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>tabs <span class="ot">&lt;-</span> <span class="fu">organize_tables</span>(file)[<span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>tabs</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$`Sample IDs`
+# A tibble: 8 × 12
+  ...1  ...2  ...3  ...4  ...5  ...6   ...7  ...8  ...9 ...10 ...11 ...12
+  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1 P     P1    P1    P1    P3    P3       NA    NA    NA    NA    NA    NA
+2 P     P1    P1    P1    P3    P3       NA    NA    NA    NA    NA    NA
+3 P     P1    P1    P1    P3    P3       NA    NA    NA    NA    NA    NA
+4 P     P1    P1    P1    P3    P3       NA    NA    NA    NA    NA    NA
+5 N     P1    P1    P1    P3    P3       NA    NA    NA    NA    NA    NA
+6 N     P1    P1    P1    P3    P3       NA    NA    NA    NA    NA    NA
+7 N     P1    P1    P1    P3    P3       NA    NA    NA    NA    NA    NA
+8 N     P1    P1    P1    P3    P3       NA    NA    NA    NA    NA    NA
+
+$Dilutions
+# A tibble: 8 × 12
+  ...1  ...2  ...3  ...4  ...5  ...6   ...7  ...8  ...9 ...10 ...11 ...12
+  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1 1000  1000  1000  10000 1000  1000     NA    NA    NA    NA    NA    NA
+2 1000  1000  1000  10000 1000  1000     NA    NA    NA    NA    NA    NA
+3 1000  1000  1000  10000 1000  1000     NA    NA    NA    NA    NA    NA
+4 1000  1000  1000  10000 1000  1000     NA    NA    NA    NA    NA    NA
+5 1000  1000  1000  10000 1000  1000     NA    NA    NA    NA    NA    NA
+6 1000  1000  1000  10000 1000  1000     NA    NA    NA    NA    NA    NA
+7 1000  1000  1000  10000 1000  1000     NA    NA    NA    NA    NA    NA
+8 1000  1000  1000  10000 1000  1000     NA    NA    NA    NA    NA    NA</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>tabs <span class="ot">&lt;-</span> <span class="fu">convert_tables</span>(tabs)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>tabs <span class="sc">%&gt;%</span> </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Sample IDs Dilutions
+1           P      1000
+2          P1      1000
+3          P1      1000
+4          P1     10000
+5          P3      1000
+6          P3      1000
+7        &lt;NA&gt;      &lt;NA&gt;
+8        &lt;NA&gt;      &lt;NA&gt;
+9        &lt;NA&gt;      &lt;NA&gt;
+10       &lt;NA&gt;      &lt;NA&gt;
+11       &lt;NA&gt;      &lt;NA&gt;
+12       &lt;NA&gt;      &lt;NA&gt;
+13          P      1000
+14         P1      1000
+15         P1      1000</code></pre>
+</div>
+</div>
+</section>
+<section id="sample-independent-metadata" class="level4">
+<h4 class="anchored" data-anchor-id="sample-independent-metadata">Sample-Independent Metadata</h4>
+<p>The independent metadata can be retrieved using the “get_meta” function. This data is included in the header of the excel workbook.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">get_meta</span>(file) <span class="sc">%&gt;%</span> <span class="fu">as.data.frame</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            Meta_ID                                        Meta_info
+1              User                                             USER
+2              Path  C:\\Program Files (x86)\\BMG\\Omega\\User\\Data
+3           Test ID                                              236
+4         Test Name                               RT-QuIC Plate Mode
+5              Date                                         8/8/2024
+6              Time                                       2:58:07 PM
+7               ID1                        20240808_r5_GR_scrapie_RT
+8 Fluorescence (FI)                                             &lt;NA&gt;</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="retrieving-and-manipulating-raw-data" class="level3">
+<h3 class="anchored" data-anchor-id="retrieving-and-manipulating-raw-data">Retrieving and Manipulating Raw Data</h3>
+<p>The raw data is typically found on the second sheet of the Excel workbook. The raw real-time data can be retrieved using the “get_real” function. The logical argument, “ordered”, indicates whether the user would prefer the columns to be ordered by well or by sample ID. By default, it is FALSE which will order the data by well. This should almost always be the case for easier integration with other downstream functions. Additionally, since there can be more than one instance of real-time data (depending on if the user added some calculations in MARS), “get_real” returns a list of dataframes. Therefore, the output should be indexed to access the data frame of interest.</p>
+<section id="retrieve-raw-data" class="level4">
+<h4 class="anchored" data-anchor-id="retrieve-raw-data">Retrieve Raw Data</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>df_ <span class="ot">&lt;-</span> <span class="fu">get_real</span>(file, <span class="at">ordered =</span> <span class="cn">FALSE</span>)[[<span class="dv">1</span>]] <span class="sc">%&gt;%</span> <span class="fu">as.data.frame</span>()</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>df_[<span class="dv">1</span><span class="sc">:</span><span class="dv">15</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Time positive_control_p sample_x1 sample_x1_2 sample_x2 sample_x3
+1     0                611       599         564       588       597
+2  0.75                524       513         475       482       542
+3   1.5                576       545         515       509       565
+4  2.25                609       559         533       535       591
+5     3                615       570         540       547       602
+6  3.75                623       576         552       556       595
+7   4.5                623       574         559       561       604
+8  5.25                617       588         562       579       623
+9     6                637       590         563       566       609
+10 6.75                619       585         573       569       616
+11  7.5                625       591         562       565       619
+12 8.25                631       590         572       565       623
+13    9                632       601         577       563       613
+14 9.75                624       594         569       560       628
+15 10.5                597       593         562       555       631</code></pre>
+</div>
+</div>
+</section>
+<section id="transpose-raw-data" class="level4">
+<h4 class="anchored" data-anchor-id="transpose-raw-data">Transpose Raw Data</h4>
+<p>This data is structured such that each sample is its own column as well as the time points. This format can be non-ideal, and should be transposed for downstream manipulation using the function, “transpose_real”. After transposition, each time point has its own column, and there is a single column for every sample ID.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">transpose_real</span>(df_)[<span class="dv">1</span><span class="sc">:</span><span class="dv">15</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">13</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             Sample IDs   0 0.75 1.5 2.25   3 3.75 4.5 5.25   6 6.75 7.5 8.25
+2    positive_control_p 611  524 576  609 615  623 623  617 637  619 625  631
+3             sample_x1 599  513 545  559 570  576 574  588 590  585 591  590
+4           sample_x1_2 564  475 515  533 540  552 559  562 563  573 562  572
+5             sample_x2 588  482 509  535 547  556 561  579 566  569 565  565
+6             sample_x3 597  542 565  591 602  595 604  623 609  616 619  623
+7           sample_x3_2 571  524 542  564 568  568 583  587 594  593 586  590
+8  positive_control_p_2 594  540 582  622 628  643 642  628 640  652 647  642
+9           sample_x1_3 594  510 536  557 565  568 562  565 552  573 566  565
+10          sample_x1_4 571  493 520  529 549  556 554  563 567  570 570  566
+11          sample_x2_2 609  509 513  529 550  544 553  567 566  557 573  573
+12          sample_x3_3 686  642 678  691 708  709 721  741 745  752 745  750
+13          sample_x3_4 588  509 554  568 585  592 592  598 604  619 615  620
+14 positive_control_p_3 597  515 580  600 620  619 624  611 624  622 593  592
+15          sample_x1_5 596  516 548  558 576  568 575  576 579  586 582  570
+16          sample_x1_6 575  492 524  539 556  554 562  574 575  583 576  573</code></pre>
+</div>
+</div>
+</section>
+<section id="normalize-raw-data" class="level4">
+<h4 class="anchored" data-anchor-id="normalize-raw-data">Normalize Raw Data</h4>
+<p>The function “normalize_RFU” will convert the raw data into a background normalized data set. The function includes two additional arguments, “bg_cycle” (the cycle which will be used as the background fluorescence value) and “transposed” (if FALSE, will make a call to the “transpose_real” function).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>df_norm <span class="ot">&lt;-</span> <span class="fu">normalize_RFU</span>(df_, <span class="at">bg_cycle =</span> <span class="dv">4</span>, <span class="at">transposed =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>df_norm[<span class="dv">1</span><span class="sc">:</span><span class="dv">15</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>] <span class="sc">%&gt;%</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="dv">2</span><span class="sc">:</span><span class="fu">ncol</span>(.), <span class="sc">~</span><span class="fu">round</span>(<span class="fu">as.numeric</span>(.), <span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             Sample IDs    0 0.75  1.5 2.25    3 3.75  4.5 5.25    6 6.75  7.5
+2    positive_control_p 1.00 0.86 0.95    1 1.01 1.02 1.02 1.01 1.05 1.02 1.03
+3             sample_x1 1.07 0.92 0.97    1 1.02 1.03 1.03 1.05 1.06 1.05 1.06
+4           sample_x1_2 1.06 0.89 0.97    1 1.01 1.04 1.05 1.05 1.06 1.08 1.05
+5             sample_x2 1.10 0.90 0.95    1 1.02 1.04 1.05 1.08 1.06 1.06 1.06
+6             sample_x3 1.01 0.92 0.96    1 1.02 1.01 1.02 1.05 1.03 1.04 1.05
+7           sample_x3_2 1.01 0.93 0.96    1 1.01 1.01 1.03 1.04 1.05 1.05 1.04
+8  positive_control_p_2 0.95 0.87 0.94    1 1.01 1.03 1.03 1.01 1.03 1.05 1.04
+9           sample_x1_3 1.07 0.92 0.96    1 1.01 1.02 1.01 1.01 0.99 1.03 1.02
+10          sample_x1_4 1.08 0.93 0.98    1 1.04 1.05 1.05 1.06 1.07 1.08 1.08
+11          sample_x2_2 1.15 0.96 0.97    1 1.04 1.03 1.05 1.07 1.07 1.05 1.08
+12          sample_x3_3 0.99 0.93 0.98    1 1.02 1.03 1.04 1.07 1.08 1.09 1.08
+13          sample_x3_4 1.04 0.90 0.98    1 1.03 1.04 1.04 1.05 1.06 1.09 1.08
+14 positive_control_p_3 1.00 0.86 0.97    1 1.03 1.03 1.04 1.02 1.04 1.04 0.99
+15          sample_x1_5 1.07 0.92 0.98    1 1.03 1.02 1.03 1.03 1.04 1.05 1.04
+16          sample_x1_6 1.07 0.91 0.97    1 1.03 1.03 1.04 1.06 1.07 1.08 1.07</code></pre>
+</div>
+</div>
+<p>The reader will notice that the fourth time column is all “1’s” since this was designated the background cycle.</p>
+</section>
+</section>
+</section>
+<section id="calculations" class="level2">
+<h2 class="anchored" data-anchor-id="calculations">Calculations</h2>
+<p>There are three analytical metrics with dedicated functions: time-to-threshold, maxpoint ratio, and maximum slope. The rate of amyloid formation does not have a designated function since it is simply the inverse of the time-to-threshold. Each function below accepts input from the “transpose_real” or the “normalize_RFU” functions.</p>
+<section id="time-to-threshold" class="level3">
+<h3 class="anchored" data-anchor-id="time-to-threshold">Time-to-threshold</h3>
+<p>Time-to-threshold is calculated using the “calculate_TtT” function.</p>
+</section>
+<section id="maxpoint-ratio" class="level3">
+<h3 class="anchored" data-anchor-id="maxpoint-ratio">Maxpoint Ratio</h3>
+</section>
+<section id="maximum-slope" class="level3">
+<h3 class="anchored" data-anchor-id="maximum-slope">Maximum Slope</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> tabs<span class="sc">$</span><span class="st">`</span><span class="at">Sample IDs</span><span class="st">`</span> <span class="sc">%&gt;%</span> <span class="fu">na.omit</span>()</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the number of hours that the rxn ran for.</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>hours <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">colnames</span>(df_norm)[<span class="fu">ncol</span>(df_norm)])</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="st">"Sample IDs"</span> <span class="ot">=</span> samples) <span class="sc">%&gt;%</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Maxpoint Ratio</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">MPR =</span> <span class="fu">calculate_MPR</span>(df_norm, <span class="at">start_col =</span> <span class="dv">3</span>, <span class="at">data_is_norm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Max Slope</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">MS =</span> <span class="fu">calculate_MS</span>(df_norm, <span class="at">data_is_norm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Time to Threshold</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">TtT =</span> <span class="fu">calculate_TtT</span>(df_norm, <span class="at">threshold =</span> <span class="dv">2</span>, <span class="at">start_col =</span> <span class="dv">3</span>),</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Rate of Amyloid Formation</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">RAF =</span> <span class="fu">ifelse</span>(TtT <span class="sc">==</span> hours, <span class="dv">0</span>, <span class="dv">1</span> <span class="sc">/</span> TtT),</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Crossed threshold?</span></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">crossed =</span> TtT <span class="sc">!=</span> hours</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Sample.IDs       MPR           MS      TtT        RAF crossed
+1           P  5.806240 7.507754e-04 20.24882 0.04938560    TRUE
+2          P1  7.740608 3.632479e-04 51.55198 0.01939790    TRUE
+3          P1 10.405253 1.030331e-03 36.96472 0.02705282    TRUE
+4          P1  1.082243 1.401869e-05 72.00000 0.00000000   FALSE
+5          P3  6.993232 3.572100e-04 50.83224 0.01967256    TRUE
+6          P3  6.985816 4.427699e-04 52.23304 0.01914497    TRUE
+7           P  5.614148 5.385852e-04 17.55778 0.05695480    TRUE
+8          P1  1.028725 1.296628e-05 72.00000 0.00000000   FALSE
+9          P1  1.077505 1.417769e-05 72.00000 0.00000000   FALSE
+10         P1  1.156900 4.200797e-05 72.00000 0.00000000   FALSE
+11         P3  1.095514 1.447178e-05 72.00000 0.00000000   FALSE
+12         P3  1.091549 2.200703e-05 72.00000 0.00000000   FALSE
+13          P  9.213333 7.893519e-04 16.67595 0.05996659    TRUE
+14         P1  1.057348 1.592992e-05 72.00000 0.00000000   FALSE
+15         P1  3.512059 4.674294e-04 68.74862 0.01454575    TRUE</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="visualization" class="level2">
+<h2 class="anchored" data-anchor-id="visualization">Visualization</h2>
+</section>
+</section>
+<section id="usage" class="level1">
+<h1>Usage</h1>
+</section>
+<section id="validation-performance" class="level1">
+<h1>Validation &amp; Performance</h1>
+</section>
+<section id="discussion" class="level1">
+<h1>Discussion</h1>
+</section>
+<section id="conclusion" class="level1">
+<h1>Conclusion</h1>
+</section>
+<section id="acknowledgments" class="level1">
+<h1>Acknowledgments</h1>
+</section>
+<section id="references" class="level1">
+<h1>References</h1>
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-Atarashi2011" class="csl-entry" role="listitem">
+Atarashi, Ryuichiro, Kazunori Sano, Katsuya Satoh, and Noriyuki Nishida. 2011. <span>“Real-Time Quaking-Induced Conversion: A Highly Sensitive Assay for Prion Detection.”</span> <em>Prion</em>. Taylor &amp; Francis. <a href="https://doi.org/10.4161/pri.5.3.16893">https://doi.org/10.4161/pri.5.3.16893</a>.
+</div>
+<div id="ref-Gallups2022" class="csl-entry" role="listitem">
+Gallups, Nicole J., and Ashley S. Harms. 2022. <span>“<span>‘Seeding’</span> the Idea of Early Diagnostics in Synucleinopathies.”</span> <em>Brain</em> 145 (April): 418–19. <a href="https://doi.org/10.1093/BRAIN/AWAC062">https://doi.org/10.1093/BRAIN/AWAC062</a>.
+</div>
+<div id="ref-Henderson2015" class="csl-entry" role="listitem">
+Henderson, Davin M., Kristen A. Davenport, Nicholas J. Haley, Nathaniel D. Denkers, Candace K. Mathiason, and Edward A. Hoover. 2015. <span>“Quantitative Assessment of Prion Infectivity in Tissues and Body Fluids by Real-Time Quaking-Induced Conversion.”</span> <em>Journal of General Virology</em> 96 (January): 210–19. <a href="https://doi.org/10.1099/vir.0.069906-0">https://doi.org/10.1099/vir.0.069906-0</a>.
+</div>
+<div id="ref-Orru2015" class="csl-entry" role="listitem">
+Orrú, Christina D., Bradley R. Groveman, Andrew G. Hughson, Gianluigi Zanusso, Michael B. Coulthart, and Byron Caughey. 2015. <span>“Rapid and Sensitive RT-QuIC Detection of Human Creutzfeldt-Jakob Disease Using Cerebrospinal Fluid.”</span> <em>mBio</em> 6 (January). <a href="https://doi.org/10.1128/mBio.02451-14">https://doi.org/10.1128/mBio.02451-14</a>.
+</div>
+<div id="ref-Rowden2023" class="csl-entry" role="listitem">
+Rowden, Gage R., Catalina Picasso-Risso, Manci Li, Marc D. Schwabenlander, Tiffany M. Wolf, and Peter A. Larsen. 2023. <span>“Standardization of Data Analysis for RT-QuIC-Based Detection of Chronic Wasting Disease.”</span> <em>Pathogens</em> 12 (February): 309. <a href="https://doi.org/10.3390/PATHOGENS12020309/S1">https://doi.org/10.3390/PATHOGENS12020309/S1</a>.
+</div>
+</div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

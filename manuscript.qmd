@@ -19,8 +19,22 @@ bibliography:
 bibliographystyle: 
     apa
 ---
+```{r, echo=FALSE, message=FALSE}
+library(quicR)
+library(dplyr)
+library(kableExtra)
+library(readxl)
+library(readr)
+
+file <- "inst/extdata/input_files/test3.xlsx"
+sample_file <- "inst/extdata/BMG_formatting/plate_layout.csv"
+```
+
 
 # Introduction
+Real-time quaking induced conversion is a diagnostic assay that converts recombinant protein substrate into a misfolded aggregate in the presence of a misfolded seed [@Atarashi2011].
+
+While standard metrics for determining a diagnosis have not been universally established, there are certain metrics that many research groups have found useful. These include time-to-threshold (TtT)[@Orru2015], rate of amyloid formation (RAF)[@Gallups2022], maxpoint ratio (MPR)[@Rowden2023], and maximum slope (MS)[@Henderson2015]. All together, these metrics provide insight into the general kinetics of an RT-QuIC reaction, and can be used together to draw a more robust diagnostic decision.
 
 # Methods
 This package requires the following dependencies: dplyr, ggplot2, janitor, openxlsx, readxl, reshape2, slider, stats, stringr, tidyr. Because the MARS software (BMG Labtech, Ortenberg, Germany) exports data as an Excel workbook, the packages, openxlsx and readxl, were fundamental to performing downstream handling. The tidyverse packages (dplyr, ggplot2, stringr, and tidyr), were vital for writing easy-to-read code and for data visualization. The janitor package has useful functions for performing quick data cleaning
@@ -28,9 +42,123 @@ This package requires the following dependencies: dplyr, ggplot2, janitor, openx
 ## Development
 The quicR package was developed to address the need for efficient data conversion and analysis of RT-QuIC data. The functions were designed with usability and reproducibility in mind, ensuring compatibility between multiple labs. Currently, the package accepts data exported from the MARS software as an Excel workbook.
 
-The two types of functionality in this package revolve around data curation and metric calculations. 
+The functionality in this package revolves around data curation, metric calculations, and visualization. 
 
 # Implementation
+
+## Input of Sample IDs into MARS
+
+MARS allows input of a TXT file containing sample IDs, dilution factors, and their well locations. This file is uniquely formatted, and not easily reproduced manually. The function "BMG_format" allows for input of a CSV file containing the plate layout, and exports the formatted TXT file.
+
+### Example Plate Layout
+
+```{r, echo=FALSE, message=FALSE}
+read_csv(sample_file, name_repair = "minimal") %>% kable()
+```
+
+### Formatted Plate Layout for MARS Input
+
+"BMG_format" includes the logical argument "write_file". If this argument is true, it will write a TXT file to the "save_path" as "save_name". 
+
+```{r}
+BMG_format(sample_file, write_file = FALSE)[1:18]
+```
+
+## Data Cleaning and Transformation
+
+The MARS software (BMG Labtech, Ortenberg, Germany) exports real-time data as an Excel workbook. Typically, the first sheet in the workbook will include microplate views of data. The two tables that are most relevant on this sheet are the "Sample IDs" table and the "Dilutions" table (if included). For much of the downstream analysis, it is crucial the the "Sample IDs" table was exported. If there is no table, the user can simply add it manually.
+
+### Retrieving Metadata
+
+The metadata is defined as either sample-dependent or -independent. Sample-dependent metadata includes information such as sample IDs and dilution factors, whereas sample-independent metadata includes the date, time, reaction ID, etc.
+
+#### Sample-Dependent Metadata
+
+The dependent metadata can be retrieved using the "organize_tables" and "convert_tables" functions. The former returns a list of tables, and the ladder converts each table into a column in a single data frame.
+
+```{r, message=FALSE}
+tabs <- organize_tables(file)[-1]
+tabs
+
+tabs <- convert_tables(tabs)
+tabs %>% 
+  head(15)
+```
+
+#### Sample-Independent Metadata
+The independent metadata can be retrieved using the "get_meta" function. This data is included in the header of the excel workbook.
+
+```{r, message=FALSE}
+get_meta(file) %>% as.data.frame()
+```
+
+### Retrieving and Manipulating Raw Data
+
+The raw data is typically found on the second sheet of the Excel workbook. The raw real-time data can be retrieved using the "get_real" function. The logical argument, "ordered", indicates whether the user would prefer the columns to be ordered by well or by sample ID. By default, it is FALSE which will order the data by well. This should almost always be the case for easier integration with other downstream functions. Additionally, since there can be more than one instance of real-time data (depending on if the user added some calculations in MARS), "get_real" returns a list of dataframes. Therefore, the output should be indexed to access the data frame of interest.
+
+#### Retrieve Raw Data
+
+```{r}
+df_ <- get_real(file, ordered = FALSE)[[1]] %>% as.data.frame()
+
+df_[1:15, 1:6]
+```
+
+#### Transpose Raw Data
+
+This data is structured such that each sample is its own column as well as the time points. This format can be non-ideal, and should be transposed for downstream manipulation using the function, "transpose_real". After transposition, each time point has its own column, and there is a single column for every sample ID.
+
+```{r}
+transpose_real(df_)[1:15, 1:13]
+```
+
+#### Normalize Raw Data
+
+The function "normalize_RFU" will convert the raw data into a background normalized data set. The function includes two additional arguments, "bg_cycle" (the cycle which will be used as the background fluorescence value) and "transposed" (if FALSE, will make a call to the "transpose_real" function).
+
+```{r}
+df_norm <- normalize_RFU(df_, bg_cycle = 4, transposed = FALSE)
+
+df_norm[1:15, 1:12] %>%
+  mutate_at(2:ncol(.), ~round(as.numeric(.), 2))
+```
+
+The reader will notice that the fourth time column is all "1's" since this was designated the background cycle.
+
+## Calculations
+There are three analytical metrics with dedicated functions: time-to-threshold, maxpoint ratio, and maximum slope. The rate of amyloid formation does not have a designated function since it is simply the inverse of the time-to-threshold. Each function below accepts input from the "transpose_real" or the "normalize_RFU" functions.
+
+### Time-to-threshold
+Time-to-threshold is calculated using the "calculate_TtT" function.
+
+### Maxpoint Ratio
+
+### Maximum Slope
+
+```{r}
+samples <- tabs$`Sample IDs` %>% na.omit()
+
+# Define the number of hours that the rxn ran for.
+hours <- as.numeric(colnames(df_norm)[ncol(df_norm)])
+
+data.frame("Sample IDs" = samples) %>%
+  mutate(
+    # Maxpoint Ratio
+    MPR = calculate_MPR(df_norm, start_col = 3, data_is_norm = TRUE),
+    # Max Slope
+    MS = calculate_MS(df_norm, data_is_norm = TRUE),
+    # Time to Threshold
+    TtT = calculate_TtT(df_norm, threshold = 2, start_col = 3),
+    # Rate of Amyloid Formation
+    RAF = ifelse(TtT == hours, 0, 1 / TtT),
+    # Crossed threshold?
+    crossed = TtT != hours
+  ) %>%
+  head(15)
+```
+
+
+## Visualization
 
 # Usage
 
