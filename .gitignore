@@ -2,3 +2,5 @@
 .Rhistory
 settings.json
 /.quarto/
+.vscode
+manuscript_files
