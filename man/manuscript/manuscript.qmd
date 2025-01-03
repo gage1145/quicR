@@ -68,7 +68,8 @@ MARS allows input of a TXT file containing sample IDs, dilution factors, and the
 
 \begin{table}[ht]
 \centering
-\begin{tabular}{c|cccccccccccc}
+\begin{tabular}{|c|cccccccccccc|}
+  \hline
    & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 \\ 
   \hline
   A & N & S01 & S02 & S03 & S04 & S05 & S06 & S07 & S08 & S09 & S10 & S11 \\ 
@@ -79,7 +80,7 @@ MARS allows input of a TXT file containing sample IDs, dilution factors, and the
   F & P & S12 & S13 & S14 & S15 & S16 & S17 & S18 & S19 & S20 & S21 & S22 \\ 
   G & P & S12 & S13 & S14 & S15 & S16 & S17 & S18 & S19 & S20 & S21 & S22 \\ 
   H & P & S12 & S13 & S14 & S15 & S16 & S17 & S18 & S19 & S20 & S21 & S22 \\ 
-   \hline
+  \hline
 \end{tabular}
 \end{table}
 
@@ -167,16 +168,18 @@ Time-to-threshold is calculated by iterating through each row and checking if a 
 Maxpoint ratios (MPR) are calculated by the "calculate_MPR" function. Data must be normalized in order to derive this metric. In a normalized data set, the MPR is simply the maximum value achieved during the run.
 
 ### Maximum Slope
-The Maximum Slope (MS) is calculated by the "calculate_MS" function. The data can be either raw or normalized. The function iterates through each row using a rolling window which can be adjusted (default value is 3). Given the window size, a linear model is developed on those data points, and the slope of the model is recorded. The MS is simply the largest slope value recorded.
+The Maximum Slope (MS) is calculated by the "calculate_MS" function. The data can be either raw or normalized. The function iterates through each row using a rolling window which can be adjusted (default value is 3). Given the window size, the slope is calcualated based on the range of the window. The MS is simply the largest slope value recorded.
 
 ```{r}
 samples <- tabs$`Sample IDs` %>% na.omit()
+dilutions <- tabs$Dilutions %>% na.omit() %>% as.numeric()
 
 # Define the number of hours that the rxn ran for.
 hours <- as.numeric(colnames(df_norm)[ncol(df_norm)])
 
 data.frame("Sample IDs" = samples) %>%
   mutate(
+    Dilutions = -log10(dilutions),
     # Maxpoint Ratio
     MPR = calculate_MPR(df_norm, start_col = 3, data_is_norm = TRUE),
     # Max Slope
