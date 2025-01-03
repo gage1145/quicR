@@ -2,8 +2,8 @@
 title: "quicR: An R Package for Real-Time Quaking Induced Conversion (RT-QuIC) Assays"
 author:
     - name: 
-        given: Gage
-        family: Rowden
+      given: Gage
+      family: Rowden
       id: GR
       orcid: 0000-0002-7517-0480
       email: rowde002@umn.edu
@@ -26,7 +26,22 @@ author:
         Supervision
         Prject administration
       corresponding: true
-abstract: Real-time quaking induced conversion (RT-QuIC) has quickly become an emerging diagnostic tool for protein misfolding disorders such as Creutzfeldt-Jakob disease and Parkinson's disease. Given that the technology is still relatively new, academic and industry standards have yet to be established. 'quicR' was developed to fill this lack of standardization by providing functions for both data curation and analysis.
+    - name:
+        given: Peter
+        family: Larsen
+        id: PL
+        orcid: 0000-0000-0000-0000
+        email: plarsen@umn.edu
+        affiliation:
+          name: University of Minnesota
+          city: Saint Paul
+          state: MN
+        roles:
+          Supervision
+          Project administration
+          Funding
+      
+abstract: Real-time quaking induced conversion (RT-QuIC) has quickly become an emerging diagnostic tool for protein misfolding disorders such as Creutzfeldt-Jakob disease and Parkinson's disease. Given that the technology is still relatively new, academic and industry standards have yet to be established. 'quicR' was developed to fill this lack of standardization by providing functions for both data curation and analysis. 
 keywords: quicR, R package, RT-QuIC, prion, CJD, Parkinson's
 format: pdf
 mainfont: Calibri
@@ -39,6 +54,8 @@ library(dplyr)
 library(kableExtra)
 library(readxl)
 library(readr)
+library(ggplot2)
+library(reshape2)
 
 file <- "../../inst/extdata/input_files/test3.xlsx"
 sample_file <- "../../inst/extdata/BMG_formatting/plate_layout.csv"
@@ -177,7 +194,7 @@ dilutions <- tabs$Dilutions %>% na.omit() %>% as.numeric()
 # Define the number of hours that the rxn ran for.
 hours <- as.numeric(colnames(df_norm)[ncol(df_norm)])
 
-data.frame("Sample IDs" = samples) %>%
+df_analyzed <- data.frame("Sample IDs" = samples, check.names = FALSE) %>%
   mutate(
     Dilutions = -log10(dilutions),
     # Maxpoint Ratio
@@ -187,15 +204,44 @@ data.frame("Sample IDs" = samples) %>%
     # Time to Threshold
     TtT = calculate_TtT(df_norm, threshold = 2, start_col = 3),
     # Rate of Amyloid Formation
-    RAF = ifelse(TtT == hours, 0, 1 / TtT),
-    # Crossed threshold?
-    crossed = TtT != hours
-  ) %>%
+    RAF = ifelse(TtT == hours, 0, 1 / TtT)
+  )
+
+df_analyzed%>%
   head(15) %>%
   kable(row.names = FALSE)
 ```
 
+\newpage
+
 ## Visualization
+
+### Plate View
+```{r, warning=FALSE}
+#| fig-width: 8
+#| fig-height: 7
+sample_locations <- get_sample_locations(
+  file, 
+  dilution_bool = TRUE,
+  dilution_fun = function(x) -log10(x)
+)
+
+plate_view(df_, sample_locations)
+```
+
+### Summary Plots
+```{r, warning=FALSE, message=FALSE}
+#| fig-width: 6
+#| fig-height: 5
+df_analyzed %>%
+  melt(id.vars = c("Sample IDs", "Dilutions")) %>%
+  mutate_at("Dilutions", as.factor) %>%
+  
+  ggplot(aes(`Sample IDs`, value, fill = Dilutions)) +
+    geom_boxplot() +
+    facet_wrap(~variable, scales = "free")
+```
+
 
 # Usage
 
