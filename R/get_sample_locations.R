@@ -6,6 +6,7 @@
 #' @param tab_name Table name containing the sample IDs.
 #' @param dilution_bool Logical; is there a table containing dilution factors? If so, will add a newline and the log of the dilution factor to the ID column.
 #' @param dilution_fun A function for transforming the dilution factor.
+#' @param sep A string used to separate the sample ID and dilution factor.
 #' @param plate Integer; either 96 or 384 to denote microplate type.
 #'
 #' @return A vector containing well IDs.
@@ -24,7 +25,7 @@
 #' get_sample_locations(file)
 #'
 #' @export
-get_sample_locations <- function(file, tab_name = "Sample IDs", dilution_bool = FALSE, dilution_fun = function(x) 1*x, plate = 96) {
+get_sample_locations <- function(file, tab_name = "Sample IDs", dilution_bool = FALSE, dilution_fun = function(x) 1*x, sep = "\n", plate = 96) {
 
   data.frame(
     wells = get_wells(file),
@@ -46,7 +47,7 @@ get_sample_locations <- function(file, tab_name = "Sample IDs", dilution_bool = 
       "IDs" = if (dilution_bool) {
         paste(
           as.character(.[["IDs"]]),
-          "\n",
+          sep,
           (organize_tables(file) %>%
              convert_tables() %>%
              suppressMessages())[["Dilutions"]] %>%
