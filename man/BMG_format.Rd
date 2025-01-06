@@ -6,7 +6,7 @@
 \usage{
 BMG_format(
   file,
-  save_path = "./",
+  save_path = "",
   save_name = "formatted.txt",
   write_file = FALSE
 )

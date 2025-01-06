@@ -27,7 +27,7 @@
 #' BMG_format(layout_file)
 #'
 #' @export
-BMG_format <- function(file, save_path = "./", save_name = "formatted.txt", write_file = FALSE) {
+BMG_format <- function(file, save_path = "", save_name = "formatted.txt", write_file = FALSE) {
   df_ <- read.csv(file, header = F)
   colnames(df_) <- c("col", df_[1, -1])
   df_ <- df_[-1, ]
@@ -88,8 +88,8 @@ BMG_format <- function(file, save_path = "./", save_name = "formatted.txt", writ
     apply(1, format_row) |>
     na.omit()
   if (write_file == TRUE) {
-    writeLines(paste(save_path, save_name))
-  } else {
-    return(formatted)
+    writeLines(formatted, paste0(save_path, save_name))
+
   }
+  return(formatted)
 }
