@@ -20,11 +20,11 @@ while (file == "") {
   }
 }
 
-plate <- ""
-while (plate == "") {
+plate <- 0
+while (plate == 0) {
   plate <- as.integer(readline("Please enter 96 or 384 for plate type: "))
   if (plate != 96 & plate != 384) {
-    plate <- ""
+    plate <- 0
   }
 }
 
@@ -44,15 +44,15 @@ dilution_bool <- "Dilutions" %in% names(df_dic)
 # Read in the real-time data.
 # get_real will return a list of dataframes depending on how many real-time
 # measurements the user exported from MARS.
-df_list <- quicR::get_real(file, ordered = FALSE)
+df_ <- quicR::get_real(file, ordered = FALSE)
 
 df_id <- ifelse(
-  length(df_list) > 1,
+  length(df_) > 1,
   as.integer(
     readline(
       paste(
         "There are",
-        length(df_list),
+        length(df_),
         "real-time data sets. Please enter a number in that range: "
       )
     )
@@ -60,11 +60,17 @@ df_id <- ifelse(
   1
 )
 
-df <- df_list[[df_id]] %>%
-  as.data.frame %>%
-  column_to_rownames("Time")
+df_ <- df_[[df_id]] %>%
+  as.data.frame()
 
-sample_locations <- get_sample_locations(file, "Sample IDs", dilution_bool)
+sample_locations <- get_sample_locations(
+  file = file,
+  tab_name = "Sample IDs",
+  dilution_bool = dilution_bool,
+  dilution_fun = function(x) -log10(x),
+  sep = "\n",
+  plate = plate
+)
 
 
 
@@ -72,6 +78,8 @@ sample_locations <- get_sample_locations(file, "Sample IDs", dilution_bool)
 
 
 
-quicR::plate_view(df, sample_locations, plate)
+quicR::plate_view(df_, sample_locations, plate) +
+  ggtitle(str_split_i(file, "\\.", 1)) +
+  theme(plot.title = element_text(hjust = 0.5))
 
 ggsave("plate_view.png", width = 3600, height = 2400, units = "px")
