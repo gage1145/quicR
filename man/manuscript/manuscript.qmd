@@ -156,15 +156,18 @@ The MARS software (BMG Labtech, Ortenberg, Germany) exports real-time data as an
 ### Retrieving Metadata
 The metadata is defined as either sample-dependent or -independent. Sample-dependent metadata includes information such as sample IDs and dilution factors, whereas sample-independent metadata includes the date, time, reaction ID, etc.
 
-The dependent metadata can be retrieved using the "organize_tables" and "convert_tables" functions. The former returns a list of tables, and the latter converts each table into a column in a single data frame. See @tbl-sampleids and @tbl-dilutions for example outputs of organize_tables and 
+The dependent metadata can be retrieved using the "organize_tables" and "convert_tables" functions. The former returns a list of tables, and the latter converts each table into a column in a single data frame. See @tbl-tables for example outputs of organize_tables.
 
-```{r, message=FALSE}
+```{r, echo=FALSE, message=FALSE}
 tabs <- organize_tables(file)[-2]
+```
+```{r, eval=FALSE}
+organize_tables(file)
 ```
 
 ```{r, echo=FALSE, as.is=TRUE}
-#| label: tbl-sampleids
-#| tbl-cap: Sample IDs
+#| label: tbl-tables
+#| tbl-cap: Sample IDs and Dilution Factors
 rename <- function(x) {
   names(x) <- 1:12
   rownames(x) <- LETTERS[1:8]
@@ -182,14 +185,9 @@ tabs$`Sample IDs` %>%
   ) %>%
   column_spec(1, border_left = TRUE, border_right = TRUE, bold = TRUE) %>%
   column_spec(13, border_right = TRUE) %>%
-  row_spec(0, bold = TRUE)
-  # kable_styling(latex_options = c("HOLD_position"))
-```
+  row_spec(0, bold = TRUE) %>%
+  kable_styling(full_width = TRUE, font_size = 10)
 
-
-```{r, echo=FALSE, as.is=TRUE}
-#| label: tbl-dilutions
-#| tbl-cap: Dilutions
 tabs$Dilutions %>%
   as.data.frame() %>%
   rename() %>%
@@ -202,13 +200,18 @@ tabs$Dilutions %>%
   column_spec(1, border_left = TRUE, border_right = TRUE, bold = TRUE) %>%
   column_spec(13, border_right = TRUE) %>%
   row_spec(0, bold = TRUE) %>%
-  kable_styling(latex_options = c("scale_down"))
+  kable_styling(full_width = TRUE, font_size = 10)
 ```
 
-```{r, message=FALSE}
+```{r, eval=FALSE}
+organize_tables(file) %>% convert_tables()
+```
+```{r, echo=FALSE, message=FALSE}
 tabs <- convert_tables(tabs)
 tabs %>% head(12) %>% kable(row.names = FALSE)
 ```
+
+\newpage
 
 #### Sample Locations
 Samples locations can be extracted based on their well ID. The "get_sample_locations" function accepts additional arguments if dilution factors were exported from MARS. The "dilution_fun" argument will supply a function for transforming the dilution factors (e.g. if the user would want to perform a log transformation).
@@ -243,10 +246,10 @@ get_meta(file) %>%
   kable(row.names = FALSE)
 ```
 
+\newpage
+
 ### Retrieving and Manipulating Raw Data
 The raw data is typically found on the second sheet of the Excel workbook. The raw real-time data can be retrieved using the "get_real" function. The logical argument, "ordered", indicates whether the user would prefer the columns to be ordered by well or by sample ID. By default, it is FALSE which will order the data by well. This should almost always be the case for easier integration with other downstream functions. Additionally, since there can be more than one instance of real-time data (depending on if the user added some calculations in MARS), "get_real" returns a list of dataframes. Therefore, the output should be indexed to access the data frame of interest.
-
-\newpage
 
 #### Retrieve Raw Data
 ```{r, eval=FALSE}
@@ -257,6 +260,8 @@ columns <- 8
 df_ <- get_real(file, ordered = FALSE)[[1]] %>% as.data.frame()
 df_[1:11, 1:columns] %>% kable(row.names = FALSE, align = rep("c", columns))
 ```
+
+\newpage
 
 #### Transpose Raw Data
 This data is structured such that each sample is its own column (variable) and each row (observation) is a time point. While this format is technically correct, a transposed format is more ideal for some downstream manipulation. This operation is performed using the function, "transpose_real". After transposition, each time point is an individual column (variable), and each sample is an individual row (observation).
@@ -269,8 +274,6 @@ columns <- 12
 transpose_real(df_)[1:7, 1:columns] %>% 
   kable(row.names = FALSE, align = rep("c", columns))
 ```
-
-\newpage
 
 #### Normalize Raw Data
 The function "normalize_RFU" will convert the raw data into a background normalized data set. The function includes two additional arguments, "bg_cycle" (the cycle which will be used as the background fluorescence value) and "transposed" (if FALSE, will make a call to the "transpose_real" function). Note that the fourth time point is all "1's" since this was designated the background cycle.
@@ -290,7 +293,7 @@ df_norm <- df_norm %>%
 ```
 
 ## Calculations
-There are three analytical metrics with dedicated functions: time-to-threshold (TtT), maxpoint ratio (MPR), and maximum slope (MS). The rate of amyloid formation does not have a designated function since it is simply the inverse of the time-to-threshold. Each function below accepts input from the "transpose_real" or the "normalize_RFU" functions.
+There are three analytical metrics with dedicated functions: time-to-threshold (TtT), maxpoint ratio (MPR), and maximum slope (MS). The rate of amyloid formation does not have a designated function since it is simply the inverse of the time-to-threshold. Each function below accepts input from the "transpose_real" or the "normalize_RFU" functions. See @tbl-metrics for an example of the output of these functions.
 
 ### Time-to-threshold
 TtT is calculated using the "calculate_TtT" function. The function must be supplied a threshold; default value is 2 (i.e. twice the background fluorescence if the data is normalized). A starting column should also be given as an integer; default value is 3. This is essentially asking how many columns of metadata are included before the fluorescence reads begin. 
@@ -301,9 +304,15 @@ TtT is calculated by iterating through each row and checking if a value is great
 MPR is calculated by the "calculate_MPR" function. Data must be normalized in order to derive this metric. In a normalized data set, the MPR is simply the maximum value achieved during the run. Raw data can be passed to this function, but the argument, "data_is_norm", must be set to TRUE. This will pass the raw data to "normalize_RFU" before calculating the MPR values.
 
 ### Maximum Slope
-MS is calculated by the "calculate_MS" function. The function iterates through each row using a rolling window which can be adjusted (default value is 3). Given the window size, the slope is calcualated based on the range of the window. The MS is simply the largest slope value recorded.
+MS is calculated by the "calculate_MS" function. The function iterates through each row using a rolling window which can be adjusted (default value is 3). Given the window size, the slope is calcualated based on change in fluorescence divided by the range of the window. The MS is simply the largest slope value recorded. The units are typically reported as $\Delta$RFU/s.
+
+\newpage
 
 ```{r, eval=FALSE}
+#| label: tbl-metrics
+#| tbl-cap: Calculated metrics
+#| tbl-cap-location: bottom
+
 samples <- tabs$`Sample IDs`
 dilutions <- tabs$Dilutions
 
