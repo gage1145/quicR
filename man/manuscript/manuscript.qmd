@@ -295,6 +295,16 @@ df_norm <- df_norm %>%
 ## Calculations
 There are three analytical metrics with dedicated functions: time-to-threshold (TtT), maxpoint ratio (MPR), and maximum slope (MS). The rate of amyloid formation does not have a designated function since it is simply the inverse of the time-to-threshold. Each function below accepts input from the "transpose_real" or the "normalize_RFU" functions. See @tbl-metrics for an example of the output of these functions.
 
+### Thresholds
+Many publications have different methods of determining thresholds. By and large, the most popular method is to take the average background fluorescence of the entire plate and add some multiple of standard deviations. The quicR package provides the "calculate_threshold" function for this purpose. A value can be provided as the optional argument, "multiplier", which will be applied to the standard deviation.
+```{r, eval=FALSE}
+get_real(file)[[1]] %>% calculate_threshold(multiplier = 10)
+```
+```{r, echo=FALSE}
+calculate_threshold(df_, multiplier = 10)
+```
+
+
 ### Time-to-threshold
 TtT is calculated using the "calculate_TtT" function. The function must be supplied a threshold; default value is 2 (i.e. twice the background fluorescence if the data is normalized). A starting column should also be given as an integer; default value is 3. This is essentially asking how many columns of metadata are included before the fluorescence reads begin. 
 
