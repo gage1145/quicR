@@ -41,7 +41,7 @@ author:
           Project administration
           Funding
       
-abstract: Real-time quaking induced conversion (RT-QuIC) has quickly become an emerging diagnostic tool for protein misfolding disorders such as Creutzfeldt-Jakob disease and Parkinson's disease. Given that the technology is still relatively new, academic and industry standards have yet to be established. 'quicR' was developed to fill this lack of standardization by providing functions for data curation, analysis, and vizualiztion. 
+abstract: Real-time quaking induced conversion (RT-QuIC) has quickly become an emerging diagnostic tool for protein misfolding disorders such as Creutzfeldt-Jakob disease and Parkinson's disease. Given that the technology is still relatively new, academic and industry standards for cleaning data and analyzing results have yet to be fully established. The open source R library, quicR, was developed to fill this lack of standardization. This library provides functions, which can be easily integrated into existing R workflows, for data curation, analysis, and vizualiztion.
 keywords: quicR, R, library, RT-QuIC, prion, diagnostics, CJD, Parkinson's
 format: 
   pdf:
@@ -80,22 +80,22 @@ path <- "../../inst/extdata/BMG_formatting"
 
 
 # Introduction
-Real-time quaking induced conversion (RT-QuIC) is a cutting-edge diagnostic assay that has garnered significant attention for its ability to detect misfolded protein aggregates. The assay works by converting a recombinant protein substrate into an amyloid aggregate in the presence of a misfolded seed [@Atarashi2011]. The assay's sensitivity and specificity make RT-QuIC a promising tool for diagnosing diseases such as prion disorders and other protein misfolding pathologies. However, the relatively recent development and novelty of the assay have left a gap in widely accepted academic and industry standards for data analysis and interpretation.
+Real-time quaking induced conversion (RT-QuIC) is a cutting-edge diagnostic assay that has garnered significant attention for its ability to detect misfolded protein aggregates [@Atarashi2011]. The assay works by converting a recombinant protein substrate into an amyloid aggregate in the presence of a misfolded seed [@Wilham2010; @Orru2012; @Bongianni2019; @Orru2017; @Orru2015; @Dassanayake2016; @Hwang2018; @Groveman2018; @Metrick2020]. The assay's sensitivity and specificity make RT-QuIC a promising tool for diagnosing diseases such as prion disorders and other protein misfolding pathologies [@Fiorini2020; @Franceschini2017; @Picasso-Risso2022, @Holz2021]. However, the relatively recent development and novelty of the assay have left a gap in widely accepted academic and industry standards for data analysis and interpretation [@Rowden2023].
 
-To address this gap, we introduce quicR, an open-source R library dedicated to the manipulation, analysis, and visualization of RT-QuIC data. By consolidating key metrics and providing robust analytical tools, quicR aims to standardize the analysis pipeline and foster reproducibility within the field. quicR is designed with both researchers and diagnosticians in mind, providing a user-friendly interface that integrates seamlessly with existing R workflows.
+To address this gap, we introduce quicR, an open-source library, developed in R [@R2024], dedicated to the cleaning, analysis, and visualization of RT-QuIC data. By consolidating key metrics and providing robust analytical tools, quicR aims to standardize the analysis pipeline and foster reproducibility within the field of seeded amplification assays. quicR is designed with both researchers and diagnosticians in mind, providing a user-friendly interface that integrates seamlessly with existing R workflows.
 
-While universal diagnostic criteria for RT-QuIC have yet to be established, certain analytical metrics have emerged as valuable tools for interpreting assay results. These include:
+While universal diagnostic criteria for RT-QuIC have yet to be established, certain analytical metrics have emerged as valuable tools for interpreting assay results and kinetics. These include:
 
--   Time-to-threshold (TtT): The time required for the fluorescence signal to exceed a predefined threshold, indicating amyloid formation [@Orru2015].
--   Rate of amyloid formation (RAF): A measure of the kinetics of aggregate growth, which provides insight into relative misfolded seed quantity [@Gallups2022].
--   Maxpoint ratio (MPR): A ratio-based metric for comparing peak normalized fluorescence intensities [@Rowden2023].
+-   Time-to-threshold (TtT): The time required for the fluorescence signal to exceed a predefined threshold [@Orru2015].
+-   Rate of amyloid formation (RAF): A measure of the kinetics of aggregate growth, which provides insight into the relative quantity of misfolded seed [@Gallups2022].
+-   Maxpoint ratio (MPR): A ratio-based metric measuring peak normalized fluorescence intensities [@Rowden2023].
 -   Maximum slope (MS): The steepest rate of fluorescence increase, reflecting the most rapid phase of aggregation [@Henderson2015].
 
 Together, these metrics enable researchers to characterize the kinetics of RT-QuIC reactions comprehensively, enhancing the rigor and reliability of diagnostic decisions.
 
-In addition to analytical tools, quicR provides flexible and customizable visualization capabilities. Leveraging the powerful ggplot2 library [@ggplot2016], quicR enables users to generate high-quality, publication-ready figures. These visualizations can be further customized using the intuitive + syntax of ggplot2, allowing for tailored presentations of RT-QuIC data.
+In addition to analytical tools, quicR provides flexible and customizable visualization capabilities. Leveraging the powerful ggplot2 library [@ggplot2016], quicR enables users to generate high-quality, publication-ready figures. These visualizations can be further customized using the intuitive '+' syntax of ggplot2, allowing for tailored presentations of RT-QuIC data.
 
-By combining standardized metrics, advanced visualization tools, and a commitment to open science, quicR serves as a foundational resource for the growing RT-QuIC community. Its goal is to empower researchers to analyze and present their data with clarity, consistency, and confidence.
+By combining standardized metrics, advanced visualization tools, and a commitment to open source science, quicR serves as a foundational resource for the growing RT-QuIC community. Its goal is to empower researchers to analyze and present their data with clarity, consistency, and cohesion.
 
 # Methods
 
@@ -299,7 +299,7 @@ get_meta(file) %>%
   kable(row.names = FALSE)
 ```
 
-### Retrieving and Manipulating Raw Data
+## Retrieving and Manipulating Raw Data
 The raw, real-time data is typically found on the second sheet of the Excel workbook. There are three functions dedicated to the retrieval and cleaning of raw data.
 1.  get_real: Retrieves the raw data from the Excel file, and outputs it as a dataframe.
 2.  transpose_real: Swaps the rows and columns which makes some downstream analyses easier.
