@@ -5,139 +5,70 @@ library(ggpubr)
 library(ggrepel)
 
 
-data_is_norm <- FALSE
-file <- "../../inst/extdata/input_files/test2.xlsx"
-window <- 4
 
-curate <- function(x) {
-  x %>%
-    {if (data_is_norm) . else normalize_RFU(.)} %>%
-    t() %>%
-    as.data.frame() %>%
-    mutate_all(~ as.numeric(as.character(.))) %>%
-    suppressWarnings() %>%
-    na.omit() %>%
-    mutate(Time = as.numeric(rownames(.))) %>%
-    relocate("Time", .before = 1)
+# Smoothed Functions ------------------------------------------------------
+
+
+
+S <- 5.13534
+a <- 314730
+b <- -1.61059
+E <- -1.43142
+c <- 78.01494
+d <- -0.304958
+
+raw_func <- function(x) {
+  ratio1 <- S/(1 + a * exp(b * x))
+  ratio2 <- E/(1 + c * exp(d * x))
+  return(ratio1 + ratio2)
 }
 
+deriv_func <- function(x) {
+  ratio1 <- -S * a * b * exp(b * x) / (a * exp(b * x) + 1)^2
+  ratio2 <- -E * c * d * exp(d * x) / (c * exp(d * x) + 1)^2
+  ratio1 + ratio2
+}
 
-df_1 <- get_real(file, ordered = FALSE)[[1]][1:2] %>%
-  curate()
+df_ <- data.frame(x = seq(0, 48, 0.1)) %>%
+  mutate(raw = raw_func(x), der = deriv_func(x))
 
+threshold <- 0.2
+ttt <- min(df_[which(df_$raw > threshold), "x"])
+mpr <- max(df_$raw)
+mpr_time <- df_[which(df_$raw == max(df_$raw)), "x"]
+ms <- max(df_$der)
+ms_time <- df_[which(df_$der == max(df_$der)), "x"]
 
-slope <- slide(
-  df_1,
-  ~lm(`2` ~ Time, data = .x)[[1]][[2]],
-  .before = window,
-  .complete = TRUE
-) %>%
-  unlist() %>%
-  as.data.frame()
+ggplot(df_, aes(x)) +
+  geom_line(aes(y = raw), color = "darkred", size = 1.2) +
+  geom_line(aes(y = der), color = "darkblue", size = 1.2) +
 
-slope <- rbind(NA, NA, slope, NA, NA)
+  geom_segment(x = 0, xend = mpr_time, y = mpr, yend = mpr, color = "darkred", size = 1.2, linetype = "dashed") +
+  geom_segment(x = mpr_time, xend = mpr_time, y = -0.15, yend = mpr, color = "darkred", size = 1.2, linetype = "dashed") +
+  geom_segment(x = 0, xend = ms_time, y = ms, yend = ms, color = "darkblue", size = 1.2, linetype = "dashed") +
+  geom_segment(x = ms_time, xend = ms_time, y = -0.15, yend = ms, color = "darkblue", size = 1.2, linetype = "dashed") +
+  geom_segment(x = 0, xend = ttt, y = threshold, yend = threshold, color = "darkred", size = 1.2, linetype = "dashed") +
+  geom_segment(x = ttt, xend = ttt, y = -0.15, yend = threshold, color = "darkred", size = 1.2, linetype = "dashed") +
 
-df_2 <- cbind(df_1, slope) %>%
-  na.omit() %>%
-  mutate_all(as.numeric)
-colnames(df_2) <- c("Time", "Raw", "Slope")
+  geom_label_repel(label = "Maxpoint Ratio", x = mpr_time, y = mpr, hjust = "inward", data = subset(df_, raw == mpr), force_pull = -200, color = "darkred", size = 5, segment.size = 1.2) +
+  geom_label_repel(label = "Max Slope", x = ms_time, y = ms, hjust = "outward", vjust = "outward", data = subset(df_, der == ms), force_pull = -100, color = "darkblue", size = 5, segment.size = 1.2) +
+  geom_label_repel(label = "Threshold", x = 1, y = threshold, vjust = "outward", data = subset(df_, x == 0), force_pull = -50, color = "darkred", size = 5, segment.size = 1.5) +
+  geom_label_repel(label = "Time-to-threshold", x = ttt, y = threshold, hjust = "inward", vjust = "outward", data = subset(df_, x == ttt), force_pull = -250, color = "darkred", size = 5, segment.size = 1.2) +
+  geom_text(label = "-- Normalized RFU", x = 1, y = 4, hjust = 0, vjust = 0, color = "darkred", size = 5) +
+  geom_text(label = "-- Derivative", x = 1, y = 3.5, hjust = 0, vjust = 0, color = "darkblue", size = 5) +
 
-ms <- max(df_2$Slope)
-ms_time <- df_2[[which(df_2$Slope == max(df_2$Slope)), "Time"]]
-
-mpr <- max(df_2$Raw)
-mpr_time <- df_2[[which(df_2$Raw == max(df_2$Raw)), "Time"]]
-threshold <- 1.2
-ttt <- min(df_2[which(df_2$Raw > threshold),][["Time"]])
-
-ggplot(df_2, aes(Time)) +
-  geom_line(aes(y = Slope), color = "blue", size = 1.2) +
-  geom_line(aes(y = Raw - 1), color = "red", size = 1.2) +
-  # geom_smooth(aes(y = Slope), color = "blue", span = 0.1, se = F, size = 1.2) +
-  # geom_smooth(aes(y = Raw - 1), color = "red", span = 0.1, se = F, size = 1.2) +
-
-  geom_hline(yintercept = ms, color = "darkblue", size = 1.2, linetype = "dashed") +
-  # geom_vline(xintercept = ms_time, color = "darkblue", size = 1.2, linetype = "dashed") +
-  geom_hline(yintercept = mpr - 1, color = "darkred", size = 1.2, linetype = "dashed") +
-  # geom_vline(xintercept = mpr_time, color = "darkred", size = 1.2, linetype = "dashed") +
-  geom_hline(yintercept = threshold - 1, color = "black", size = 1.2, linetype = "dashed") +
-  geom_vline(xintercept = ttt, color = "darkgreen", size = 1.2, linetype = "dashed") +
-
-  geom_label_repel(
-    label = "Maxpoint Ratio",
-    hjust = "inward",
-    x = mpr_time,
-    vjust = "outward",
-    y = mpr - 1,
-    data = subset(df_2, Raw == mpr),
-    force_pull = -200,
-    color = "darkred",
-    size = 6,
-    segment.size = 1.2
-  ) +
-  geom_label_repel(
-    label = "Max Slope",
-    hjust = "inward",
-    x = ms_time,
-    vjust = "outward",
-    y = ms,
-    data = subset(df_2, Slope == ms),
-    force_pull = -200,
-    color = "darkblue",
-    size = 6,
-    segment.size = 1.2
-  ) +
-  geom_label_repel(
-    label = "Threshold",
-    x = 15,
-    vjust = "outward",
-    y = threshold - 1,
-    data = subset(df_2, Time == 20.25),
-    force_pull = -100,
-    color = "black",
-    size = 6,
-    segment.size = 1.5
-  ) +
-  geom_label_repel(
-    label = "Time-to-threshold",
-    hjust = "inward",
-    x = ttt,
-    vjust = "outward",
-    y = threshold - 1,
-    data = subset(df_2, Time == ttt),
-    force_pull = -300,
-    color = "darkgreen",
-    size = 6,
-    segment.size = 1.2
-  ) +
-  geom_text(
-    label = "-- Normalized RFU",
-    x = 15,
-    y = 4,
-    hjust = 0,
-    vjust = 0,
-    color = "red",
-    size = 6
-  ) +
-  geom_text(
-    label = "-- Derivative",
-    x = 15,
-    y = 3.5,
-    hjust = 0,
-    vjust = 0,
-    color = "blue",
-    size = 6
-  ) +
-
-  labs(
-    x = "Time (h)"
-  ) +
-  theme_classic2() +
+  labs(x = "Time (h)") +
+  theme_classic() +
   scale_x_continuous(breaks = seq(0, 48, 2)) +
-  coord_cartesian(xlim = c(15, 35)) +
+  coord_cartesian(xlim = c(0, 21), ylim = c(-0.15, 4.8), expand = FALSE) +
   theme(
     axis.title.y = element_blank(),
     axis.title.x = element_text(size = 20),
-    axis.text = element_text(size = 16)
+    axis.text = element_text(size = 16),
+    panel.border = element_rect(colour = "black", fill=NA, linewidth=1)
   )
 ggsave("images/metric_example.png", width = 12, height = 6)
+
+
+
+

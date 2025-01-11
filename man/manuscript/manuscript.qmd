@@ -1,5 +1,5 @@
 ---
-title: "quicR: An R Package for Real-Time Quaking Induced Conversion (RT-QuIC) Assays"
+title: "quicR: An R Library for Streamlined Data Handling of Real-Time Quaking Induced Conversion Assays"
 author:
     - name: 
         given: Gage
@@ -42,17 +42,17 @@ author:
           Funding
       
 abstract: Real-time quaking induced conversion (RT-QuIC) has quickly become an emerging diagnostic tool for protein misfolding disorders such as Creutzfeldt-Jakob disease and Parkinson's disease. Given that the technology is still relatively new, academic and industry standards have yet to be established. 'quicR' was developed to fill this lack of standardization by providing functions for data curation, analysis, and vizualiztion. 
-keywords: quicR, R package, RT-QuIC, prion, CJD, Parkinson's
+keywords: quicR, R, library, RT-QuIC, prion, diagnostics, CJD, Parkinson's
 format: 
   pdf:
     papersize: letter
     documentclass: article
     fontsize: 12pt
     geometry:
-      - top=30mm
-      - right=30mm
-      - bottom=30mm
-      - left=30mm
+      - top=20mm
+      - right=20mm
+      - bottom=20mm
+      - left=20mm
     fig-pos: "H"
     include-in-header: 
       - text: \usepackage{tabularray}
@@ -80,7 +80,7 @@ path <- "../../inst/extdata/BMG_formatting"
 
 
 # Introduction
-Real-time quaking induced conversion is a cutting-edge diagnostic assay that has garnered significant attention for its ability to detect misfolded protein aggregates. The assay works by converting a recombinant protein substrate into an amyloid aggregate in the presence of a misfolded seed [@Atarashi2011]. The assay's sensitivity and specificity make RT-QuIC a promising tool for diagnosing diseases such as prion disorders and other protein misfolding pathologies. However, the relatively recent development and novelty of the assay have left a gap in widely accepted academic and industry standards for data analysis and interpretation.
+Real-time quaking induced conversion (RT-QuIC) is a cutting-edge diagnostic assay that has garnered significant attention for its ability to detect misfolded protein aggregates. The assay works by converting a recombinant protein substrate into an amyloid aggregate in the presence of a misfolded seed [@Atarashi2011]. The assay's sensitivity and specificity make RT-QuIC a promising tool for diagnosing diseases such as prion disorders and other protein misfolding pathologies. However, the relatively recent development and novelty of the assay have left a gap in widely accepted academic and industry standards for data analysis and interpretation.
 
 To address this gap, we introduce quicR, an open-source R library dedicated to the manipulation, analysis, and visualization of RT-QuIC data. By consolidating key metrics and providing robust analytical tools, quicR aims to standardize the analysis pipeline and foster reproducibility within the field. quicR is designed with both researchers and diagnosticians in mind, providing a user-friendly interface that integrates seamlessly with existing R workflows.
 
@@ -100,9 +100,11 @@ By combining standardized metrics, advanced visualization tools, and a commitmen
 # Methods
 
 ## Dependencies
-This package requires the following dependencies: dplyr, ggplot2, janitor, openxlsx, readxl, reshape2, slider, stringr, and tidyr. Because the MARS software (BMG Labtech, Ortenberg, Germany) exports data as an Excel workbook, the packages, openxlsx [@openxlsx2024] and readxl [@readxl2023], were fundamental to performing downstream handling. The tidyverse packages (dplyr, ggplot2, stringr, and tidyr), were vital for writing easy-to-read code and for data visualization [@tidyverse2019]. The janitor package [@janitor2024] has data cleaning functions which were useful when importing data from Excel. The slider package provides tools which apply some function to a moving window which was crucial for determining the approximate derivative of raw data [@slider2024].
+This package requires the following dependencies: dplyr, ggplot2, stringr, tidyr, janitor, openxlsx, readxl, reshape2, and slider. Because the MARS software (BMG Labtech, Ortenberg, Germany) exports data as an Excel workbook, the packages, openxlsx [@openxlsx2024] and readxl [@readxl2023], were fundamental to performing downstream handling. The tidyverse packages (dplyr, ggplot2, stringr, and tidyr), were vital for writing easy-to-read code and for data visualization [@tidyverse2019]. The janitor package [@janitor2024] has data cleaning functions which were useful when importing data from Excel. The slider package provides tools which apply some function to a moving window which was crucial for determining the approximate derivative of raw data [@slider2024].
 
-## Input Data Formatting
+\newpage
+
+## Input Formatting
 MARS exports data into Excel workbooks. For many of the quicR functions to work together, the workbooks must be formatted correctly. In MARS, select "Excel Report", and a pop-up window will appear (see [@fig-mars]). The following options must be checked for proper output: "Microplate View", "Table view", "Transpose table", and "Add test run information". After clicking "Export report to Excel", an Excel workbook is created such as in [@fig-marsoutput].
 
 ![Excel export settings in MARS](images/MARS_settings.png){#fig-mars height=50%}
@@ -127,7 +129,7 @@ Finally, MS is determined by approximating the maximum of the derivative of the 
 ![Example graphs highlighting the different calculated metrics. The red curve represents a raw data curve that has been normalized against background. MPR is calculated as the maximum fluorescent value achieved in the normalized raw data. TtT is determined as the time required to cross a given threshold (in this example, the threshold is 0.2). The blue curve represents the derivative of the raw data, and max slope is determined as the maximum of the derivative.](images/metric_example.png){#fig-metrics}
 
 # Development
-![Workflow hierarchy of the quicR package. Blue nodes indicate steps where BMG software is needed. Purple nodes indicate functions dedicated to handling metadata. Red nodes are functions that acquire and manipulate raw data. Orange nodes are functions which calculate some metric. Finally, yellow nodes represent endpoints in the data analysis.](images/workflow.png){#fig-workflow}
+![Workflow hierarchy of the quicR package. Blue nodes indicate steps where BMG software is needed. Purple nodes indicate functions dedicated to handling metadata. Red nodes are functions that acquire and manipulate raw data. Orange nodes are functions which calculate some metric. Finally, yellow nodes represent endpoints in the data analysis.](images/workflow2.png){#fig-workflow}
 
 quicR was developed to address the need for efficient data conversion and analysis of RT-QuIC data. The functions were designed with usability and reproducibility in mind, ensuring compatibility between multiple labs. Currently, the package accepts data exported from the proprietary MARS software (BMG Labtech, Ortenberg, Germany) as an Excel workbook.
 
@@ -138,14 +140,14 @@ The functionality in this package revolves around data curation, metric calculat
 # Implementation
 The implementation of the quicR package encompasses several streamlined processes designed to facilitate data input, cleaning, transformation, and analysis of real-time fluorescence data. This section provides a comprehensive guide to utilizing the package's key functionalities, detailing how to:
 
-1.  Format and input sample data into MARS.
+1.  Format and input sample data into Omega control software (BMG Labtech, Ortenberg, Germany).
 2.  Extract, clean, and organize metadata and raw fluorescence data.
 3.  Apply transformations and normalization to raw data for downstream analysis.
 4.  Calculate critical analytical metrics, such as time-to-threshold (TtT), rate of amyloid formation (RAF), maxpoint ratio (MPR), and maximum slope (MS).
 
 These steps are designed to enhance reproducibility, minimize manual data handling, and enable seamless integration with the MARS software workflow. Through practical examples, this section illustrates how each function operates, along with expected input and output formats, ensuring clarity and ease of use for researchers.
 
-## Input of Sample IDs into MARS
+## Input of Sample IDs into Omega Control Software
 The Omega control software allows input of a TXT file containing sample IDs, dilution factors, and their well locations. This file is uniquely formatted, and not easily reproduced manually. The function, "BMG_format", allows for input of a CSV file containing the plate layout (see @tbl-layout for proper formatting), and exports the formatted TXT file. The file can then be imported into the control software before running.
 
 :::{#tbl-layout tbl-pos="ht"}
@@ -173,7 +175,7 @@ The Omega control software allows input of a TXT file containing sample IDs, dil
 Example CSV file plate layout for input into the "BMG_format" function. The top left corner should be cell "A1" in the CSV file. The top numbered row and the left-most lettered column should never be altered.
 :::
 
-
+\newpage
 
 ### Formatted Plate Layout for MARS Input
 The function, "BMG_format", includes the logical argument "write_file". If TRUE, it will create a TXT file. The path can be given to the "save_path" argument, and the file name can be supplied to the "save_name" argument. The text file will be formatted as follows, and can be imported into MARS.
@@ -207,7 +209,7 @@ The MARS software (BMG Labtech, Ortenberg, Germany) exports real-time data as an
 The metadata is defined as either sample-dependent or -independent. Sample-dependent metadata includes information such as sample IDs and dilution factors, whereas sample-independent metadata includes the date, time, reaction ID, etc.
 
 The dependent metadata can be retrieved using the "organize_tables" and "convert_tables" functions. The former returns a list of tables, and the latter converts each table into a column in a single data frame. See @tbl-tables and @tbl-converted for example outputs of these functions.
-
+\newpage
 ```{r, echo=FALSE, message=FALSE}
 tabs <- organize_tables(file)[-2]
 ```
@@ -217,7 +219,7 @@ organize_tables(file)
 
 ```{r, echo=FALSE, as.is=TRUE}
 #| label: tbl-tables
-#| tbl-cap: Sample IDs and Dilution Factors
+#| tbl-cap: Sample IDs and Dilution Factors. Note that these are the same tables shown in [@fig-sheet1].
 rename <- function(x) {
   names(x) <- 1:12
   rownames(x) <- LETTERS[1:8]
@@ -260,8 +262,10 @@ organize_tables(file) %>% convert_tables()
 #| label: tbl-converted
 #| tbl-cap: The tables extracted from the "organize_tables" function are converted into columns in a dataframe. This format is much more compatible with downstream analysis.
 tabs <- convert_tables(tabs)
-tabs %>% head(12) %>% kable(row.names = FALSE)
+tabs %>% head(12) %>% kable(row.names = FALSE, align = c("c", "c"))
 ```
+
+\newpage
 
 ### Sample Locations
 Samples locations can be extracted based on their well ID. The "get_sample_locations" function accepts additional arguments if dilution factors were exported from MARS. The "dilution_fun" argument will supply a function for transforming the dilution factors (e.g. if the user would want to perform a log transformation). This output of this function is critical as an argument in "plate_view" function which is further explained in the visualization section.
@@ -312,6 +316,8 @@ df_ <- get_real(file, ordered = FALSE)[[1]] %>% as.data.frame()
 df_[1:11, 1:columns] %>% kable(row.names = FALSE, align = rep("c", columns))
 ```
 
+\newpage
+
 ### Transpose Raw Data
 This data is structured such that each sample is its own column (variable) and each row (observation) is a time point. While this format is technically correct, a transposed format is more ideal for some downstream manipulation. This operation is performed using the function, "transpose_real". After transposition, each time point is an individual column (variable), and each sample is an individual row (observation).
 
@@ -341,6 +347,8 @@ df_norm <- df_norm %>%
   mutate(`Sample IDs` = tabs$`Sample IDs`)
 ```
 
+\newpage
+
 ## Calculations
 There are three analytical metrics with dedicated functions: time-to-threshold (TtT), maxpoint ratio (MPR), and maximum slope (MS). The rate of amyloid formation does not have a designated function since it is simply the inverse of the time-to-threshold. Each function below accepts input from the "transpose_real" or the "normalize_RFU" functions. See @tbl-metrics for an example of the output of these functions.
 
@@ -364,6 +372,8 @@ MPR is calculated by the "calculate_MPR" function. Data must be normalized in or
 
 ### Maximum Slope
 MS is calculated by the "calculate_MS" function. The function iterates through each row using a rolling window which can be adjusted (default value is 3). Given the window size, the slope is calculated based on change in fluorescence divided by the range of the window. The MS is simply the largest slope value recorded. The units are typically reported as $\Delta$RFU/h.
+
+\newpage
 
 ```{r, eval=FALSE}
 df_norm <- get_real(file) %>% normalize_RFU()
@@ -395,6 +405,8 @@ df_analyzed%>%
   kable(row.names = FALSE, align = rep("c", ncol(df_analyzed)))
 ```
 
+\newpage
+
 ## Visualization
 
 ### Plate View
@@ -411,7 +423,7 @@ sample_locations <- get_sample_locations(
 plate_view(df_, sample_locations)
 ```
 
-
+\newpage
 
 ### Summary Plots
 ```{r, warning=FALSE, message=FALSE}
