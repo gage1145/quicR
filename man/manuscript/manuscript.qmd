@@ -5,13 +5,7 @@ authors:
       name: Gage Rowden
       orcid: 0000-0002-7517-0480
       email: rowde002@umn.edu
-      affiliations:
-        - name: University of Minnesota
-          city: Saint Paul
-          state: MN
-        - name: Priogen Corp.
-          city: Saint Paul
-          state: MN
+      affil-id: 1,2,3
       roles:
           Conceptualization
           Methodology
@@ -25,25 +19,26 @@ authors:
           Writing--review and editing
           Visualization
           Supervision
-          Prject administration
+          Project administration
       corresponding: true
     - id: PL
       name: Peter Larsen
       orcid: 0000-0002-3634-3625
       email: plarsen@umn.edu
-      affiliations:
-        - name: University of Minnesota
-          city: Saint Paul
-          state: MN
-        - name: Priogen Corp.
-          city: Saint Paul
-          state: MN
+      affil-id: 1,2,3
       roles:
           Supervision
           Project administration
           Funding
+affiliations:
+  - id: 1
+    name: Department of Veterinary and Biomedical Sciences, University of Minnesota, St. Paul, MN 55108, USA.
+  - id: 2
+    name: Minnesota Center for Prion Research and Outreach, University of Minnesota, St. Paul, MN 55108, USA.
+  - id: 3
+    name: Priogen Corp., St. Paul, MN 55114, USA.
       
-abstract: Real-time quaking induced conversion (RT-QuIC) has quickly become an emerging diagnostic tool for protein misfolding disorders such as Creutzfeldt-Jakob disease and Parkinson's disease. Given that the technology is still relatively new, academic and industry standards for cleaning data and analyzing results have yet to be fully established. The open source R library, quicR, was developed to fill this lack of standardization. This library provides functions, which can be easily integrated into existing R workflows, for data curation, analysis, and vizualiztion.
+abstract: Real-time quaking induced conversion (RT-QuIC) has quickly become an emerging diagnostic tool for protein misfolding disorders such as Creutzfeldt-Jakob disease and Parkinson's disease. Given that the technology is still relatively new, academic and industry standards for cleaning data and analyzing results have yet to be fully established. The open source R library, quicR, was developed to fill this lack of standardization. This library provides functions, which can be easily integrated into existing R workflows, for data curation, analysis, and vizualization.
 keywords: quicR, R, library, RT-QuIC, prion, diagnostics, CJD, Parkinson's
 format: 
   pdf:
@@ -56,10 +51,18 @@ format:
       - bottom=20mm
       - left=20mm
     fig-pos: "H"
+    keep-tex: true
+    template-partials: 
+      - title.tex
     include-in-header: 
       - text: \usepackage{tabularray}
       - text: \usepackage{float}
       - text: \floatplacement{table}{H}
+      - text: \usepackage[noblocks]{authblk}
+      - text: \renewcommand*{\Authsep}{, }
+      - text: \renewcommand*{\Authand}{, }
+      - text: \renewcommand*{\Authands}{, }
+      - text: \renewcommand\Affilfont{\small}
     html: default
 mainfont: Calibri
 bibliography: references.bib
@@ -75,7 +78,7 @@ library(readr)
 library(ggplot2)
 library(reshape2)
 
-file <- "../../inst/extdata/input_files/test2.xlsx"
+file <- "../../inst/extdata/input_files/test4.xlsx"
 file_384 <- "../../inst/extdata/input_files/test384.xlsx"
 sample_file <- "../../inst/extdata/BMG_formatting/plate_layout.csv"
 path <- "../../inst/extdata/BMG_formatting"
@@ -138,7 +141,9 @@ quicR was developed to address the need for efficient data conversion and analys
 
 This project was devloped using Git version control. GitHub workflows were utilized to ensure that the package is able to be installed on current operating systems. Additionally, tests were performed on each function using the testthat package [@testthat2011].
 
-The functionality in this package revolves around data curation, metric calculations, and visualization. 
+The functionality in this package revolves around data curation, metric calculations, and visualization.
+
+\newpage
 
 # Implementation
 The implementation of the quicR package encompasses several streamlined processes designed to facilitate data input, cleaning, transformation, and analysis of real-time fluorescence data. This section provides a comprehensive guide to utilizing the package's key functionalities, detailing how to:
@@ -214,7 +219,7 @@ The metadata is defined as either sample-dependent or -independent. Sample-depen
 The dependent metadata can be retrieved using the "organize_tables" and "convert_tables" functions. The former returns a list of tables, and the latter converts each table into a column in a single data frame. See @tbl-tables and @tbl-converted for example outputs of these functions.
 \newpage
 ```{r, echo=FALSE, message=FALSE}
-tabs <- organize_tables(file)[-2]
+tabs <- organize_tables(file)
 ```
 ```{r, eval=FALSE}
 organize_tables(file)
@@ -241,7 +246,7 @@ tabs$`Sample IDs` %>%
   column_spec(1, border_left = TRUE, border_right = TRUE, bold = TRUE) %>%
   column_spec(13, border_right = TRUE) %>%
   row_spec(0, bold = TRUE) %>%
-  kable_styling(full_width = TRUE, font_size = 10)
+  kable_styling(full_width = TRUE, font_size = 8)
 
 tabs$Dilutions %>%
   as.data.frame() %>%
@@ -271,7 +276,7 @@ tabs %>% head(12) %>% kable(row.names = FALSE, align = c("c", "c"))
 \newpage
 
 ### Sample Locations
-Samples locations can be extracted based on their well ID. The "get_sample_locations" function accepts additional arguments if dilution factors were exported from MARS. The "dilution_fun" argument will supply a function for transforming the dilution factors (e.g. if the user would want to perform a log transformation). This output of this function is critical as an argument in "plate_view" function which is further explained in the visualization section.
+Samples locations can be extracted based on their well ID. The "get_sample_locations" function accepts additional arguments if dilution factors were exported from MARS. The "dilution_fun" argument will supply a function for transforming the dilution factors (e.g. if the user would want to perform a log transformation). The output of this function is critical as an argument in the "plate_view" function which is further explained in the visualization section.
 
 ```{r, eval=FALSE}
 get_sample_locations(
@@ -283,12 +288,16 @@ get_sample_locations(
 )
 ```
 ```{r, echo=FALSE}
+#| label: tbl-samp-loc
+#| tbl-cap: Well locations of each sample. Included in this is the dilution factor which has been transformed as the negative log of original dilution values. This table is important for input into the plate_view function.
 get_sample_locations(
   file, dilution_bool = TRUE, dilution_fun = function(x) -log10(x), sep = " "
 ) %>%
   head(12) %>%
   kable(row.names = FALSE, align = c("c", "c"))
 ```
+
+\newpage
 
 ### Sample-Independent Metadata
 The independent metadata can be retrieved using the "get_meta" function. This data is included in the header of the excel workbook.
@@ -297,6 +306,8 @@ The independent metadata can be retrieved using the "get_meta" function. This da
 get_meta(file)
 ```
 ```{r, echo=FALSE, message=FALSE}
+#| label: tbl-meta
+#| tbl-cap: Metadata which is included in the header of the Excel file.
 get_meta(file) %>%
   mutate_at("Meta_info", ~gsub("\\\\", "/", .)) %>%
   kable(row.names = FALSE)
@@ -308,9 +319,13 @@ The raw, real-time data is typically found on the second sheet of the Excel work
 2.  transpose_real: Swaps the rows and columns which makes some downstream analyses easier.
 3.  normalize_RFU: normalizes the raw data by dividing each read by background fluorescence at a given cycle.
 
+\newpage
+
 ### Retrieve Raw Data
 Raw data can be retrieved using the "get_real" function. The logical argument, "ordered", indicates whether the user would prefer the columns to be ordered by well or by sample ID. By default, it is FALSE which will order the data by well. This should almost always be the case for easier integration with other downstream functions. Additionally, since there can be more than one instance of real-time data (depending on if the user added some calculations in MARS), "get_real" returns a list of dataframes. Therefore, the output should be indexed to access the data frame of interest.
 ```{r, eval=FALSE}
+#| label: tbl-raw
+#| tbl-cap: Raw data retrieved directly from the MARS output file.
 get_real(file)[[1]]
 ```
 ```{r, echo=FALSE}
@@ -325,6 +340,8 @@ df_[1:11, 1:columns] %>% kable(row.names = FALSE, align = rep("c", columns))
 This data is structured such that each sample is its own column (variable) and each row (observation) is a time point. While this format is technically correct, a transposed format is more ideal for some downstream manipulation. This operation is performed using the function, "transpose_real". After transposition, each time point is an individual column (variable), and each sample is an individual row (observation).
 
 ```{r, eval=FALSE}
+#| label: tbl-transposed
+#| tbl-cap: Transposed raw data. This converted the data columns to rows and the rows to columns.
 get_real(file)[[1]] %>% transpose_real()
 ```
 ```{r, echo=FALSE}
@@ -340,6 +357,8 @@ The function "normalize_RFU" will convert the raw data into a background normali
 get_real(file)[[1]] %>% normalize_RFU(transposed = FALSE)
 ```
 ```{r, echo=FALSE, message=FALSE}
+#| label: tbl-norm
+#| tbl-cap: Normalized raw data Note that the "transposed" argument was set to false, so a call was made to the "transpose_real" function.
 df_norm <- normalize_RFU(df_, bg_cycle = 4, transposed = FALSE)
 
 df_norm[1:7, 1:columns] %>%
@@ -365,7 +384,7 @@ get_real(file)[[1]] %>%
 calculate_threshold(df_, method = "stdev", multiplier = 10)
 ```
 
-### Time-to-threshold & Rate of Amyloid Formation
+### Time-to-Threshold & Rate of Amyloid Formation
 TtT is calculated using the "calculate_TtT" function. The function must be supplied a threshold; default value is 2 (i.e. twice the background fluorescence if the data is normalized). A starting column should also be given as an integer; default value is 3. This is essentially asking how many columns of metadata are included before the fluorescence reads begin. 
 
 TtT is calculated by iterating through each row and checking if a value is greater than the threshold. If the value is greater, the slope of the previous time-point to the current time-point is calculated, and the time intersection of the current read is returned.
@@ -379,7 +398,7 @@ MS is calculated by the "calculate_MS" function. The function iterates through e
 \newpage
 
 ```{r, eval=FALSE}
-df_norm <- get_real(file) %>% normalize_RFU()
+df_norm <- get_real(file)[[1]] %>% normalize_RFU()
 
 data.frame("Sample IDs" = tabs$`Sample IDs`) %>%
   mutate(
@@ -438,7 +457,7 @@ df_analyzed %>%
   
   ggplot(aes(`Sample IDs`, value, fill = Dilutions)) +
     geom_boxplot() +
-    facet_wrap(~variable, scales = "free") +
+    facet_wrap(~variable, scales = "free_y") +
     theme(
       legend.position = "bottom",
       strip.text = element_text(face = "bold"),
@@ -446,8 +465,6 @@ df_analyzed %>%
       axis.title = element_blank()
     )
 ```
-
-
 
 # Usage
 
@@ -460,12 +477,51 @@ install.packages("quicR")
 devtools::install_github("gage1145/quicR")
 ```
 
-# Validation & Performance
+## Example Workflow
+```{r, eval=FALSE}
+library(quicR)
+
+# Import and Format Data --------------------------------------------------
+
+file <- "example.xlsx"
+raw <- get_real(file)[[1]]
+normal <- normalize_RFU(raw, transposed = FALSE)
+meta <- file |>
+  organize_tables() |>
+  convert_tables()
+
+# Calculate Key Metrics ---------------------------------------------------
+
+mpr <- calculate_MPR(normal, data_is_norm = TRUE)
+ms  <- calculate_MS(normal, data_is_norm = TRUE)
+ttt <- calculate_TtT(normal, threshold = 2)
+
+analyzed <- data.frame(
+  `Sample IDs`                = meta$`Sample IDs`,
+  `Dilutions`                 = meta$Dilutions,
+  `Maxpoint Ratio`            = mpr,
+  `Max Slope`                 = ms,
+  `Time-to-Threshold`         = ttt,
+  `Rate of Amyloid Formation` = 1 / ttt
+)
+```
+\newpage
+
+<!-- # Validation & Performance -->
 
 # Discussion
+The quicR package represents a significant advancement in the standardization and reproducibility of RT-QuIC data analysis. By integrating key metrics such as time-to-threshold (TtT), maxpoint ratio (MPR), and maximum slope (MS), quicR addresses critical gaps in the field, providing researchers and diagnosticians with a robust toolkit for interpreting complex fluorescence data.
+
+One of the primary strengths of quicR lies in its flexibility and user-centric design. The package leverages R’s powerful ecosystem, including the tidyverse and ggplot2, to streamline workflows and create high-quality, customizable visualizations. This ensures accessibility for a wide range of users, from experienced data scientists to wet-lab researchers unfamiliar with programming. Additionally, the incorporation of open-source principles allows the broader scientific community to contribute to its development, fostering innovation and adaptability.
+
+Despite these strengths, there are limitations to consider. Currently, quicR is tailored to data exported from the MARS software, which may limit its applicability to researchers using alternative fluorescence readers. Future iterations of the package could expand compatibility by incorporating functions to handle diverse data formats. Furthermore, while quicR includes robust visualization tools, users seeking highly specialized plots may require additional customization beyond the package’s default capabilities.
+
+Another avenue for improvement lies in the standardization of RT-QuIC diagnostic criteria. quicR provides tools to calculate key metrics, but consensus on thresholds and interpretations remains a challenge for the field. Collaborative efforts among researchers and clinicians are necessary to define universal criteria, enabling quicR to fully realize its potential as a diagnostic aid.
 
 # Conclusion
-quicR provides improved and standardized methods for analyzing RT-QuIC data. 
+quicR offers a powerful solution for the analysis and visualization of RT-QuIC data, addressing critical needs in a rapidly evolving field. By enabling consistent data handling and interpretation, quicR lays the groundwork for improved diagnostic consistency and reproducibility. The package's open-source nature ensures that it will continue to evolve, integrating new insights and technologies as they emerge.
+
+As RT-QuIC technology advances, tools like quicR will play a pivotal role in bridging the gap between assay development and practical application. By equipping researchers with reliable, standardized tools, quicR not only supports the study of prion and protein misfolding disorders but also serves as a model for the development of software solutions in other diagnostic fields.
 
 # Acknowledgments
 
