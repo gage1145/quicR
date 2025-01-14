@@ -51,7 +51,7 @@ format:
       - bottom=20mm
       - left=20mm
     fig-pos: "H"
-    keep-tex: true
+    # keep-tex: true
     template-partials: 
       - title.tex
     include-in-header: 
@@ -86,16 +86,16 @@ path <- "../../inst/extdata/BMG_formatting"
 
 
 # Introduction
-Real-time quaking induced conversion (RT-QuIC) is a cutting-edge diagnostic assay that has garnered significant attention for its ability to detect misfolded protein aggregates [@Atarashi2011]. The assay works by converting a recombinant protein substrate into an amyloid aggregate in the presence of a misfolded seed [@Wilham2010; @Orru2012; @Bongianni2019; @Orru2017; @Orru2015; @Dassanayake2016; @Hwang2018; @Groveman2018; @Metrick2020]. The assay's sensitivity and specificity make RT-QuIC a promising tool for diagnosing diseases such as prion disorders and other protein misfolding pathologies [@Fiorini2020; @Franceschini2017; @Picasso-Risso2022, @Holz2021]. However, the relatively recent development and novelty of the assay have left a gap in widely accepted academic and industry standards for data analysis and interpretation [@Rowden2023].
+Real-time quaking induced conversion (RT-QuIC) is a cutting-edge diagnostic assay that has garnered significant attention for its ability to detect misfolded protein aggregates [@Atarashi2011]. The assay works by converting a recombinant protein substrate into an amyloid aggregate in the presence of a misfolded seed [@Wilham2010; @Orru2012; @Orru2017; @Orru2015; @Bongianni2019; @Dassanayake2016; @Hwang2018; @Groveman2018; @Metrick2020]. The assay's sensitivity and specificity make RT-QuIC a promising tool for diagnosing diseases such as prion disorders and other protein misfolding pathologies [@Fiorini2020; @Franceschini2017; @Picasso-Risso2022, @Holz2021]. However, the relatively recent development and novelty of the assay have left a gap in widely accepted academic and industry standards for data analysis and interpretation [@Rowden2023].
 
 To address this gap, we introduce quicR, an open-source library, developed in R [@R2024], dedicated to the cleaning, analysis, and visualization of RT-QuIC data. By consolidating key metrics and providing robust analytical tools, quicR aims to standardize the analysis pipeline and foster reproducibility within the field of seeded amplification assays. quicR is designed with both researchers and diagnosticians in mind, providing a user-friendly interface that integrates seamlessly with existing R workflows.
 
 While universal diagnostic criteria for RT-QuIC have yet to be established, certain analytical metrics have emerged as valuable tools for interpreting assay results and kinetics. These include:
 
--   Time-to-threshold (TtT): The time required for the fluorescence signal to exceed a predefined threshold [@Orru2015].
--   Rate of amyloid formation (RAF): A measure of the kinetics of aggregate growth, which provides insight into the relative quantity of misfolded seed [@Gallups2022].
--   Maxpoint ratio (MPR): A ratio-based metric measuring peak normalized fluorescence intensities [@Rowden2023].
--   Maximum slope (MS): The steepest rate of fluorescence increase, reflecting the most rapid phase of aggregation [@Henderson2015].
+1.    Time-to-threshold (TtT): The time required for the fluorescence signal to exceed a predefined threshold [@Orru2015].
+2.    Rate of amyloid formation (RAF): A measure of the kinetics of aggregate growth, which provides insight into the relative quantity of misfolded seed [@Gallups2022].
+3.    Maxpoint ratio (MPR): A ratio-based metric measuring peak normalized fluorescence intensities [@Rowden2023].
+4.    Maximum slope (MS): The steepest rate of fluorescence increase, reflecting the most rapid phase of aggregation [@Henderson2015].
 
 Together, these metrics enable researchers to characterize the kinetics of RT-QuIC reactions comprehensively, enhancing the rigor and reliability of diagnostic decisions.
 
@@ -106,7 +106,7 @@ By combining standardized metrics, advanced visualization tools, and a commitmen
 # Methods
 
 ## Dependencies
-This package requires the following dependencies: dplyr, ggplot2, stringr, tidyr, janitor, openxlsx, readxl, reshape2, and slider. Because the MARS software (BMG Labtech, Ortenberg, Germany) exports data as an Excel workbook, the packages, openxlsx [@openxlsx2024] and readxl [@readxl2023], were fundamental to performing downstream handling. The tidyverse packages (dplyr, ggplot2, stringr, and tidyr), were vital for writing easy-to-read code and for data visualization [@tidyverse2019]. The janitor package [@janitor2024] has data cleaning functions which were useful when importing data from Excel. The slider package provides tools which apply some function to a moving window which was crucial for determining the approximate derivative of raw data [@slider2024].
+This package requires the following dependencies: dplyr, ggplot2, stringr, tidyr, janitor, openxlsx, readxl, reshape2, and slider. Because the MARS software (BMG Labtech, Ortenberg, Germany) exports data as an Excel workbook, the packages, openxlsx [@openxlsx2024] and readxl [@readxl2023], were fundamental to performing initial data handling. The tidyverse packages (dplyr, ggplot2, stringr, and tidyr), were vital for writing easy-to-read code and for data visualization [@tidyverse2019]. The janitor package [@janitor2024] has data cleaning functions which were useful when importing data from Excel. The slider package provides tools which apply some function to a moving window which was crucial for determining the approximate derivative of raw data [@slider2024].
 
 \newpage
 
@@ -130,18 +130,44 @@ TtT is calculated by iterating through each sample until a value is greater than
 
 MPR is defined as the maximum fluorescence divided by the background fluorescence. Thus, in order to calculate, the raw data must first be normalized against the background. This is done by choosing a cycle for background determination, and then dividing each read by that value. Once this is done, the MPR is taken as the max value.
 
-Finally, MS is determined by approximating the maximum of the derivative of the raw data and is typically reported in units of $\Delta$RFU/h (i.e. the change in relative fluorescent units per hour). Originally, this was accomplished by applying a linear regression to a sliding window; however, this proved to be very computationally expensive. Now, the slopes are calculated using differences between two data points within the range of the sliding window. While this slightly reduces the accuracy of the approximation, it was decided that the improvement in computation time was worth the loss in accuracy.
+MS is determined by approximating the maximum of the derivative of the raw data and is typically reported in units of $\Delta$RFU/h (i.e. the change in relative fluorescent units per hour). Originally, this was accomplished by applying a linear regression to a sliding window; however, this proved to be very computationally expensive. Now, the slopes are calculated using differences between two data points within the range of the sliding window. While this slightly reduces the accuracy of the approximation, the improvement in computation time exceeded the loss in accuracy.
 
 ![Example graphs highlighting the different calculated metrics. The red curve represents a raw data curve that has been normalized against background. MPR is calculated as the maximum fluorescent value achieved in the normalized raw data. TtT is determined as the time required to cross a given threshold (in this example, the threshold is 0.2). The blue curve represents the derivative of the raw data, and max slope is determined as the maximum of the derivative.](images/metric_example.png){#fig-metrics}
 
 # Development
 ![Workflow hierarchy of the quicR package. Blue nodes indicate steps where BMG software is needed. Purple nodes indicate functions dedicated to handling metadata. Red nodes are functions that acquire and manipulate raw data. Orange nodes are functions which calculate some metric. Finally, yellow nodes represent endpoints in the data analysis.](images/workflow2.png){#fig-workflow}
 
-quicR was developed to address the need for efficient data conversion and analysis of RT-QuIC data. The functions were designed with usability and reproducibility in mind, ensuring compatibility between multiple labs. Currently, the package accepts data exported from the proprietary MARS software (BMG Labtech, Ortenberg, Germany) as an Excel workbook.
+quicR was developed to address the growing need for efficient data conversion, analysis, and visualization of RT-QuIC data. With a focus on usability and reproducibility, the package is designed to standardize workflows and ensure compatibility across multiple laboratories. Its primary input format is data exported as Excel workbooks from the proprietary MARS software (BMG Labtech, Ortenberg, Germany), providing seamless integration with existing experimental workflows.
+Design Philosophy
 
-This project was devloped using Git version control. GitHub workflows were utilized to ensure that the package is able to be installed on current operating systems. Additionally, tests were performed on each function using the testthat package [@testthat2011].
+The development of quicR was guided by three key principles:
 
-The functionality in this package revolves around data curation, metric calculations, and visualization.
+1.    Usability: The package features intuitive functions and a user-friendly interface that cater to both novice and experienced R users.
+2.    Reproducibility: quicR incorporates rigorous testing and version control to ensure consistent performance across operating systems and environments.
+3.    Flexibility: Recognizing the diverse needs of the RT-QuIC community, the package supports customizable workflows and outputs, allowing users to tailor analyses to their specific research goals.
+
+## Version Control and Collaboration
+
+The project was managed using Git for version control, enabling efficient tracking of changes and fostering collaborative development. The source code is hosted on GitHub, ensuring transparency and encouraging contributions from the research community. GitHub Actions were employed to automate testing and deployment workflows, verifying that the package remains compatible with current versions of R and its dependencies.
+
+## Testing and Validation
+Robust testing protocols were implemented to guarantee the reliability of quicR’s functionality. Each function was subjected to comprehensive unit testing using the testthat package [@testthat2011]. These tests ensure that key metrics, data manipulation routines, and visualization tools perform as expected, even as the package evolves.
+
+## Core Functionalities
+The functionality of quicR is centered around three primary objectives:
+
+1.    Data Curation: Functions for importing, cleaning, and normalizing raw RT-QuIC data to streamline pre-processing.
+2.    Metric Calculations: Tools for deriving critical metrics, such as time-to-threshold (TtT), maxpoint ratio (MPR), and maximum slope (MS), to enable standardized data interpretation.
+3.    Visualization: High-quality plotting capabilities powered by the ggplot2 library, enabling users to create publication-ready figures with minimal effort.
+
+## Continuous Development
+quicR is an ongoing project, with future updates planned to expand its functionality and improve its user experience. Planned enhancements include:
+
+-   Support for alternative data formats to broaden compatibility.
+-   Additional metrics and visualization options to meet the evolving needs of the RT-QuIC community.
+-   Integration with R Shiny for interactive data exploration.
+
+By combining rigorous development practices, a commitment to open science, and a focus on community-driven improvements, quicR serves as a foundational tool for advancing the analysis of RT-QuIC data.
 
 \newpage
 
