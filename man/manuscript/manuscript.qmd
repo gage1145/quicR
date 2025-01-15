@@ -111,28 +111,30 @@ This package requires the following dependencies: dplyr, ggplot2, stringr, tidyr
 \newpage
 
 ## Input Formatting
-MARS exports data into Excel workbooks. For many of the quicR functions to work together, the workbooks must be formatted correctly. In MARS, select "Excel Report", and a pop-up window will appear (see [@fig-mars]). The following options must be checked for proper output: "Microplate View", "Table view", "Transpose table", and "Add test run information". After clicking "Export report to Excel", an Excel workbook is created such as in [@fig-marsoutput].
+The FLUOstar® Omega series microplate readers (BMG Labtech, Ortenberg, Germany) are by far the most common readers used for RT-QuIC. As such, their analysis software, MARS, is integral to data input for this package. MARS exports data into Excel workbooks, and for many of the quicR functions to work together, the workbooks must be formatted correctly. In MARS, select "Excel Report", and a pop-up window ([@fig-mars]) will appear. The following options must be checked for proper output: "Microplate View", "Table view", "Transpose table", and "Add test run information".
 
-![Excel export settings in MARS](images/MARS_settings.png){#fig-mars height=50%}
+![Excel export settings in MARS. Ensure that "Microplate View", "Table view", "Transpose table", and "Add test run information" are selected.](images/MARS_settings.png){#fig-mars height=50%}
+
+After clicking "Export report to Excel", an Excel workbook is created such as in [@fig-marsoutput]. This workbook will contain two sheets, the first with the microplate views and the second with the table view. The first sheet will have all of the relevant metadata while the second sheet will have all of the raw fluorescent data.
 
 :::{#fig-marsoutput layout-nrow=2}
 ![Microplate view Excel spreadsheet. This is the first spreadsheet in the workbook and contains the plate layouts of any data the user exported from MARS. Typically, there is a header containing metadata followed by a number of named matrices.](images/sheet1.png){#fig-sheet1 height=50%}
 
 ![Table view Excel spreadsheet. This is the second spreadsheet in the workboook and contains columns of each well and time points. Each cell is a raw fluorescent value. This spreadsheet will also contain a header, but was excluded from this figure.](images/sheet2.png){#fig-sheet2 height=50%}
 
-Excel spreadsheet exported from MARS.  
+Excel workbook exported from MARS.  
 :::
 
 ## Key Metrics and Calculations
-quicR has functions for calculating TtT, MPR, and MS. A graphical representation of these can be found in [@fig-metrics]. There is no dedicated function for RAF since it can simply be expressed as the inverse of TtT, and can therefore be calculated separately as in [@tbl-metrics].
+quicR has functions for calculating TtT, MPR, and MS. A graphical representation of these can be found in [@fig-metrics]. There is no dedicated function for RAF since it can simply be expressed as the inverse of TtT, and can therefore be calculated separately as in the example in [@tbl-metrics].
 
 TtT is calculated by iterating through each sample until a value is greater than the supplied threshold. It then determines the intersection between the previous and current read times and the threshold. If no value was found larger than the threshold, the total reaction run-time is returned.
 
-MPR is defined as the maximum fluorescence divided by the background fluorescence. Thus, in order to calculate, the raw data must first be normalized against the background. This is done by choosing a cycle for background determination, and then dividing each read by that value. Once this is done, the MPR is taken as the max value.
+MPR is defined as the maximum fluorescence divided by the background fluorescence. Thus, in order to calculate, the raw data must first be normalized against the background. This is done by choosing a cycle for background determination, and then dividing each read by that value. The MPR is taken as the max value of the normalized data.
 
-MS is determined by approximating the maximum of the derivative of the raw data and is typically reported in units of $\Delta$RFU/h (i.e. the change in relative fluorescent units per hour). Originally, this was accomplished by applying a linear regression to a sliding window; however, this proved to be very computationally expensive. Now, the slopes are calculated using differences between two data points within the range of the sliding window. While this slightly reduces the accuracy of the approximation, the improvement in computation time exceeded the loss in accuracy.
+MS is determined by approximating the maximum of the derivative of the raw data and is typically reported in units of $\Delta$RFU/h (i.e. the change in relative fluorescent units per hour). Originally, this was accomplished by applying a linear regression to a sliding window; however, this proved to be very computationally expensive. Now, slopes are calculated using differences between two data points within the range of a sliding window. While this slightly reduces the accuracy of the approximation, the improvement in computation time exceeded the loss in resolution.
 
-![Example graphs highlighting the different calculated metrics. The red curve represents a raw data curve that has been normalized against background. MPR is calculated as the maximum fluorescent value achieved in the normalized raw data. TtT is determined as the time required to cross a given threshold (in this example, the threshold is 0.2). The blue curve represents the derivative of the raw data, and max slope is determined as the maximum of the derivative.](images/metric_example.png){#fig-metrics}
+![Example graphs highlighting the different calculated metrics. The red curve represents a raw data curve that has been normalized against background. The level has also been decreased by 1 to better show the relationship with the derivative. MPR is calculated as the maximum fluorescent value achieved in the normalized raw data. TtT is determined as the time required to cross a given threshold (in this example, the threshold is 0.2). The blue curve represents the derivative of the raw data, and max slope is determined as the maximum of the derivative.](images/metric_example.png){#fig-metrics}
 
 # Development
 ![Workflow hierarchy of the quicR package. Blue nodes indicate steps where BMG software is needed. Purple nodes indicate functions dedicated to handling metadata. Red nodes are functions that acquire and manipulate raw data. Orange nodes are functions which calculate some metric. Finally, yellow nodes represent endpoints in the data analysis.](images/workflow2.png){#fig-workflow}
@@ -148,10 +150,10 @@ The development of quicR was guided by three key principles:
 
 ## Version Control and Collaboration
 
-The project was managed using Git for version control, enabling efficient tracking of changes and fostering collaborative development. The source code is hosted on GitHub, ensuring transparency and encouraging contributions from the research community. GitHub Actions were employed to automate testing and deployment workflows, verifying that the package remains compatible with current versions of R and its dependencies.
+The project was managed using Git for version control, enabling efficient tracking of changes and fostering collaborative development. The source code is hosted on GitHub (https://github.com/gage1145/quicR), ensuring transparency and encouraging contributions from the research community. GitHub Actions were employed to automate testing and deployment workflows, verifying that the package remains compatible with current versions of R and its dependencies.
 
 ## Testing and Validation
-Robust testing protocols were implemented to guarantee the reliability of quicR’s functionality. Each function was subjected to comprehensive unit testing using the testthat package [@testthat2011]. These tests ensure that key metrics, data manipulation routines, and visualization tools perform as expected, even as the package evolves.
+Robust testing protocols were implemented to guarantee the reliability of quicR’s functionality. Each function was subjected to comprehensive unit testing using the testthat package [@testthat2011]. These tests ensure that key metrics, data manipulation routines, and visualization tools perform as expected, even as the package evolves. Each new build of quicR must pass these tests in order to be released.
 
 ## Core Functionalities
 The functionality of quicR is centered around three primary objectives:
@@ -542,14 +544,15 @@ One of the primary strengths of quicR lies in its flexibility and user-centric d
 
 Despite these strengths, there are limitations to consider. Currently, quicR is tailored to data exported from the MARS software, which may limit its applicability to researchers using alternative fluorescence readers. Future iterations of the package could expand compatibility by incorporating functions to handle diverse data formats. Furthermore, while quicR includes robust visualization tools, users seeking highly specialized plots may require additional customization beyond the package’s default capabilities.
 
-Another avenue for improvement lies in the standardization of RT-QuIC diagnostic criteria. quicR provides tools to calculate key metrics, but consensus on thresholds and interpretations remains a challenge for the field. Collaborative efforts among researchers and clinicians are necessary to define universal criteria, enabling quicR to fully realize its potential as a diagnostic aid.
+Another avenue for improvement lies in the standardization of RT-QuIC diagnostic criteria. quicR provides tools to calculate key metrics, but consensus on thresholds and interpretations remains a challenge for the field. Collaborative efforts among researchers and clinicians are necessary to define universal criteria, enabling quicR to fully realize its potential as a diagnostic aid. Diagnostic determinations could easily be built into the library, but a larger consensus within the research community will need to be reached to warrant inclusion.
 
 # Conclusion
-quicR offers a powerful solution for the analysis and visualization of RT-QuIC data, addressing critical needs in a rapidly evolving field. By enabling consistent data handling and interpretation, quicR lays the groundwork for improved diagnostic consistency and reproducibility. The package's open-source nature ensures that it will continue to evolve, integrating new insights and technologies as they emerge.
+quicR offers a powerful solution for the cleaning, analysis, and visualization of RT-QuIC data, addressing critical needs in a rapidly evolving field. By enabling consistent data handling and interpretation, quicR lays the groundwork for improved diagnostic consistency and reproducibility. The package's open-source nature ensures that it will continue to evolve, integrating new insights and technologies as they emerge.
 
 As RT-QuIC technology advances, tools like quicR will play a pivotal role in bridging the gap between assay development and practical application. By equipping researchers with reliable, standardized tools, quicR not only supports the study of prion and protein misfolding disorders but also serves as a model for the development of software solutions in other diagnostic fields.
 
 # Acknowledgments
+Special thanks to Beni Altmann at The Comprehensive R Archive Network (CRAN) for help during the submission process to CRAN.
 
 # References
 ::: {#refs}
