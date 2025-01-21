@@ -1,4 +1,4 @@
-# quicR <img src="man/figures/quicR_logo2.png" align="right" height="138"/>
+# quicR <img src="man/figures/logo.png" align="right" height="138"/>
 
 <!-- badges: start -->
 
