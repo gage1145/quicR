@@ -106,7 +106,7 @@ By combining standardized metrics, advanced visualization tools, and a commitmen
 # Methods
 
 ## Dependencies
-This package requires the following dependencies: dplyr, ggplot2, stringr, tidyr, janitor, openxlsx, readxl, reshape2, and slider. Because the MARS software (BMG Labtech, Ortenberg, Germany) exports data as an Excel workbook, the packages, openxlsx [@openxlsx2024] and readxl [@readxl2023], were fundamental to performing initial data handling. The tidyverse packages (dplyr, ggplot2, stringr, and tidyr), were vital for writing easy-to-read code and for data visualization [@tidyverse2019]. The janitor package [@janitor2024] has data cleaning functions which were useful when importing data from Excel. The slider package provides tools which apply some function to a moving window which was crucial for determining the approximate derivative of raw data [@slider2024].
+This package requires the following dependencies: dplyr, ggplot2, stringr, tidyr, janitor, openxlsx, readxl, reshape2, and slider. Because the MARS software (BMG Labtech, Ortenberg, Germany) exports data as an Excel workbook, the packages, openxlsx [@openxlsx2024] and readxl [@readxl2023], were fundamental to performing initial data handling. The tidyverse packages (dplyr, ggplot2, stringr, and tidyr), were vital for writing easy-to-read code and for data visualization [@tidyverse2019]. The janitor package [@janitor2024] has data cleaning functions which were useful when importing data from Excel. The slider package [@slider2024] provides tools which apply some function to a moving window which was crucial for determining the approximate derivative of raw data.
 
 \newpage
 
@@ -166,6 +166,7 @@ The functionality of quicR is centered around three primary objectives:
 quicR is an ongoing project, with future updates planned to expand its functionality and improve its user experience. Planned enhancements include:
 
 -   Support for alternative data formats to broaden compatibility.
+-   Inclusion of analysis pipeline given popular research community methods.
 -   Additional metrics and visualization options to meet the evolving needs of the RT-QuIC community.
 -   Integration with R Shiny for interactive data exploration.
 
@@ -368,11 +369,11 @@ df_[1:11, 1:columns] %>% kable(row.names = FALSE, align = rep("c", columns))
 This data is structured such that each sample is its own column (variable) and each row (observation) is a time point. While this format is technically correct, a transposed format is more ideal for some downstream manipulation. This operation is performed using the function, "transpose_real". After transposition, each time point is an individual column (variable), and each sample is an individual row (observation).
 
 ```{r, eval=FALSE}
-#| label: tbl-transposed
-#| tbl-cap: Transposed raw data. This converted the data columns to rows and the rows to columns.
 get_real(file)[[1]] %>% transpose_real()
 ```
 ```{r, echo=FALSE}
+#| label: tbl-transposed
+#| tbl-cap: Transposed raw data. This converted the data columns to rows and the rows to columns.
 columns <- 12
 transpose_real(df_)[1:7, 1:columns] %>% 
   kable(row.names = FALSE, align = rep("c", columns))
@@ -437,10 +438,9 @@ data.frame("Sample IDs" = tabs$`Sample IDs`) %>%
     RAF = 1 / TtT
   )
 ```
-
 ```{r, echo=FALSE}
 #| label: tbl-metrics
-#| tbl-cap: Calculated metrics
+#| tbl-cap: Calculated metrics. Each row indicates an individual well. This table shows only the first 12 wells which correspond to the top row of the microplate.
 #| tbl-cap-location: top
 df_analyzed <- data.frame("Sample IDs" = tabs$`Sample IDs`, check.names = FALSE) %>%
   mutate(
@@ -464,6 +464,7 @@ The "plate_view" function requires *un-transposed* data and sample locations as 
 ```{r, warning=FALSE}
 #| fig-width: 12
 #| fig-height: 8
+#| fig-cap: Plate-view analog of a 96-well microplate. Each facet in the 8$\times$12 grid shows the real-time curves of an RT-QuIC reaction. The numbers underneath the sample IDs are the dilution factors.
 sample_locations <- get_sample_locations(
   file, 
   dilution_bool = TRUE,
@@ -535,8 +536,6 @@ analyzed <- data.frame(
 ```
 \newpage
 
-<!-- # Validation & Performance -->
-
 # Discussion
 The quicR package represents a significant advancement in the standardization and reproducibility of RT-QuIC data analysis. By integrating key metrics such as time-to-threshold (TtT), maxpoint ratio (MPR), and maximum slope (MS), quicR addresses critical gaps in the field, providing researchers and diagnosticians with a robust toolkit for interpreting complex fluorescence data.
 
@@ -557,4 +556,3 @@ Special thanks to Beni Altmann at The Comprehensive R Archive Network (CRAN) for
 # References
 ::: {#refs}
 :::
-
