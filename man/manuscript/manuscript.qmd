@@ -140,7 +140,8 @@ MS is determined by approximating the maximum of the derivative of the raw data 
 ![Workflow hierarchy of the quicR package. Blue nodes indicate steps where BMG software is needed. Purple nodes indicate functions dedicated to handling metadata. Red nodes are functions that acquire and manipulate raw data. Orange nodes are functions which calculate some metric. Finally, yellow nodes represent endpoints in the data analysis.](images/workflow2.png){#fig-workflow}
 
 quicR was developed to address the growing need for efficient data conversion, analysis, and visualization of RT-QuIC data. With a focus on usability and reproducibility, the package is designed to standardize workflows and ensure compatibility across multiple laboratories. Its primary input format is data exported as Excel workbooks from the proprietary MARS software (BMG Labtech, Ortenberg, Germany), providing seamless integration with existing experimental workflows.
-Design Philosophy
+
+## Design Philosophy
 
 The development of quicR was guided by three key principles:
 
@@ -275,7 +276,7 @@ tabs$`Sample IDs` %>%
   column_spec(1, border_left = TRUE, border_right = TRUE, bold = TRUE) %>%
   column_spec(13, border_right = TRUE) %>%
   row_spec(0, bold = TRUE) %>%
-  kable_styling(full_width = TRUE, font_size = 8)
+  kable_styling(full_width = TRUE, font_size = 6.5)
 
 tabs$Dilutions %>%
   as.data.frame() %>%
@@ -289,7 +290,7 @@ tabs$Dilutions %>%
   column_spec(1, border_left = TRUE, border_right = TRUE, bold = TRUE) %>%
   column_spec(13, border_right = TRUE) %>%
   row_spec(0, bold = TRUE) %>%
-  kable_styling(full_width = TRUE, font_size = 10)
+  kable_styling(full_width = TRUE, font_size = 6.5)
 ```
 
 ```{r, eval=FALSE}
@@ -427,7 +428,8 @@ MS is calculated by the "calculate_MS" function. The function iterates through e
 \newpage
 
 ```{r, eval=FALSE}
-df_norm <- get_real(file)[[1]] %>% normalize_RFU()
+df_norm <- get_real(file)[[1]] %>% 
+  normalize_RFU()
 
 data.frame("Sample IDs" = tabs$`Sample IDs`) %>%
   mutate(
@@ -452,7 +454,8 @@ df_analyzed <- data.frame("Sample IDs" = tabs$`Sample IDs`, check.names = FALSE)
   )
 df_analyzed%>%
   head(12) %>%
-  kable(row.names = FALSE, align = rep("c", ncol(df_analyzed)))
+  kable(row.names = FALSE, align = rep("c", ncol(df_analyzed))) %>%
+  row_spec(0, bold = TRUE)
 ```
 
 \newpage
@@ -464,7 +467,7 @@ The "plate_view" function requires *un-transposed* data and sample locations as 
 ```{r, warning=FALSE}
 #| fig-width: 12
 #| fig-height: 8
-#| fig-cap: Plate-view analog of a 96-well microplate. Each facet in the 8$\times$12 grid shows the real-time curves of an RT-QuIC reaction. The numbers underneath the sample IDs are the dilution factors.
+#| fig-cap: Plate-view analog of a 96-well microplate. Each facet in the 8x12 grid shows the real-time curves of an RT-QuIC reaction. The numbers underneath the sample IDs are the dilution factors.
 sample_locations <- get_sample_locations(
   file, 
   dilution_bool = TRUE,
