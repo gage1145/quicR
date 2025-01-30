@@ -4,7 +4,7 @@
 #' and converts them into dataframe columns.
 #'
 #' @param tab A table/matrix or a list of tables/matrices.
-#' @param na_moit Logical; if true, will remove rows with NA.
+#' @param na_omit Logical; if true, will remove rows with NA.
 #'
 #' @return A dataframe column.
 #'
