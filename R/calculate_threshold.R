@@ -8,6 +8,7 @@
 #' @param multiplier For some methods, will add a multiplier for more conservative thresholds.
 #'
 #' @importFrom dplyr select
+#' @importFrom stats sd
 #'
 #' @return A float value.
 #'
