@@ -36,9 +36,9 @@ calculate_MS <- function(data, window = 3, data_is_norm = TRUE) {
       t() %>%
       as.data.frame() %>%
       mutate_all(~ as.numeric(as.character(.))) %>%
+      mutate(Time = as.numeric(rownames(.))) %>%
       suppressWarnings() %>%
       na.omit() %>%
-      mutate(Time = as.numeric(rownames(.))) %>%
       relocate("Time", .before = 1)
   }
 
