@@ -1,3 +1,24 @@
+# quicR 2.0.0
+
+## Bug fixes
+- Adjusted the delimiter in `get_meta` so that the second column doesn't have a leading white space.
+- Fixed example scripts to work with the updated functions.
+- Now suppressing messages from `get_wells`. This wasn't necessarily a bug, but was not ideal and the messages didn't provide any relevant information about what the function was doing.
+- Fixed a typo in `get_wells` which caused the function to assigning a data frame as a variable instead of returning the data frame.
+- Fixed a bug where the plate view would not render properly if the plate was not completely full.
+
+
+## New features
+- Provided the `calculate_threshold` function for calculating detection thresholds using a common method done in the literature.
+- Added a `sep` argument to `get_sample_locations` for delimiting sample IDs and dilution factors.
+- Converted the `calculate_MS` function to a vectorized function, and instead of using `lm`, the function looks at differences within the moving window. This provides a much faster calculation, but does reduce the accuracy slightly. May provide the option to do either methods in the future.
+- Added the default option "Sample IDs" for `tab_name` in the `get_sample_locations` function.
+
+## Miscellaneous
+- Made the quicR logo!
+- Provided better test files which have more ideal RT-QuIC data.
+- Now includes the manuscript in the man folder which will be submitted for publication.
+
 # quicR 1.1.1
 
 -   Fixed organize_tables function to accept Excel files which do not have the metadata preamble. Will not affect output if file still has the preamble.
