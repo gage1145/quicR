@@ -52,9 +52,9 @@ format:
       - left=20mm
     fig-pos: "H"
     # keep-tex: true
-    template-partials: 
+    template-partials:
       - title.tex
-    include-in-header: 
+    include-in-header:
       - text: \usepackage{tabularray}
       - text: \usepackage{float}
       - text: \floatplacement{table}{H}
@@ -129,15 +129,15 @@ Excel workbook exported from MARS.
 :::
 
 ## Key Metrics and Calculations
-quicR has functions for calculating TtT, MPR, and MS (vizualized in [@fig-metrics]). There is no dedicated function for RAF since it can be expressed as the inverse of TtT, and can therefore be calculated separately as in the example in [@tbl-metrics].
+quicR has functions for calculating TtT, MPR, and MS (vizualized in [@fig-metrics]). There is no dedicated function for RAF since it can be expressed as the inverse of TtT, and can therefore be calculated separately as in the example in the Calculations section.
 
 TtT is calculated by iterating through each sample until a value is greater than the user-supplied threshold. It then determines the intersection between the previous and current read times and the threshold. If no value was found larger than the threshold, the total reaction run-time is returned.
 
 MPR is defined as the maximum fluorescence divided by the background fluorescence [@Rowden2023]. Thus, in order to calculate, the raw data must first be normalized against the background. This is done by the user choosing a cycle for background determination, and then dividing each read by that value. The MPR is taken as the max value of the normalized data.
 
-MS is determined by approximating the maximum of the derivative of the raw data and is typically reported in units of $\Delta$RFU/h (i.e. the change in relative fluorescent units per hour). Originally, this was accomplished by applying a linear regression to a sliding window; however, this proved to be very computationally expensive. Now, slopes are calculated using differences between two data points within the range of a sliding window. While this slightly reduces the accuracy of the approximation, the improvement in computation time exceeded the loss in resolution.
+MS is determined by approximating the maximum of the derivative of the raw data and is typically reported in units of $\Delta$RFU/h (i.e. the change in relative fluorescent units per hour). Slopes are calculated using differences between two data points within the range of a sliding window. While this slightly reduces the accuracy of the approximation, the improvement in computation time exceeded the loss in resolution.
 
-![Example graph highlighting the calculated metrics described above. The red curve represents a raw data curve that has been normalized against background. The maxpoint ratio is calculated as the maximum fluorescent value achieved in the normalized raw data. Time-to-threshold is determined as the time required to cross a given threshold (in this example, the threshold is set at 0.2). The blue curve represents the derivative of the raw data, and max slope is determined as the maximum of the derivative.](images/metric_example.png){#fig-metrics}
+![Example graph highlighting the calculated metrics described above. The red curve represents a raw data curve that has been normalized against background. The maxpoint ratio is calculated as the maximum fluorescent value achieved in the normalized raw data. Time-to-threshold is determined as the time required to cross a given threshold (in this example, the threshold is set at 0.2). The blue curve represents the approximate derivative of the raw data, and max slope is determined as the maximum of the derivative.](images/metric_example.png){#fig-metrics}
 
 # Development
 ![Workflow hierarchy of the quicR package. Blue nodes indicate steps where BMG software is needed. Purple nodes indicate functions dedicated to handling metadata. Red nodes are functions that acquire and manipulate raw data. Orange nodes are functions which calculate some metric. Finally, yellow nodes represent data analysis endpoints.](images/workflow2.png){#fig-workflow}
@@ -314,8 +314,7 @@ Samples locations can be extracted based on their well ID. The "get_sample_locat
 get_sample_locations(
   file, 
   dilution_bool = TRUE, 
-  dilution_fun = function(x) 
-    -log10(x), 
+  dilution_fun = function(x) -log10(x), 
   sep = "_"
 )
 ```
@@ -355,7 +354,7 @@ The raw, real-time data is typically found on the second sheet of the Excel work
 \newpage
 
 ### Retrieve Raw Data
-Raw data can be retrieved using the "get_real" function. The logical argument, "ordered", indicates whether the user would prefer the columns to be ordered by well or by sample ID. By default, it is FALSE which will order the data by well. This should almost always be the case for easier integration with other downstream functions. Additionally, since there can be more than one instance of real-time data (depending on if the user added some calculations in MARS), "get_real" returns a list of dataframes. Therefore, the output should be indexed to access the data frame of interest.
+Raw data can be retrieved using the "get_real" function. The logical argument, "ordered", indicates whether the user would prefer the columns to be ordered by well or by sample ID. By default, it is FALSE which will order the data by well. This should almost always be the case for easier integration with other downstream functions. Additionally, since there can be more than one instance of real-time data (depending on if the user added some calculations in MARS), "get_real" returns a list of dataframes. Therefore, the output must be indexed to access the data frame of interest.
 ```{r, eval=FALSE}
 #| label: tbl-raw
 #| tbl-cap: Raw data retrieved directly from the MARS output file.
@@ -405,7 +404,7 @@ df_norm <- df_norm |>
 \newpage
 
 ## Calculations
-There are three analytical metrics with dedicated functions: time-to-threshold (TtT), maxpoint ratio (MPR), and maximum slope (MS). The rate of amyloid formation does not have a designated function since it is simply the inverse of the time-to-threshold. Each function below accepts input from the "transpose_real" or the "normalize_RFU" functions. See @tbl-metrics for an example of the output of these functions.
+There are three analytical metrics with dedicated functions: time-to-threshold (TtT), maxpoint ratio (MPR), and maximum slope (MS). The rate of amyloid formation does not have a designated function since it is simply the reciprocal of the time-to-threshold (1/TtT). Each function below accepts input from the "transpose_real" or the "normalize_RFU" functions. See @tbl-metrics for an example of the output of these functions.
 
 ### Thresholds
 Many publications have different methods of determining thresholds. By convention, the most popular method is to take the average background fluorescence of the every well and add some multiple of standard deviations [@Rowden2023]. The quicR package provides the "calculate_threshold" function for this purpose. A value can be provided as the optional argument, "multiplier", which will be applied to the standard deviation.
