@@ -1,4 +1,4 @@
-library(slider)
+# library(slider)
 library(ggpubr)
 library(openxlsx)
 library(agricolae)
@@ -66,7 +66,8 @@ df <- df[[df_id]]
 # Export the tables in the first sheet of the file.
 dic <- file %>%
   quicR::organize_tables() %>%
-  quicR::convert_tables()
+  quicR::convert_tables() %>%
+  na.omit()
 
 column_names <- c("Time", dic$`Sample IDs`)
 
@@ -81,7 +82,7 @@ colnames(df) <- column_names
 
 df_norm <- df %>%
   transpose_real() %>%
-  normalize_RFU()
+  normalize_RFU(transposed = TRUE)
 
 
 
@@ -93,7 +94,7 @@ df_norm <- df %>%
 # Determine if there is a dilutions table.
 dilution_bool <- "Dilutions" %in% names(dic)
 
-if (dilution_bool) dilutions <- dic$Dilutions
+if (dilution_bool) dilutions <- dic$Dilutions %>% na.omit()
 
 
 
@@ -114,10 +115,7 @@ df_analyzed <- data.frame("Sample_ID" = df_norm$`Sample ID`) %>%
     # Max Slope
     MS = quicR::calculate_MS(df_norm, data_is_norm = TRUE),
     # Time to Threshold
-    TtT = quicR::calculate_TtT(
-      df_norm,
-      threshold = threshold, start_col = 3, run_time = hours
-    ),
+    TtT = quicR::calculate_TtT(df_norm, threshold = threshold, start_col = 3),
     # Rate of Amyloid Formation
     RAF = ifelse(TtT == hours, 0, 1 / (3600 * TtT)),
     # Crossed threshold?
@@ -160,15 +158,15 @@ metrics <- c("MPR", "MS")
 for (metric in metrics) {
   formula <- as.formula(
     paste0(
-      metric, " ~ ", "Sample_ID", ifelse(dilution_bool, "+ Dilutions", "")
+      metric, " ~ Sample_ID", ifelse(dilution_bool, " + Dilutions", "")
     )
   )
   # Create a dataframe of the individual comparisons.
   comps <- LSD.test( # Perform the post-hoc multiple comparisons test.
     # Create the statistical model using ANOVA.
-    aov(formula, data = df_analyzed),
-    ifelse(dilution_bool, c("Sample_ID", "Dilutions"), c("Sample_ID")),
-    p.adj = "holm", group = FALSE
+    aov(formula = formula, data = df_analyzed),
+    trt = if (dilution_bool) c("Sample_ID", "Dilutions") else "Sample_ID",
+    p.adj = "none", group = FALSE
   )[["comparison"]]
 
   # Initialize columns which will hold unique IDs for each sample compared.
@@ -180,7 +178,7 @@ for (metric in metrics) {
         t() %>%
         as.data.frame()
     ) %>%
-    select(-difference) %>%
+    select(-c("difference", "LCL", "UCL")) %>%
     # Remove all comparisons that are not against "N".
     subset(
       V1 == "N" |
@@ -225,11 +223,7 @@ for (metric in metrics) {
 }
 
 summary <- summary %>%
-  mutate(
-    MPR_pvalue = as.numeric(MPR_pvalue),
-    MS_pvalue = as.numeric(MS_pvalue),
-    Positive = thres_pos & MPR_pvalue <= 0.05 & MS_pvalue <= 0.05
-  )
+  mutate(Positive = thres_pos & MPR_pvalue <= 0.05 & MS_pvalue <= 0.05)
 
 
 

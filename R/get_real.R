@@ -25,7 +25,7 @@
 #' @export
 get_real <- function(data, ordered = FALSE) {
   check_format <- function(x) {
-    if (is.character(x)) { # Read the Excel file into R.
+    if (is.character(x)) {
       return(suppressMessages(read_excel(x, sheet = 2, col_names = FALSE)))
     } else if (is.data.frame(x)) {
       return(x)

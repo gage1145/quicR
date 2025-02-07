@@ -38,7 +38,7 @@ get_meta <- function(file) {
     na.omit() |>
     separate_wider_delim(
       1,
-      ":",
+      ": ",
       names = c("Meta_ID", "Meta_info"),
       too_few = "align_start",
       too_many = "merge"

@@ -4,10 +4,12 @@
 \alias{convert_tables}
 \title{Convert tables into a single column in a dataframe.}
 \usage{
-convert_tables(tab)
+convert_tables(tab, na_omit = TRUE)
 }
 \arguments{
 \item{tab}{A table/matrix or a list of tables/matrices.}
+
+\item{na_omit}{Logical; if true, will remove rows with NA.}
 }
 \value{
 A dataframe column.

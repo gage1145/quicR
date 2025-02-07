@@ -17,7 +17,8 @@
 #' @export
 get_wells <- function(file) {
   if (is.character(file)) {
-    df <- read_excel(file, sheet = 2, col_names = FALSE)
+    df <- read_excel(file, sheet = 2, col_names = FALSE) %>%
+      suppressMessages()
   } else if (is.data.frame(file)) {
     df <- file
   } else {
@@ -35,7 +36,7 @@ get_wells <- function(file) {
       break
     }
   }
-  wells <- wells[-(1:2)] |>
+  wells[-(1:2)] |>
     as.data.frame() |>
     t() |>
     as.data.frame()
