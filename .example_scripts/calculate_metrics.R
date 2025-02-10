@@ -1,4 +1,3 @@
-# library(slider)
 library(ggpubr)
 library(openxlsx)
 library(agricolae)
@@ -66,13 +65,7 @@ df <- df[[df_id]]
 # Export the tables in the first sheet of the file.
 dic <- file %>%
   quicR::organize_tables() %>%
-  quicR::convert_tables() %>%
-  na.omit()
-
-column_names <- c("Time", dic$`Sample IDs`)
-
-# Apply the column names.
-colnames(df) <- column_names
+  quicR::convert_tables()
 
 
 
@@ -90,11 +83,8 @@ df_norm <- df %>%
 
 
 
-
 # Determine if there is a dilutions table.
 dilution_bool <- "Dilutions" %in% names(dic)
-
-if (dilution_bool) dilutions <- dic$Dilutions %>% na.omit()
 
 
 
@@ -106,22 +96,12 @@ if (dilution_bool) dilutions <- dic$Dilutions %>% na.omit()
 hours <- as.numeric(colnames(df_norm)[ncol(df_norm)])
 
 # Initialized the dataframe with the calculated metrics.
-df_analyzed <- data.frame("Sample_ID" = df_norm$`Sample ID`) %>%
+df_analyzed <- calculate_metrics(df_norm, dic) %>%
   mutate(
-    # Add dilutions if applicable.
     Dilutions = if (dilution_bool) -log10(as.numeric(dilutions)),
-    # Maxpoint Ratio
-    MPR = quicR::calculate_MPR(df_norm, start_col = 3, data_is_norm = TRUE),
-    # Max Slope
-    MS = quicR::calculate_MS(df_norm, data_is_norm = TRUE),
-    # Time to Threshold
-    TtT = quicR::calculate_TtT(df_norm, threshold = threshold, start_col = 3),
-    # Rate of Amyloid Formation
-    RAF = ifelse(TtT == hours, 0, 1 / (3600 * TtT)),
-    # Crossed threshold?
     crossed = TtT != hours
   ) %>%
-  # Order the data frame based on Sample_ID.
+  rename(Sample_ID = `Sample IDs`) %>%
   arrange(Sample_ID)
 
 
@@ -253,56 +233,13 @@ saveWorkbook(wb, "summary.xlsx", overwrite = TRUE)
 
 df_analyzed %>%
   select(-crossed) %>%
-  {
-    if (dilution_bool) {
-      reshape2::melt(., id.vars = c("Sample_ID", "Dilutions")) %>%
-        mutate(Dilutions = as.factor(desc(Dilutions))) %>%
-        ggplot(aes(Sample_ID, value, fill = Dilutions))
-    } else {
-      reshape2::melt(., id.vars = "Sample_ID") %>%
-        ggplot(aes(Sample_ID, value))
-    }
-  } +
-
-  geom_boxplot(
-    outlier.shape = NA,
-    position = "dodge"
-  ) +
-
+  plot_metrics("Sample_ID", "Dilutions", dilution_bool = dilution_bool) +
   geom_dotplot(
     binaxis = "y",
     stackdir = "center",
     dotsize = 0.5,
     position = "dodge",
     stackratio = 0.5
-  ) +
-
-  facet_wrap(
-    vars(variable),
-    scales = "free",
-    labeller = as_labeller(
-      c(
-        MPR = "MPR (Max RFU / Initial RFU)",
-        RAF = "RAF (1/s)",
-        MS  = "Max Slope (RFU/s)",
-        TtT = "Time to Threshold (h)"
-      )
-    ),
-    strip.position = "left"
-  ) +
-
-  ylim(0, NA) +
-  xlab(NULL) +
-  ylab(NULL) +
-
-  theme(
-    axis.line = element_line(colour = "black"),
-    axis.text.x = element_text(angle = 45, hjust = 1),
-    panel.background = element_blank(),
-    panel.grid = element_line(colour = "lightgrey"),
-    panel.border = element_rect(colour = "black", fill = NA, size = 1),
-    strip.background = element_blank(),
-    strip.placement = "outside"
   )
 
 ggsave("summary.png", width = 4000, height = 2500, units = "px")
