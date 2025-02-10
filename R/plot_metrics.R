@@ -5,6 +5,8 @@
 #' @param data A dataframe containing the calculated metrics from the "calculate" family of quicR functions.
 #' @param ... A selection of columns to be used as faceting variables. Typically this includes the sample IDs and dilution factors.
 #' @param dilution_bool Logical; should dilution factors be included in the plot?
+#' @param nrow Integer; number of rows to output in the plot.
+#' @param ncol Integer; number of columns to output in the plot.
 #'
 #' @importFrom dplyr %>%
 #' @importFrom tidyr gather

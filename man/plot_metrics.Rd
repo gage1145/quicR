@@ -4,7 +4,7 @@
 \alias{plot_metrics}
 \title{Plot metrics generated from the "calculate" family of quicR functions.}
 \usage{
-plot_metrics(data, ..., dilution_bool = TRUE)
+plot_metrics(data, ..., dilution_bool = TRUE, nrow = 2, ncol = 2)
 }
 \arguments{
 \item{data}{A dataframe containing the calculated metrics from the "calculate" family of quicR functions.}
@@ -12,6 +12,10 @@ plot_metrics(data, ..., dilution_bool = TRUE)
 \item{...}{A selection of columns to be used as faceting variables. Typically this includes the sample IDs and dilution factors.}
 
 \item{dilution_bool}{Logical; should dilution factors be included in the plot?}
+
+\item{nrow}{Integer; number of rows to output in the plot.}
+
+\item{ncol}{Integer; number of columns to output in the plot.}
 }
 \value{
 A ggplot object
