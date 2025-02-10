@@ -39,7 +39,7 @@
 #'   plot_metrics("Sample IDs", "Dilutions")
 #'
 #' @export
-plot_metrics <- function(data, ..., dilution_bool = TRUE) {
+plot_metrics <- function(data, ..., dilution_bool = TRUE, nrow = 2, ncol = 2) {
 
   data %>%
     gather("variable", "value", -c(...)) %>%
@@ -51,7 +51,7 @@ plot_metrics <- function(data, ..., dilution_bool = TRUE) {
     geom_boxplot(
       position = position_dodge2(preserve = "single")
     ) +
-    facet_wrap(~variable, scales = "free_y") +
+    facet_wrap(~variable, scales = "free_y", nrow = nrow, ncol = ncol) +
     labs(fill = if (dilution_bool) "Dilutions") +
     theme(
       legend.position = "bottom",
