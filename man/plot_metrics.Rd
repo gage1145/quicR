@@ -4,12 +4,21 @@
 \alias{plot_metrics}
 \title{Plot metrics generated from the "calculate" family of quicR functions.}
 \usage{
-plot_metrics(data, ..., dilution_bool = TRUE, nrow = 2, ncol = 2)
+plot_metrics(
+  data,
+  sample_col = "Sample IDs",
+  fill = "Dilutions",
+  dilution_bool = TRUE,
+  nrow = 2,
+  ncol = 2
+)
 }
 \arguments{
 \item{data}{A dataframe containing the calculated metrics from the "calculate" family of quicR functions.}
 
-\item{...}{A selection of columns to be used as faceting variables. Typically this includes the sample IDs and dilution factors.}
+\item{sample_col}{The name of the column containing the sample IDs.}
+
+\item{fill}{The column containing the fill aesthetic. Usually the dilutions column.}
 
 \item{dilution_bool}{Logical; should dilution factors be included in the plot?}
 
@@ -30,23 +39,13 @@ file <- system.file(
   package = "quicR"
 )
 
-raw <- quicR::get_real(file)[[1]] |>
+data <- quicR::get_real(file)[[1]] |>
   quicR::normalize_RFU()
 
 meta <- quicR::organize_tables(file) |>
   quicR::convert_tables()
 
-data.frame(
-  `Sample IDs` = meta$`Sample IDs`,
-  `Dilutions`  = meta$Dilutions,
-  check.names = FALSE
-) |>
-  dplyr::mutate(
-    MPR = quicR::calculate_MPR(raw),
-    MS  = quicR::calculate_MS(raw),
-    TtT = quicR::calculate_TtT(raw, 2),
-    RAF = 1 / TtT
-  ) |>
-  plot_metrics("Sample IDs", "Dilutions")
+calculate_metrics(data, meta) |>
+  plot_metrics()
 
 }
