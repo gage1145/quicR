@@ -98,7 +98,7 @@ hours <- as.numeric(colnames(df_norm)[ncol(df_norm)])
 # Initialized the dataframe with the calculated metrics.
 df_analyzed <- calculate_metrics(df_norm, dic) %>%
   mutate(
-    Dilutions = if (dilution_bool) -log10(as.numeric(dilutions)),
+    Dilutions = if (dilution_bool) -log10(as.numeric(Dilutions)),
     crossed = TtT != hours
   ) %>%
   rename(Sample_ID = `Sample IDs`) %>%
@@ -229,11 +229,18 @@ saveWorkbook(wb, "summary.xlsx", overwrite = TRUE)
 
 # Plot the metrics in a facet plot ----------------------------------------
 
-
+order <- c(
+  "N", "P",
+  unique(
+    df_analyzed$Sample_ID[which(!(df_analyzed$Sample_ID %in% c("N", "P")))]
+  )
+)
 
 df_analyzed %>%
   select(-crossed) %>%
-  plot_metrics("Sample_ID", "Dilutions", dilution_bool = dilution_bool) +
+  filter(Sample_ID != "B") %>%
+  mutate(Sample_ID = factor(Sample_ID, levels = order)) %>%
+  plot_metrics(sample_col = "Sample_ID", dilution_bool = dilution_bool) +
   geom_dotplot(
     binaxis = "y",
     stackdir = "center",
