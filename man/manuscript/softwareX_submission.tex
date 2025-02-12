@@ -31,7 +31,7 @@
 %% please give \usepackage{epsfig}
 
 %% The amssymb package provides various useful mathematical symbols
-\usepackage{amssymb}
+%% \usepackage{amssymb}
 \usepackage{hyperref}
 \setlength{\parindent}{0pt}
 %% The amsthm package provides extended theorem environments
@@ -40,11 +40,12 @@
 %% The lineno packages adds line numbers. Start line numbering with
 %% \begin{linenumbers}, end it with \end{linenumbers}. Or switch it on
 %% for the whole article with \linenumbers.
-%\usepackage{lineno}
+% \usepackage{lineno}
 
 \journal{SoftwareX}
 
 \begin{document}
+
 \renewcommand{\labelenumii}{\arabic{enumi}.\arabic{enumii}}
 
 \begin{frontmatter}
@@ -53,11 +54,11 @@
 %% Title, authors and addresses
 
 %% use the tnoteref command within \title for footnotes;
-%% use the tnotetext command for theassociated footnote;
+%% use the tnotetext command for the associated footnote;
 %% use the fnref command within \author or \address for footnotes;
-%% use the fntext command for theassociated footnote;
+%% use the fntext command for the associated footnote;
 %% use the corref command within \author for corresponding author footnotes;
-%% use the cortext command for theassociated footnote;
+%% use the cortext command for the associated footnote;
 %% use the ead command for the email address,
 %% and the form \ead[url] for the home page:
 %% \title{Title\tnoteref{label1}}
@@ -72,14 +73,13 @@
 
 \title{quicR: An R Library for Streamlined Data Handling of Real-Time Quaking Induced Conversion Assays}
 
-\author[label1,label2,label3]{Gage Rowden\corref{cor}\fnref{email}}
-\ead{rowde002@umn.edu}
-\fntext[email]{}
-\cortext[cor]{}
+\author[label1,label2,label3]{Gage Rowden\corref{cor}}
+\fntext[ ]{\textit{E-mail address: }rowde002@umn.edu}
+\cortext[cor]{Corresponding author.}
 \author[label1,label2,label3]{Peter Larsen}
-\address[label1]{Department of Veterinary and Biomedical Sciences, University of Minnesota, St. Paul, MN 55108, USA.}
-\address[label2]{Minnesota Center for Prion Research and Outreach, University of Minnesota, St. Paul, MN 55108, USA.}
-\address[label3]{Priogen Corp., St. Paul, MN 55114, USA.}
+\address[label1]{Department of Veterinary and Biomedical Sciences, University of Minnesota, USA.}
+\address[label2]{Minnesota Center for Prion Research and Outreach, University of Minnesota, USA.}
+\address[label3]{Priogen Corp., USA.}
 
 \begin{abstract}
 Real-time quaking induced conversion (RT-QuIC) has quickly become a valuable diagnostic tool for protein misfolding disorders such as Creutzfeldt-Jakob disease and Parkinson's disease. Given that the technology is relatively new, academic and industry standards for quality filtering data and high throughput analysis of results have yet to be fully established. The open source R library, quicR, was developed to provide a standardized approach to RT-QuIC data analysis. quicR provides functions, which can be easily integrated into existing R workflows, for data curation, analysis, and vizualization.
@@ -101,33 +101,32 @@ R package \sep RT-QuIC \sep prion \sep diagnostics \sep CJD \sep Parkinson's
 % \linenumbers
 
 \section*{Metadata}
-\label{}
-\textit{The ancillary data table~\ref{codeMetadata} is required for the sub-version of the codebase. Please replace the italicized text in the right column with the correct information about your current code and leave the left column untouched.}
 
 \begin{table}[ht]
-\begin{tabular}{|l|p{6.5cm}|p{6.5cm}|}
-\hline
-\textbf{Nr.} & \textbf{Code metadata description} & \textbf{Metadata} \\
-\hline
-C1 & Current code version & V2.1.0 \\
-\hline
-C2 & Permanent link to code/repository used for this code version & \url{https://github.com/gage1145/quicR} \\
-\hline
-C3  & Permanent link to Reproducible Capsule & \url{https://github.com/gage1145/quicR/releases/tag/v2.1.0}\\
-\hline
-C4 & Legal Code License   & GPL-3 \\
-\hline
-C5 & Code versioning system used & git \\
-\hline
-C6 & Software code languages, tools, and services used & R \\
-\hline
-C7 & Compilation requirements, operating environments \& dependencies & R (>=4.1.0) \\
-\hline
-C8 & If available Link to developer documentation/manual & \url{https://cran.r-project.org/web/packages/quicR/quicR.pdf} \\
-\hline
-C9 & Support email for questions & rowde002@umn.edu\\
-\hline
-\end{tabular}
+    \fontsize{9}{9}\selectfont
+    \begin{tabular}{|l|p{6.5cm}|p{6.5cm}|}
+        \hline
+        \textbf{Nr.} & \textbf{Code metadata description} & \textbf{Metadata} \\
+        \hline
+        C1 & Current code version & V2.1.0 \\
+        \hline
+        C2 & Permanent link to code/repository used for this code version & \url{https://github.com/gage1145/quicR} \\
+        \hline
+        C3  & Permanent link to Reproducible Capsule & \url{https://github.com/gage1145/quicR/releases/tag/v2.1.0}\\
+        \hline
+        C4 & Legal Code License & GPL-3 \\
+        \hline
+        C5 & Code versioning system used & git \\
+        \hline
+        C6 & Software code languages, tools, and services used & R \\
+        \hline
+        C7 & Compilation requirements, operating environments \& dependencies & R (>=4.1.0) \\
+        \hline
+        C8 & If available Link to developer documentation/manual & \url{https://cran.r-project.org/web/packages/quicR/quicR.pdf} \\
+        \hline
+        C9 & Support email for questions & rowde002@umn.edu\\
+        \hline
+    \end{tabular}
 \caption{Code metadata}
 \label{codeMetadata} 
 \end{table}
@@ -149,18 +148,18 @@ C9 & Support email for questions & rowde002@umn.edu\\
 
     Together, these metrics enable researchers to characterize the kinetics of RT-QuIC reactions comprehensively, enhancing the rigor and reliability of diagnostic decisions.
 
-    In addition to analytical tools, quicR provides flexible and customizable visualization capabilities. Leveraging the powerful ggplot2 library \cite{ggplot2016}, quicR enables users to generate high-quality, publication-ready figures. These visualizations can be further customized using the intuitive '+' syntax of ggplot2, allowing for tailored presentations of RT-QuIC data.
+    In addition to analytical tools, quicR provides flexible and customizable visualization capabilities. Leveraging the powerful ggplot2 library \cite{ggplot2016}, quicR enables users to generate high-quality, publication-ready figures. These visualizations can be further customized using the intuitive `+' syntax of ggplot2, allowing for tailored presentations of RT-QuIC data.
 
     By combining standardized metrics, advanced visualization tools, and a commitment to open source science, quicR serves as a foundational resource for the growing RT-QuIC community. Its goal is to empower researchers to analyze and present their data with clarity, consistency, and cohesion.
 
-\textit{In this section, we want you to introduce the scientific background and the motivation for developing the software.}
-
-\begin{itemize}
-    \item \textit{Explain why the software is important and describe the exact (scientific) problem(s) it solves.}
-    \item \textit{Indicate in what way the software has contributed (or will contribute in the future) to the process of scientific discovery; if available, please cite a research paper using the software.}
-    \item \textit{Provide a description of the experimental setting. (How does the user use the software?)}
-    \item \textit{Introduce related work in literature (cite or list algorithms used, other software etc.).}
-\end{itemize}
+% \textit{In this section, we want you to introduce the scientific background and the motivation for developing the software.}
+% 
+% \begin{itemize}
+%     \item \textit{Explain why the software is important and describe the exact (scientific) problem(s) it solves.}
+%     \item \textit{Indicate in what way the software has contributed (or will contribute in the future) to the process of scientific discovery; if available, please cite a research paper using the software.}
+%     \item \textit{Provide a description of the experimental setting. (How does the user use the software?)}
+%     \item \textit{Introduce related work in literature (cite or list algorithms used, other software etc.).}
+% \end{itemize}
 
 \section{Software description}
     \subsection{Software architecture}
@@ -186,15 +185,15 @@ C9 & Support email for questions & rowde002@umn.edu\\
 % \textit{\textbf{Optional}: you may include one explanatory  video or screencast that will appear next to your article, in the right hand side panel. Please upload any video as a single supplementary file with your article. Only one MP4 formatted, with 150MB maximum size, video is possible per article. Recommended video dimensions are 640 x 480 at a maximum of 30 frames / second. Prior to submission please test and validate your .mp4 file at  \url{http://elsevier-apps.sciverse.com/GadgetVideoPodcastPlayerWeb/verification} . This tool will display your video exactly in the same way as it will appear on ScienceDirect. }
 
 \section{Impact}
-\textit{This is the main section of the article and reviewers will weight it appropriately.
-Please indicate:}
-\begin{itemize}
-    \item \textit{Any new research questions that can be pursued as a result of your software.}
-    \item \textit{In what way, and to what extent, your software improves the pursuit of existing research questions.}
-    \item \textit{Any ways in which your software has changed the daily practice of its users.}
-    \item \textit{How widespread the use of the software is within and outside the intended user group (downloads, number of users if your software is a service, citable publications, etc.).}
-    \item \textit{How the software is being used in commercial settings and/or how it has led to the creation of spin-off companies.}
-    \end{itemize}
+% \textit{This is the main section of the article and reviewers will weight it appropriately.
+% Please indicate:}
+% \begin{itemize}
+%     \item \textit{Any new research questions that can be pursued as a result of your software.}
+%     \item \textit{In what way, and to what extent, your software improves the pursuit of existing research questions.}
+%     \item \textit{Any ways in which your software has changed the daily practice of its users.}
+%     \item \textit{How widespread the use of the software is within and outside the intended user group (downloads, number of users if your software is a service, citable publications, etc.).}
+%     \item \textit{How the software is being used in commercial settings and/or how it has led to the creation of spin-off companies.}
+%     \end{itemize}
 % \textit{Please note that points 1 and 2 are best demonstrated by
 %   references to citable publications.}
 
