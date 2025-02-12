@@ -5,3 +5,11 @@ settings.json
 .vscode
 manuscript_files
 nul
+.aux
+.bbl
+.blg
+.fdb_latexmk
+.manuscript_files.log
+.out
+.spl
+.synctex.gz
