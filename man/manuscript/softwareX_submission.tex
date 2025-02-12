@@ -70,9 +70,12 @@
 %% \address{Address\fnref{label3}}
 %% \fntext[label3]{}
 
-\title{Title (quicR: An R Library for Streamlined Data Handling of Real-Time Quaking Induced Conversion Assays)}
+\title{quicR: An R Library for Streamlined Data Handling of Real-Time Quaking Induced Conversion Assays}
 
-\author[label1,label2,label3]{Gage Rowden}
+\author[label1,label2,label3]{Gage Rowden\corref{cor}\fnref{email}}
+\ead{rowde002@umn.edu}
+\fntext[email]{}
+\cortext[cor]{}
 \author[label1,label2,label3]{Peter Larsen}
 \address[label1]{Department of Veterinary and Biomedical Sciences, University of Minnesota, St. Paul, MN 55108, USA.}
 \address[label2]{Minnesota Center for Prion Research and Outreach, University of Minnesota, St. Paul, MN 55108, USA.}
@@ -84,7 +87,7 @@ Real-time quaking induced conversion (RT-QuIC) has quickly become a valuable dia
 
 \begin{keyword}
 %% keywords here, in the form: keyword \sep keyword
-R package \sep R library \sep RT-QuIC \sep prion \sep diagnostics \sep CJD \sep Parkinson's
+R package \sep RT-QuIC \sep prion \sep diagnostics \sep CJD \sep Parkinson's
 
 %% PACS codes here, in the form: \PACS code \sep code
 
@@ -106,72 +109,31 @@ R package \sep R library \sep RT-QuIC \sep prion \sep diagnostics \sep CJD \sep 
 \hline
 \textbf{Nr.} & \textbf{Code metadata description} & \textbf{Metadata} \\
 \hline
-C1 & Current code version & v2.1.0 \\
+C1 & Current code version & V2.1.0 \\
 \hline
-C2 & Permanent link to code/repository used for this code version & For example: \url{https://github.com/gage1145/quicR} \\
+C2 & Permanent link to code/repository used for this code version & \url{https://github.com/gage1145/quicR} \\
 \hline
-C3  & Permanent link to Reproducible Capsule & For example: \url{https://codeocean.com/capsule/0270963/tree/v1}\\
+C3  & Permanent link to Reproducible Capsule & \url{https://github.com/gage1145/quicR/releases/tag/v2.1.0}\\
 \hline
-C4 & Legal Code License   & All software and code must be released under one of the pre-approved licenses listed in the \href{https://www.elsevier.com/journals/softwarex/2352-7110/guide-for-authors}{Guide for Authors}, such as Apache License, GNU General Public License (GPL) or MIT License. Write the name of the license you’ve chosen here. \\
+C4 & Legal Code License   & GPL-3 \\
 \hline
 C5 & Code versioning system used & git \\
 \hline
 C6 & Software code languages, tools, and services used & R \\
 \hline
-C7 & Compilation requirements, operating environments \& dependencies & \\
+C7 & Compilation requirements, operating environments \& dependencies & R (>=4.1.0) \\
 \hline
-C8 & If available Link to developer documentation/manual & For example: \url{https://github.com/gage1145/quicR/blob/main/man/manuscript/manuscript.pdf} \\
+C8 & If available Link to developer documentation/manual & \url{https://cran.r-project.org/web/packages/quicR/quicR.pdf} \\
 \hline
 C9 & Support email for questions & rowde002@umn.edu\\
 \hline
 \end{tabular}
-\caption{Code metadata (mandatory)}
+\caption{Code metadata}
 \label{codeMetadata} 
-\end{table}
-
-% \textit{Optionally, you can provide information about the current executable
-% software version filling in the left column of
-% Table~\ref{executabelMetadata}. Please leave the first column as it is.}
-
-\begin{table}[ht]
-\begin{tabular}{|l|p{6.5cm}|p{6.5cm}|}
-\hline
-\textbf{Nr.} & \textbf{(Executable) software metadata description} & \textbf{Please fill in this column} \\
-\hline
-S1 & Current software version & For example 1.1, 2.4 etc. \\
-\hline
-S2 & Permanent link to executables of this version  & For example: \url{https://github.com/combogenomics/DuctApe/releases/tag/DuctApe-0.16.4} \\
-\hline
-S3  & Permanent link to Reproducible Capsule & \\
-\hline
-S4 & Legal Software License & List one of the approved licenses \\
-\hline
-S5 & Computing platforms/Operating Systems & For example Android, BSD, iOS, Linux, OS X, Microsoft Windows, Unix-like , IBM z/OS, distributed/web based etc. \\
-\hline
-S6 & Installation requirements \& dependencies & \\
-\hline
-S7 & If available, link to user manual - if formally published include a reference to the publication in the reference list & For example: \url{http://mozart.github.io/documentation/} \\
-\hline
-S8 & Support email for questions & \\
-\hline
-\end{tabular}
-\caption{Software metadata (optional)}
-\label{executabelMetadata} 
 \end{table}
 
 
 \section{Motivation and significance}
-\textit{In this section, we want you to introduce the scientific background and the motivation for developing the software.}
-
-\begin{itemize}
-    \item \textit{Explain why the software is important and describe the exact (scientific) problem(s) it solves.}
-    \item \textit{Indicate in what way the software has contributed (or will contribute in the future) to the process of scientific discovery; if available, please cite a research paper using the software.}
-    \item \textit{Provide a description of the experimental setting. (How does the user use the software?)}
-    \item \textit{Introduce related work in literature (cite or list algorithms used, other software etc.).}
-\end{itemize}
-
-\section{Software description}
-
     Real-time quaking induced conversion (RT-QuIC) is a cutting-edge diagnostic assay that has garnered significant attention for its ultra-sensitive detection of misfolded protein aggregates \cite{Wilham2010, Atarashi2011}. The assay works by converting a recombinant protein substrate into an amyloid aggregate in the presence of a misfolded seed \cite{Wilham2010, Orru2012, Orru2017, Orru2015, Bongianni2019, Dassanayake2016, Hwang2018, Groveman2018, Metrick2020}. The assay's sensitivity and specificity make RT-QuIC a promising tool for diagnosing diseases such as prion disorders and other protein misfolding pathologies \cite{Fiorini2020, Franceschini2017, Picasso-Risso2022, Holz2021}. However, the relatively recent development and novelty of the assay have left a gap in widely accepted academic and industry standards for data analysis and interpretation \cite{Rowden2023}.
 
     To address this gap, we introduce quicR, an open-source library, developed in R \cite{R2024}, dedicated to the cleaning, analysis, and visualization of RT-QuIC data. By consolidating key metrics and providing robust analytical tools, quicR aims to standardize the analysis pipeline and foster reproducibility within the field of quaking induced assays including related assays such as Nano-QuIC \cite{Christenson2023} and Micro-QuIC \cite{Lee2024}. quicR is designed with both researchers and diagnosticians in mind, providing a user-friendly interface that integrates seamlessly with existing R workflows.
@@ -185,21 +147,30 @@ S8 & Support email for questions & \\
         \item Maximum slope (MS): The steepest rate of fluorescence increase, reflecting the most rapid phase of aggregation \cite{Henderson2015}.
     \end{enumerate}
 
-
     Together, these metrics enable researchers to characterize the kinetics of RT-QuIC reactions comprehensively, enhancing the rigor and reliability of diagnostic decisions.
 
     In addition to analytical tools, quicR provides flexible and customizable visualization capabilities. Leveraging the powerful ggplot2 library \cite{ggplot2016}, quicR enables users to generate high-quality, publication-ready figures. These visualizations can be further customized using the intuitive '+' syntax of ggplot2, allowing for tailored presentations of RT-QuIC data.
 
     By combining standardized metrics, advanced visualization tools, and a commitment to open source science, quicR serves as a foundational resource for the growing RT-QuIC community. Its goal is to empower researchers to analyze and present their data with clarity, consistency, and cohesion.
 
-\subsection{Software architecture}
-    quicR was developed to address the growing need for efficient data conversion, analysis, and visualization of RT-QuIC data. With a focus on usability and reproducibility, the package is designed to standardize workflows and ensure compatibility across multiple laboratories. Its primary input format is data exported as Excel workbooks from the proprietary MARS software (BMG Labtech, Ortenberg, Germany), providing seamless integration with existing experimental workflows. See Figure \ref{fig:workflow} for a detailed workflow.
-    \begin{figure}[ht]
-        \caption{Workflow hierarchy of the quicR package. Blue nodes indicate steps where BMG software is needed. Purple nodes indicate functions dedicated to handling metadata. Red nodes are functions that acquire and manipulate raw data. Orange nodes are functions which calculate some metric. Finally, yellow nodes represent data analysis endpoints.}
-        \centering
-        \includegraphics[width=\textwidth]{images/workflow2.png}
-        \label{fig:workflow}
-    \end{figure}
+\textit{In this section, we want you to introduce the scientific background and the motivation for developing the software.}
+
+\begin{itemize}
+    \item \textit{Explain why the software is important and describe the exact (scientific) problem(s) it solves.}
+    \item \textit{Indicate in what way the software has contributed (or will contribute in the future) to the process of scientific discovery; if available, please cite a research paper using the software.}
+    \item \textit{Provide a description of the experimental setting. (How does the user use the software?)}
+    \item \textit{Introduce related work in literature (cite or list algorithms used, other software etc.).}
+\end{itemize}
+
+\section{Software description}
+    \subsection{Software architecture}
+        quicR was developed to address the growing need for efficient data conversion, analysis, and visualization of RT-QuIC data. With a focus on usability and reproducibility, the package is designed to standardize workflows and ensure compatibility across multiple laboratories. Its primary input format is data exported as Excel workbooks from the proprietary MARS software (BMG Labtech, Ortenberg, Germany), providing seamless integration with existing experimental workflows. See Figure \ref{fig:workflow} for a detailed workflow.
+        \begin{figure}[ht]
+            \caption{Workflow hierarchy of the quicR package. Blue nodes indicate steps where BMG software is needed. Purple nodes indicate functions dedicated to handling metadata. Red nodes are functions that acquire and manipulate raw data. Orange nodes are functions which calculate some metric. Finally, yellow nodes represent data analysis endpoints.}
+            \centering
+            \includegraphics[width=\textwidth]{images/workflow2.png}
+            \label{fig:workflow}
+        \end{figure}
 
 \subsection{Software functionalities}
 \textit{  Present the major functionalities of the software.}

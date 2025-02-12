@@ -1,0 +1,174 @@
+\begin{thebibliography}{10}
+\expandafter\ifx\csname url\endcsname\relax
+  \def\url#1{\texttt{#1}}\fi
+\expandafter\ifx\csname urlprefix\endcsname\relax\def\urlprefix{URL }\fi
+\expandafter\ifx\csname href\endcsname\relax
+  \def\href#1#2{#2} \def\path#1{#1}\fi
+
+\bibitem{Wilham2010}
+J.~M. Wilham, C.~D. Orrú, R.~A. Bessen, R.~Atarashi, K.~Sano, B.~Race, K.~D.
+  Meade-White, L.~M. Taubner, A.~Timmes, B.~Caughey, Rapid end-point
+  quantitation of prion seeding activity with sensitivity comparable to
+  bioassays, PLOS Pathog 6 (12 2010).
+\newblock \href {https://doi.org/10.1371/journal.ppat.1001217}
+  {\path{doi:10.1371/journal.ppat.1001217}}.
+
+\bibitem{Atarashi2011}
+R.~Atarashi, K.~Sano, K.~Satoh, N.~Nishida,
+  \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3226039/}{Real-time
+  quaking-induced conversion: A highly sensitive assay for prion detection},
+  Prion 5 (2011) 150--153.
+\newblock \href {https://doi.org/10.4161/pri.5.3.16893}
+  {\path{doi:10.4161/pri.5.3.16893}}.
+\newline\urlprefix\url{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3226039/}
+
+\bibitem{Orru2012}
+C.~D. Orr{\'u}, J.~M. Wilham, L.~D. Raymond, F.~Kuhn, B.~Schroeder, A.~J.
+  Raeber, B.~Caughey, Prion disease blood test using immunoprecipitation and
+  improved quaking-induced conversion, mBio 2~(3) (2012).
+\newblock \href {https://doi.org/10.1128/mBio.00078-11}
+  {\path{doi:10.1128/mBio.00078-11}}.
+
+\bibitem{Orru2017}
+C.~D. Orr{\`u}, B.~R. Groveman, A.~G. Hughson, M.~Manca, L.~D. Raymond, G.~J.
+  Raymond, K.~J. Campbell, K.~J. Anson, A.~Kraus, B.~Caughey, {RT-QuIC} assays
+  for prion disease detection and diagnostics, in: Methods in Molecular
+  Biology, Vol. 1658, Humana Press Inc., 2017, pp. 185--203.
+
+\bibitem{Orru2015}
+C.~D. Orrú, B.~R. Groveman, A.~G. Hughson, G.~Zanusso, M.~B. Coulthart,
+  B.~Caughey, \href{/pmc/articles/PMC4313917/
+  /pmc/articles/PMC4313917/?report=abstract
+  https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4313917/}{Rapid and sensitive
+  rt-quic detection of human creutzfeldt-jakob disease using cerebrospinal
+  fluid}, mBio 6 (1 2015).
+\newblock \href {https://doi.org/10.1128/mBio.02451-14}
+  {\path{doi:10.1128/mBio.02451-14}}.
+\newline\urlprefix\url{/pmc/articles/PMC4313917/
+  /pmc/articles/PMC4313917/?report=abstract
+  https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4313917/}
+
+\bibitem{Bongianni2019}
+M.~Bongianni, A.~Ladogana, S.~Capaldi, S.~Klotz, S.~Baiardi, A.~Cagnin,
+  D.~Perra, M.~Fiorini, A.~Poleggi, G.~Legname, T.~Cattaruzza, F.~Janes,
+  M.~Tabaton, B.~Ghetti, S.~Monaco, G.~G. Kovacs, P.~Parchi, M.~Pocchiari,
+  G.~Zanusso, {$\alpha$-Synuclein} {RT-QuIC} assay in cerebrospinal fluid of
+  patients with dementia with lewy bodies, Annals of Clinical and Translational
+  Neurology 6~(10) (2019) 2120--2126.
+
+\bibitem{Dassanayake2016}
+R.~P. Dassanayake, C.~D. Orr{\'u}, A.~G. Hughson, B.~Caughey, T.~Gra{\c c}a,
+  D.~Zhuang, S.~A. Madsen-Bouterse, D.~P. Knowles, D.~A. Schneider, Sensitive
+  and specific detection of classical scrapie prions in the brains of goats by
+  real-time quaking-induced conversion, J. Gen. Virol. 97~(3) (2016) 803--812.
+
+\bibitem{Hwang2018}
+S.~Hwang, M.~H. West~Greenlee, A.~Balkema-Buschmann, M.~H. Groschup, E.~M.
+  Nicholson, J.~J. Greenlee, Real-time quaking-induced conversion detection of
+  bovine spongiform encephalopathy prions in a subclinical steer, Frontiers in
+  Veterinary Science 4~(JAN) (2018) 19.
+
+\bibitem{Groveman2018}
+B.~R. Groveman, C.~D. Orr{\`u}, A.~G. Hughson, L.~D. Raymond, G.~Zanusso,
+  B.~Ghetti, K.~J. Campbell, J.~Safar, D.~Galasko, B.~Caughey, Rapid and
+  ultra-sensitive quantitation of disease-associated $\alpha$-synuclein seeds
+  in brain and cerebrospinal fluid by {$\alpha$Syn} {RT-QuIC}, Acta
+  Neuropathologica Communications 6~(1) (2018) 7.
+
+\bibitem{Metrick2020}
+M.~A. Metrick, 2nd, N.~d.~C. Ferreira, E.~Saijo, A.~Kraus, K.~Newell,
+  G.~Zanusso, M.~Vendruscolo, B.~Ghetti, B.~Caughey, A single ultrasensitive
+  assay for detection and discrimination of tau aggregates of alzheimer and
+  pick diseases, Acta Neuropathol Commun 8~(1) (2020) 22.
+
+\bibitem{Fiorini2020}
+M.~Fiorini, G.~Iselle, D.~Perra, M.~Bongianni, S.~Capaldi, L.~Sacchetto,
+  S.~Ferrari, A.~Mombello, S.~Vascellari, S.~Testi, S.~Monaco, G.~Zanusso,
+  \href{https://www.mdpi.com/1422-0067/21/3/880}{High diagnostic accuracy of
+  rt-quic assay in a prospective study of patients with suspected scjd},
+  International Journal of Molecular Sciences 21~(3) (2020).
+\newblock \href {https://doi.org/10.3390/ijms21030880}
+  {\path{doi:10.3390/ijms21030880}}.
+\newline\urlprefix\url{https://www.mdpi.com/1422-0067/21/3/880}
+
+\bibitem{Franceschini2017}
+A.~Franceschini, S.~Baiardi, A.~G. Hughson, N.~McKenzie, F.~Moda, M.~Rossi,
+  S.~Capellari, A.~Green, G.~Giaccone, B.~Caughey, P.~Parchi, High diagnostic
+  value of second generation csf rt-quic across the wide spectrum of cjd
+  prions, Sci Rep (9 2017).
+\newblock \href {https://doi.org/10.1038/s41598-017-10922-w}
+  {\path{doi:10.1038/s41598-017-10922-w}}.
+
+\bibitem{Picasso-Risso2022}
+C.~Picasso-Risso, M.~D. Schwabenlander, G.~Rowden, M.~Carstensen, J.~C. Bartz,
+  P.~A. Larsen, T.~M. Wolf, Assessment of {Real-Time} {Quaking-Induced}
+  conversion ({RT-QuIC}) assay, immunohistochemistry and {ELISA} for detection
+  of chronic wasting disease under field conditions in {White-Tailed} deer: A
+  bayesian approach, Pathogens 11~(5) (2022).
+
+\bibitem{Holz2021}
+C.~L. Holz, J.~R. Darish, K.~Straka, N.~Grosjean, S.~Bolin, M.~Kiupel,
+  S.~Sreevatsan, Evaluation of {Real-Time} {Quaking-Induced} conversion,
+  {ELISA}, and immunohistochemistry for chronic wasting disease diagnosis,
+  Front Vet Sci 8 (2021) 824815.
+
+\bibitem{Rowden2023}
+G.~R. Rowden, C.~Picasso-Risso, M.~Li, M.~D. Schwabenlander, T.~M. Wolf, P.~A.
+  Larsen, \href{https://www.mdpi.com/2076-0817/12/2/309/htm
+  https://www.mdpi.com/2076-0817/12/2/309}{Standardization of data analysis for
+  rt-quic-based detection of chronic wasting disease}, Pathogens 12 (2023) 309.
+\newblock \href {https://doi.org/10.3390/PATHOGENS12020309/S1}
+  {\path{doi:10.3390/PATHOGENS12020309/S1}}.
+\newline\urlprefix\url{https://www.mdpi.com/2076-0817/12/2/309/htm
+  https://www.mdpi.com/2076-0817/12/2/309}
+
+\bibitem{R2024}
+{R Core Team}, \href{https://www.R-project.org/}{R: A Language and Environment
+  for Statistical Computing}, R Foundation for Statistical Computing, Vienna,
+  Austria (2024).
+\newline\urlprefix\url{https://www.R-project.org/}
+
+\bibitem{Christenson2023}
+P.~R. Christenson, M.~Li, G.~Rowden, P.~A. Larsen, S.-H. Oh,
+  \href{https://doi.org/10.1021/acs.nanolett.3c01001}{Nanoparticle-enhanced
+  rt-quic (nano-quic) diagnostic assay for misfolded proteins}, Nano Letters
+  23~(9) (2023) 4074--4081, pMID: 37126029.
+\newblock \href
+  {http://arxiv.org/abs/https://doi.org/10.1021/acs.nanolett.3c01001}
+  {\path{arXiv:https://doi.org/10.1021/acs.nanolett.3c01001}}, \href
+  {https://doi.org/10.1021/acs.nanolett.3c01001}
+  {\path{doi:10.1021/acs.nanolett.3c01001}}.
+\newline\urlprefix\url{https://doi.org/10.1021/acs.nanolett.3c01001}
+
+\bibitem{Lee2024}
+D.~J. Lee, P.~R. Christenson, G.~Rowden, N.~C. Lindquist, P.~A. Larsen, S.-H.
+  Oh, \href{https://www.nature.com/articles/s44328-024-00006-x#citeas}{Rapid
+  on-site amplification and visual detection of misfolded proteins via
+  microfluidic quaking-induced conversion (micro-quic)}, npj Biosensing 1~(6)
+  (7 2024).
+\newblock \href {https://doi.org/10.1038/s44328-024-00006-x}
+  {\path{doi:10.1038/s44328-024-00006-x}}.
+\newline\urlprefix\url{https://www.nature.com/articles/s44328-024-00006-x#citeas}
+
+\bibitem{Gallups2022}
+N.~J. Gallups, A.~S. Harms,
+  \href{https://dx.doi.org/10.1093/brain/awac062}{‘seeding’ the idea of
+  early diagnostics in synucleinopathies}, Brain 145 (2022) 418--419.
+\newblock \href {https://doi.org/10.1093/BRAIN/AWAC062}
+  {\path{doi:10.1093/BRAIN/AWAC062}}.
+\newline\urlprefix\url{https://dx.doi.org/10.1093/brain/awac062}
+
+\bibitem{Henderson2015}
+D.~M. Henderson, K.~A. Davenport, N.~J. Haley, N.~D. Denkers, C.~K. Mathiason,
+  E.~A. Hoover, Quantitative assessment of prion infectivity in tissues and
+  body fluids by real-time quaking-induced conversion, Journal of General
+  Virology 96 (2015) 210--219.
+\newblock \href {https://doi.org/10.1099/vir.0.069906-0}
+  {\path{doi:10.1099/vir.0.069906-0}}.
+
+\bibitem{ggplot2016}
+H.~Wickham, \href{https://ggplot2.tidyverse.org}{ggplot2: Elegant Graphics for
+  Data Analysis}, Springer-Verlag New York, 2016.
+\newline\urlprefix\url{https://ggplot2.tidyverse.org}
+
+\end{thebibliography}
