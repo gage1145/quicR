@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.9.18)  13 FEB 2025 15:11
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.9.18)  13 FEB 2025 16:43
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -292,27 +292,35 @@ Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \float@box=\box83
 \@float@everytoks=\toks21
 \@floatcapt=\box84
+) (C:\Users\gage1\AppData\Local\Programs\MiKTeX\tex/latex/base\fontenc.sty
+Package: fontenc 2021/04/29 v2.0v Standard LaTeX package
+) (C:\Users\gage1\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\helvet.sty
+Package: helvet 2020/03/25 PSNFSS-v9.3 (WaS) 
+)
+LaTeX Font Info:    Trying to load font information for T1+phv on input line 52.
+ (C:\Users\gage1\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\t1phv.fd
+File: t1phv.fd 2020/03/25 scalable font definitions for T1/phv.
 ) (softwareX_submission.aux)
 \openout1 = `softwareX_submission.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 49.
-LaTeX Font Info:    ... okay on input line 49.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 49.
-LaTeX Font Info:    ... okay on input line 49.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 49.
-LaTeX Font Info:    ... okay on input line 49.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 49.
-LaTeX Font Info:    ... okay on input line 49.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 49.
-LaTeX Font Info:    ... okay on input line 49.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 49.
-LaTeX Font Info:    ... okay on input line 49.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 49.
-LaTeX Font Info:    ... okay on input line 49.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 49.
-LaTeX Font Info:    ... okay on input line 49.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 49.
-LaTeX Font Info:    ... okay on input line 49.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
  (C:\Users\gage1\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count312
@@ -328,42 +336,64 @@ LaTeX Font Info:    ... okay on input line 49.
 \everyMPtoPDFconversion=\toks23
 ) (C:\Users\gage1\AppData\Local\Programs\MiKTeX\tex/latex/epstopdf-pkg\epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
+ (C:\Users\gage1\AppData\Local\Programs\MiKTeX\tex/latex/grfext\grfext.sty
+Package: grfext 2019/12/03 v1.3 Manage graphics extensions (HO)
+)
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 485.
+Package grfext Info: Graphics extension search list:
+(grfext)             [.pdf,.png,.jpg,.mps,.jpeg,.jbig2,.jb2,.PDF,.PNG,.JPG,.JPEG,.JBIG2,.JB2,.eps]
+(grfext)             \AppendGraphicsExtensions on input line 504.
  (C:\Users\gage1\AppData\Local\Programs\MiKTeX\tex/latex/00miktex\epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 ))
-Package hyperref Info: Link coloring OFF on input line 49.
+Package hyperref Info: Link coloring OFF on input line 52.
  (softwareX_submission.out) (softwareX_submission.out)
 \@outlinefile=\write4
 \openout4 = `softwareX_submission.out'.
 
+
+Overfull \hbox (3.40384pt too wide) in paragraph at lines 90--92
+\T1/phv/m/n/12 valu-able di-ag-nos-tic tool for pro-tein mis-fold-ing dis-or-ders such as Creutzfeldt-
+ []
+
+LaTeX Font Info:    Font shape `T1/phv/m/it' in size <12> not available
+(Font)              Font shape `T1/phv/m/sl' tried instead on input line 94.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 101.
+(Font)              <7> on input line 105.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 101.
+(Font)              <5> on input line 105.
+LaTeX Font Info:    Font shape `T1/phv/m/it' in size <10> not available
+(Font)              Font shape `T1/phv/m/sl' tried instead on input line 105.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <12> on input line 101.
+(Font)              <12> on input line 105.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 101.
+(Font)              <8> on input line 105.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 101.
+(Font)              <6> on input line 105.
+LaTeX Font Info:    Font shape `T1/phv/m/it' in size <7> not available
+(Font)              Font shape `T1/phv/m/sl' tried instead on input line 105.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <9> on input line 109.
-LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 115.
- (C:\Users\gage1\AppData\Local\Programs\MiKTeX\tex/latex/base\t1cmtt.fd
+(Font)              <9> on input line 113.
+LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 119.
+(C:\Users\gage1\AppData\Local\Programs\MiKTeX\tex/latex/base\t1cmtt.fd
 File: t1cmtt.fd 2023/04/13 v2.5m Standard LaTeX font definitions
 )
-Underfull \hbox (badness 10000) in paragraph at lines 117--118
+Underfull \hbox (badness 10000) in paragraph at lines 121--122
 [][]$\T1/cmtt/m/n/9 https : / / github . com / gage1145 / quicR /
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 127--128
+Underfull \hbox (badness 2529) in paragraph at lines 131--131
+[]\T1/phv/m/n/9 If avail-able Link to de-vel-oper doc-u-men-ta-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 131--132
 [][]$\T1/cmtt/m/n/9 https : / / cran . r-[]project . org / web /
  []
 
 
-Overfull \hbox (31.55281pt too wide) in paragraph at lines 109--132
+Overfull \hbox (30.34851pt too wide) in paragraph at lines 113--136
 [][]
  []
 
@@ -371,35 +401,35 @@ Overfull \hbox (31.55281pt too wide) in paragraph at lines 109--132
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\<def>-command' on input line 139.
+(hyperref)                removing `\<def>-command' on input line 145.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\cnotenum' on input line 139.
+(hyperref)                removing `\cnotenum' on input line 145.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\<def>-command' on input line 139.
+(hyperref)                removing `\<def>-command' on input line 145.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\@corref' on input line 139.
+(hyperref)                removing `\@corref' on input line 145.
 
 [1
 
 
-{C:/Users/gage1/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}
+{C:/Users/gage1/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/gage1/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc}]
+
+[2
 pdfTeX warning (ext4): destination with the same identifier (name{table.1}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.139 
-      ]
-
-[2]
-<images/workflow2.png, id=168, 3854.4pt x 2289.55376pt>
+l.159     B
+           y combining standardized metrics, advanced visualization tools, a...]
+<images/workflow2.png, id=129, 3854.4pt x 2289.55376pt>
 File: images/workflow2.png Graphic file (type png)
 <use images/workflow2.png>
-Package pdftex.def Info: images/workflow2.png  used on input line 172.
+Package pdftex.def Info: images/workflow2.png  used on input line 177.
 (pdftex.def)             Requested size: 390.0pt x 231.65884pt.
 
 
@@ -407,7 +437,7 @@ Package pdftex.def Info: images/workflow2.png  used on input line 172.
 pdfTeX warning (ext4): destination with the same identifier (name{figure.1}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.178 
+l.183 
        <./images/workflow2.png>]
 > Step: init table outer spec.
 > Step: parse table options.
@@ -416,43 +446,54 @@ l.178
 > Step: parse table inner spec.
 > Step: execute table commands.
 > Step: calculate cell and line sizes.
+
+
+Package tabularray Warning: Table width is too small, need 20.02504pt more!
+
 > Step: build the whole table.
 
+Overfull \hbox (20.02504pt too wide) in paragraph at lines 219--220
+[][] 
+ []
 
-[4
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+
+[4]
+Overfull \hbox (5.84357pt too wide) in paragraph at lines 230--231
+[]\T1/phv/b/n/12 convert_tables()\T1/phv/m/n/12 : ac-cepts the ta-bles out-putted from \T1/phv/b/n/12 or-ga-nize_tables
+ []
+
+
+Overfull \hbox (11.17897pt too wide) in paragraph at lines 260--261
+[]\T1/phv/m/n/12 There are three an-a-lyt-i-cal met-rics with ded-i-cated func-tions: time-to-threshold
+ []
+
+
+
+[5
 pdfTeX warning (ext4): destination with the same identifier (name{table.2}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.219 
+l.261 
       ]
-Overfull \hbox (1.98453pt too wide) in paragraph at lines 221--222
-[]\T1/cmr/m/n/12 The meta-data is de-fined as ei-ther sample-dependent or -independent. Sample-
- []
+<images/metric_example.png, id=159, 867.24pt x 433.62pt>
+File: images/metric_example.png Graphic file (type png)
+<use images/metric_example.png>
+Package pdftex.def Info: images/metric_example.png  used on input line 281.
+(pdftex.def)             Requested size: 390.0pt x 195.00148pt.
 
 
-Overfull \hbox (49.04271pt too wide) in paragraph at lines 226--227
-[]\T1/cmr/m/n/12 Samples lo-ca-tions can be ex-tracted based on their well ID. The ``get_sample_locations''
- []
-
-
-
-[5]
-Overfull \hbox (17.90814pt too wide) in paragraph at lines 245--246
-\T1/cmr/m/n/12 nor-mal-ized data set. The func-tion in-cludes two ad-di-tional ar-gu-ments, ``bg_cycle''
- []
-
-
-Overfull \hbox (2.41943pt too wide) in paragraph at lines 248--249
-[]\T1/cmr/m/n/12 There are three an-a-lyt-i-cal met-rics with ded-i-cated func-tions: time-to-threshold
- []
-
-
-
-[6]
-
-[7] (softwareX_submission.bbl
+[6
+pdfTeX warning (ext4): destination with the same identifier (name{figure.2}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.311 
+       <./images/metric_example.png>] (softwareX_submission.bbl
 Underfull \hbox (badness 10000) in paragraph at lines 39--50
-\T1/cmr/m/n/12 URL []$\T1/cmtt/m/n/12 /pmc / articles / PMC4313917 / /pmc / articles / PMC4313917 /
+\T1/phv/m/n/12 URL []$\T1/cmtt/m/n/12 /pmc / articles / PMC4313917 / /pmc / articles / PMC4313917 /
  []
 
 
@@ -462,29 +503,51 @@ Underfull \hbox (badness 10000) in paragraph at lines 39--50
 
 
 
+[7]
+Underfull \hbox (badness 1394) in paragraph at lines 52--58
+[]\T1/phv/m/n/12 M. Bon-gianni, A. Lado-gana, S. Ca-paldi, S. Klotz, S. Ba-iardi,
+ []
+
+
+Underfull \hbox (badness 1237) in paragraph at lines 72--77
+\T1/phv/m/n/12 G. Zanusso, B. Ghetti, K. J. Camp-bell, J. Sa-far, D. Galasko,
+ []
+
+
+Underfull \hbox (badness 1735) in paragraph at lines 72--77
+\T1/phv/m/n/12 B. Caughey, Rapid and ultra-sensitive quan-ti-ta-tion of disease-
+ []
+
+
+
 [8]
-Underfull \hbox (badness 1019) in paragraph at lines 95--101
-\T1/cmr/m/n/12 wide spec-trum of cjd pri-ons, Sci Rep (9 2017).  []$\T1/cmtt/m/n/12 doi : 10 . 1038 /
+Underfull \hbox (badness 10000) in paragraph at lines 103--108
+[]\T1/phv/m/n/12 C. Picasso-Risso, M. D. Schwaben-lan-der, G. Row-den,
  []
 
 
-
-[9]
 Underfull \hbox (badness 10000) in paragraph at lines 116--124
-\T1/cmr/m/n/12 URL []$\T1/cmtt/m/n/12 https : / / www . mdpi . com / 2076-[]0817 / 12 / 2 / 309 / htmhttps :
+\T1/phv/m/n/12 URL []$\T1/cmtt/m/n/12 https : / / www . mdpi . com / 2076-[]0817 / 12 / 2 / 309 / htmhttps :
  []
 
 
-Underfull \hbox (badness 2189) in paragraph at lines 132--142
-\T1/cmr/m/n/12 folded pro-teins[], Nano Let-ters 23 (9) (2023) 4074--4081, pMID:
+Underfull \hbox (badness 3058) in paragraph at lines 132--142
+[]\T1/phv/m/n/12 P. R. Chris-ten-son, M. Li, G. Row-den, P. A. Larsen, S.-H.
+ []
+
+
+Underfull \hbox (badness 1210) in paragraph at lines 132--142
+\T1/phv/m/n/12 Oh, []Nanoparticle-enhanced rt-quic (nano-quic) di-ag-nos-tic as-say
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 144--152
-\T1/cmr/m/n/12 URL []$\T1/cmtt/m/n/12 https : / / www . nature . com / articles / s44328-[]024-[]00006-[]x #
+\T1/phv/m/n/12 URL []$\T1/cmtt/m/n/12 https : / / www . nature . com / articles / s44328-[]024-[]00006-[]x #
  []
 
-)
+
+
+[9])
 
 [10] (softwareX_submission.aux)
  ***********
@@ -492,20 +555,20 @@ LaTeX2e <2024-06-01> patch level 2
 L3 programming layer <2024-08-30>
  ***********
 Package rerunfilecheck Info: File `softwareX_submission.out' has not changed.
-(rerunfilecheck)             Checksum: 7AEE9863F02118706685D5EC4958EACA;3421.
+(rerunfilecheck)             Checksum: CB3518B26362BDE455BA4D19C554621A;2047.
  ) 
 Here is how much of TeX's memory you used:
- 11799 strings out of 473899
- 207433 string characters out of 5726500
- 649637 words of memory out of 5000000
- 34483 multiletter control sequences out of 15000+600000
- 573207 words of font info for 64 fonts, out of 8000000 for 9000
+ 11922 strings out of 473899
+ 209924 string characters out of 5726500
+ 650293 words of memory out of 5000000
+ 34586 multiletter control sequences out of 15000+600000
+ 598381 words of font info for 77 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,12n,99p,982b,1166s stack positions out of 10000i,1000n,20000p,200000b,200000s
- <C:\Users\gage1\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ectt1200.pk> <C:\Users\gage1\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm0700.pk> <C:\Users\gage1\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1000.pk> <C:\Users\gage1\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ectt0900.pk> <C:\Users\gage1\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm0900.pk> <C:\Users\gage1\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx0900.pk> <C:\Users\gage1\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecti1200.pk> <C:\Users\gage1\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1200.pk> <C:\Users\gage1\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecti1000.pk> <C:\Users\gage1\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecti0700.pk> <C:\Users\gage1\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm0800.pk> <C:\Users\gage1\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1200.pk> <C:\Users\gage1\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1728.pk><C:/Users/gage1/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/gage1/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/gage1/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Users/gage1/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
-Output written on softwareX_submission.pdf (10 pages, 468868 bytes).
+ 75i,12n,99p,982b,1162s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ <C:\Users\gage1\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ectt1200.pk> <C:\Users\gage1\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1200.pk> <C:\Users\gage1\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ectt0900.pk><C:/Users/gage1/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/gage1/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Users/gage1/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/gage1/AppData/Local/Programs/MiKTeX/fonts/type1/urw/helvetic/uhvb8a.pfb><C:/Users/gage1/AppData/Local/Programs/MiKTeX/fonts/type1/urw/helvetic/uhvr8a.pfb><C:/Users/gage1/AppData/Local/Programs/MiKTeX/fonts/type1/urw/helvetic/uhvro8a.pfb>
+Output written on softwareX_submission.pdf (10 pages, 531362 bytes).
 PDF statistics:
- 802 PDF objects out of 1000 (max. 8388607)
- 74 named destinations out of 1000 (max. 500000)
- 166 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 385 PDF objects out of 1000 (max. 8388607)
+ 75 named destinations out of 1000 (max. 500000)
+ 107 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -43,10 +43,14 @@
 % \usepackage{lineno}
 \usepackage{tabularray}
 \usepackage{float}
+\usepackage[T1]{fontenc}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
 
 \journal{SoftwareX}
 
 \begin{document}
+
 
 \renewcommand{\labelenumii}{\arabic{enumi}.\arabic{enumii}}
 
@@ -73,7 +77,7 @@
 %% \address{Address\fnref{label3}}
 %% \fntext[label3]{}
 
-\title{quicR: An R Library for Streamlined Data Handling of Real-Time Quaking Induced Conversion Assays}
+\title{quicR:\ An R Library for Streamlined Data Handling of Real-Time Quaking Induced Conversion Assays}
 
 \author[label1,label2,label3]{Gage Rowden\corref{cor}}
 \fntext[ ]{\textit{E-mail address: }rowde002@umn.edu}
@@ -84,7 +88,7 @@
 \address[label3]{Priogen Corp., USA.}
 
 \begin{abstract}
-Real-time quaking induced conversion (RT-QuIC) has quickly become a valuable diagnostic tool for protein misfolding disorders such as Creutzfeldt-Jakob disease and Parkinson's disease. Given that the technology is relatively new, academic and industry standards for quality filtering data and high throughput analysis of results have yet to be fully established. The open source R library, quicR, was developed to provide a standardized approach to RT-QuIC data analysis. quicR provides functions, which can be easily integrated into existing R workflows, for data curation, analysis, and vizualization.
+Real-time quaking induced conversion (RT-QuIC) has quickly become a valuable diagnostic tool for protein misfolding disorders such as Creutzfeldt-Jakob disease and Parkinson's disease. Given that the technology is relatively new, academic and industry standards for quality filtering data and high throughput analysis of results have yet to be fully established. The open source R library, quicR, was developed to provide a standardized approach to RT-QuIC data analysis.\ quicR provides functions, which can be easily integrated into existing R workflows, for data curation, analysis, and vizualization.
 \end{abstract}
 
 \begin{keyword}
@@ -107,27 +111,27 @@ R package \sep{} RT-QuIC \sep{} prion \sep{} diagnostics \sep{} CJD \sep{} Parki
 \begin{table}[ht]
     \fontsize{9}{9}\selectfont
     \begin{tabular}{|l|p{6.5cm}|p{6.5cm}|}
-        \hline
+        \hline{}
         \textbf{Nr.} & \textbf{Code metadata description} & \textbf{Metadata} \\
-        \hline
+        \hline{}
         C1 & Current code version & V2.1.0 \\
-        \hline
+        \hline{}
         C2 & Permanent link to code/repository used for this code version & \url{https://github.com/gage1145/quicR} \\
-        \hline
+        \hline{}
         C3  & Permanent link to Reproducible Capsule & \url{https://github.com/gage1145/quicR/releases/tag/v2.1.0}\\
-        \hline
+        \hline{}
         C4 & Legal Code License & GPL-3 \\
-        \hline
+        \hline{}
         C5 & Code versioning system used & git \\
-        \hline
+        \hline{}
         C6 & Software code languages, tools, and services used & R \\
-        \hline
+        \hline{}
         C7 & Compilation requirements, operating environments \& dependencies & R (>=4.1.0) \\
-        \hline
+        \hline{}
         C8 & If available Link to developer documentation/manual & \url{https://cran.r-project.org/web/packages/quicR/quicR.pdf}\\
-        \hline
+        \hline{}
         C9 & Support email for questions & rowde002@umn.edu\\
-        \hline
+        \hline{}
     \end{tabular}
 \caption{Code metadata}
 \label{codeMetadata} 
@@ -165,7 +169,8 @@ R package \sep{} RT-QuIC \sep{} prion \sep{} diagnostics \sep{} CJD \sep{} Parki
 
 \section{Software description}
     \subsection{Software architecture}
-        quicR was developed to address the growing need for efficient data conversion, analysis, and visualization of RT-QuIC data. With a focus on usability and reproducibility, the package is designed to standardize workflows and ensure compatibility across multiple laboratories. Its primary input format is data exported as Excel workbooks from the proprietary MARS software (BMG Labtech, Ortenberg, Germany), providing seamless integration with existing experimental workflows. See Figure \ref{fig:workflow} for a detailed workflow.
+        quicR was developed to address the growing need for efficient data conversion, analysis, and visualization of RT-QuIC data (Figure \ref{fig:workflow}). With a focus on usability and reproducibility, the package is designed to standardize workflows and ensure compatibility across multiple laboratories. 
+        % Its primary input format is data exported as Excel workbooks from the proprietary MARS software (BMG Labtech, Ortenberg, Germany), providing seamless integration with existing experimental workflows.
         \begin{figure}[ht]
             \caption{Workflow hierarchy of the quicR package. Blue nodes indicate steps where BMG software is needed. Purple nodes indicate functions dedicated to handling metadata. Red nodes are functions that acquire and manipulate raw data. Orange nodes are functions which calculate some metric. Finally, yellow nodes represent data analysis endpoints.}
             \centering
@@ -174,19 +179,22 @@ R package \sep{} RT-QuIC \sep{} prion \sep{} diagnostics \sep{} CJD \sep{} Parki
         \end{figure}
 
 \subsection{Software functionalities}
-    The implementation of the quicR package encompasses several streamlined processes designed to facilitate data input, cleaning, transformation, and analysis of real-time fluorescence data. This section provides a comprehensive guide to utilizing the package's key functionalities, detailing how to:
-
+    The implementation of the quicR package encompasses several streamlined processes designed to facilitate data input, cleaning, transformation, and analysis of RT-QuIC data. This section provides a comprehensive guide to utilizing the package's key functionalities, detailing how to:
+        
     \begin{enumerate}
         \item Format and input sample data into Omega control software (BMG Labtech, Ortenberg, Germany).
-        \item Extract, clean, and organize metadata and raw fluorescence data.
-        \item Apply transformations and normalization to raw data for downstream analysis.
+        \item Extract, clean, and organize metadata and raw data and apply transformations and normalization for downstream analysis.
         \item Calculate critical analytical metrics, such as time-to-threshold (TtT), rate of amyloid formation (RAF), maxpoint ratio (MPR), and maximum slope (MS).
+        \item Vizualize raw and analyzed data.
     \end{enumerate}
 
     These steps are designed to enhance reproducibility, minimize manual data handling, and enable seamless integration with the MARS software workflow. Through practical examples, this section illustrates how each function operates, along with expected input and output formats, ensuring clarity and ease of use for researchers.
 
-    \subsection{Input of Sample IDs into Omega Control Software}
-        The Omega control software allows input of a TXT file containing sample IDs, dilution factors, and their well locations. This file is uniquely formatted, and not easily reproduced manually. The function, ``BMG\_format'', allows for input of a CSV file containing the plate layout (see Table~\ref{tbl:layout} for proper formatting), and exports the formatted TXT file. The file can then be imported into the control software before running.
+    \subsubsection{Input of Sample IDs into Omega Control Software}
+        \begin{enumerate}
+            \item \textbf{BMG\_format()}: The Omega control software allows input of a TXT file containing sample IDs, dilution factors, and their well locations. This file is uniquely formatted, and not easily reproduced manually. This function allows for input of a CSV file containing the plate layout (see Table~\ref{tbl:layout} for proper formatting), and exports the formatted TXT file. The file can then be imported into the control software before running.
+        \end{enumerate}
+        
         \begin{table}[h]
             \caption{Example CSV file plate layout for input into the ``BMG\_format'' function. The top left corner should be cell ``A1'' in the CSV file. The top numbered row and the left-most lettered column should never be altered.\medskip}
             \label{tbl:layout}
@@ -214,52 +222,68 @@ R package \sep{} RT-QuIC \sep{} prion \sep{} diagnostics \sep{} CJD \sep{} Parki
     % \subsection{Formatted Plate Layout for MARS input}
     %     The function, "BMG_format", includes the logical argument "write_file". If TRUE, it will create a TXT file. The path can be given to the "save_path" argument, and the file name can be supplied to the "save_name" argument. The text file will be formatted as follows, and can be imported into MARS.
 
-    \subsection{Data Cleaning and Transformation}
+    \subsubsection{Data Cleaning and Transformation}
         The MARS software (BMG Labtech, Ortenberg, Germany) exports real-time data as an Excel workbook. Typically, the first sheet in the workbook will include microplate views of both raw data and metadata; however, the metadata on this page is what is most useful for downstream processes. Those tables include the ``Sample IDa'' and ``Dilutions'' tables (if dilutions were included in the MARS export). For much of the downstream analysis, it is crucial that the ``Sample IDs'' table was exported from MARS.\@ If there is no table, the user can simply add it manually (see [@fig-sheet1] for proper formatting).
 
-        \subsubsection{Retrieving Metadata}
-            The metadata is defined as either sample-dependent or -independent. Sample-dependent metadata includes information such as sample IDs and dilution factors, whereas sample-independent metadata includes the date, time, reaction ID, etc.
+        \begin{enumerate}
+            \item \textbf{organize\_tables()}: returns a list of tables contained in the first sheet of the exported Excel sheet. These tables contain valuable metadata such as sample IDs, dilution factors, and microplate locations.
+            \item \textbf{convert\_tables()}: accepts the tables outputted from \textbf{organize\_tables} and converts them to columns in a dataframe.
+            \item \textbf{get\_sample\_locations()}: extracts the well locations for each sample. Output of this function is used as an argument for vizualizing a microplate-level view of real-time data.
+        \end{enumerate}
+            % The metadata is defined as either sample-dependent or -independent. Sample-dependent metadata includes information such as sample IDs and dilution factors, whereas sample-independent metadata includes the date, time, reaction ID, etc.
 
-            The dependent metadata can be retrieved using the ``organize\_tables'' and ``convert\_tables'' functions. The former returns a list of tables, and the latter converts each table into a column in a single data frame.
+            % The dependent metadata can be retrieved using the ``organize\_tables'' and ``convert\_tables'' functions. The former returns a list of tables, and the latter converts each table into a column in a single data frame.
 
-        \subsubsection{Sample Locations}
-            Samples locations can be extracted based on their well ID.\@ The ``get\_sample\_locations'' function accepts additional arguments if dilution factors were exported from MARS.\@ The ``dilution\_bool'' argument can be set to TRUE if dilutions are to be included in the output. The ``dilution\_fun'' argument will supply a function for transforming the dilution factors (e.g.\ if the user would want to perform a log transformation). The user can supply a delimiter using the ``sep'' argument. The output of this function is critical as an argument in the ``plate\_view'' function which is further explained in the visualization section.
+        % \subsubsection{Sample Locations}
+        %     Samples locations can be extracted based on their well ID.\@ The ``get\_sample\_locations'' function accepts additional arguments if dilution factors were exported from MARS.\@ The ``dilution\_bool'' argument can be set to TRUE if dilutions are to be included in the output. The ``dilution\_fun'' argument will supply a function for transforming the dilution factors (e.g.\ if the user would want to perform a log transformation). The user can supply a delimiter using the ``sep'' argument. The output of this function is critical as an argument in the ``plate\_view'' function which is further explained in the visualization section.
 
             % \subsubsection{Sample-Independent Metadata}
     \subsection{Retrieving and Manipulating Raw Data}
         The raw, real-time data is typically found on the second sheet of the Excel workbook exported from MARS. There are three functions dedicated to the retrieval and cleaning of raw data.
 
     \begin{enumerate}
-        \item \textbf{get\_real}: Retrieves the raw data from the Excel file, and outputs it as a dataframe.
-        \item \textbf{transpose\_real}: Swaps the rows and columns which makes some downstream analyses easier.
-        \item \textbf{normalize\_RFU}: normalizes the raw data by dividing each read by background fluorescence at a given cycle.
+        \item \textbf{get\_real()}: Retrieves the raw data from the Excel file, and outputs it as a dataframe.
+        \item \textbf{transpose\_real()}: Swaps the rows and columns which makes some downstream analyses easier.
+        \item \textbf{normalize\_RFU()}: normalizes the raw data by dividing each read by background fluorescence at a given cycle.
     \end{enumerate}
 
-        \subsubsection{Retrieve Raw Data}
-            Raw data can be retrieved using the ``get\_real'' function. The logical argument, ``ordered'', indicates whether the user would prefer the columns to be ordered by well or by sample ID.\@ By default, it is FALSE which will order the data by well. This should almost always be the case for easier integration with other downstream functions. Additionally, since there can be more than one instance of real-time data (depending on if the user added some calculations in MARS), ``get\_real'' returns a list of dataframes. Therefore, the output must be indexed to access the data frame of interest.
+        % \subsubsection{Retrieve Raw Data}
+        %     Raw data can be retrieved using the ``get\_real'' function. The logical argument, ``ordered'', indicates whether the user would prefer the columns to be ordered by well or by sample ID.\@ By default, it is FALSE which will order the data by well. This should almost always be the case for easier integration with other downstream functions. Additionally, since there can be more than one instance of real-time data (depending on if the user added some calculations in MARS), ``get\_real'' returns a list of dataframes. Therefore, the output must be indexed to access the data frame of interest.
 
-        \subsubsection{Transpose Raw Data}
-            This data is structured such that each sample is its own column (variable) and each row (observation) is a time point. While this format is technically correct, a transposed format is more ideal for some downstream manipulation. This operation is performed using the function, ``transpose\_real''. After transposition, each time point is an individual column (variable), and each sample is an individual row (observation).
+        % \subsubsection{Transpose Raw Data}
+        %     This data is structured such that each sample is its own column (variable) and each row (observation) is a time point. While this format is technically correct, a transposed format is more ideal for some downstream manipulation. This operation is performed using the function, ``transpose\_real''. After transposition, each time point is an individual column (variable), and each sample is an individual row (observation).
 
-        \subsubsection{Normalize Raw Data}
-            The function ``normalize\_RFU'' will convert the raw data into a background normalized data set. The function includes two additional arguments, ``bg\_cycle'' (the cycle which will be used as the background fluorescence value) and ``transposed'' (if FALSE, will make a call to the ``transpose\_real'' function). Note that the fourth time point is all ``1's'' since this was designated the background cycle.
+        % \subsubsection{Normalize Raw Data}
+        %     The function ``normalize\_RFU'' will convert the raw data into a background normalized data set. The function includes two additional arguments, ``bg\_cycle'' (the cycle which will be used as the background fluorescence value) and ``transposed'' (if FALSE, will make a call to the ``transpose\_real'' function). Note that the fourth time point is all ``1's'' since this was designated the background cycle.
 
     \subsection{Calculations}
-        There are three analytical metrics with dedicated functions: time-to-threshold (TtT), maxpoint ratio (MPR), and maximum slope (MS). The rate of amyloid formation does not have a designated function since it is simply the reciprocal of the time-to-threshold (1/TtT). Each function below accepts input from the ``transpose\_real'' or the ``normalize\_RFU'' functions. See @tbl-metrics for an example of the output of these functions.
+        There are three analytical metrics with dedicated functions: time-to-threshold (TtT), maxpoint ratio (MPR), and maximum slope (MS). The rate of amyloid formation does not have a designated function since it is simply the reciprocal of the time-to-threshold (1/TtT). Each function below accepts input from the ``transpose\_real'' or the ``normalize\_RFU'' functions. See Figure \ref{fig:metrics} for an example of the output of these functions.
 
-        \subsubsection{Thresholds}
-            Many publications have different methods of determining thresholds. By convention, the most popular method is to take the average background fluorescence of the every well and add some multiple of standard deviations~\cite{Rowden2023}. The quicR package provides the ``calculate\_threshold'' function for this purpose. A value can be provided as the optional argument, ``multiplier'', which will be applied to the standard deviation.
+        \begin{enumerate}
+            \item \textbf{calculate\_threhold()}: returns a value which is a given number of standard deviations above the average background fluorescence of the entire microplate.
+            % Many publications have different methods of determining thresholds. By convention, the most popular method is to take the average background fluorescence of the every well and add some multiple of standard deviations~\cite{Rowden2023}. The quicR package provides the ``calculate\_threshold'' function for this purpose. A value can be provided as the optional argument, ``multiplier'', which will be applied to the standard deviation.
 
-        \subsubsection{Time-to-threshold and Rate of Amyloid Formation}
-            TtT is calculated using the ``calculate\_TtT'' function. The function must be supplied a threshold; default value is 2 (i.e.\ twice the background fluorescence if the data is normalized). A starting column should also be given as an integer; default value is 3. This is essentially asking how many columns of metadata are included before the fluorescence reads begin. 
+            \item \textbf{calculate\_TtT()}: takes the real-time data and calculates the time in hours needed to reach a given threshold value.
+            % TtT is calculated using the ``calculate\_TtT'' function. The function must be supplied a threshold; default value is 2 (i.e.\ twice the background fluorescence if the data is normalized). A starting column should also be given as an integer; default value is 3. This is essentially asking how many columns of metadata are included before the fluorescence reads begin. 
 
-            TtT is calculated by iterating through each row and checking if a value is greater than the threshold. If the value is greater, the slope of the previous time-point to the current time-point is calculated, and the time intersection of the current read is returned.
+            % TtT is calculated by iterating through each row and checking if a value is greater than the threshold. If the value is greater, the slope of the previous time-point to the current time-point is calculated, and the time intersection of the current read is returned.
 
-        \subsubsection{Maxpoint Ratio}
-            MPR is calculated by the ``calculate\_MPR'' function. Data must be normalized in order to derive this metric. In a normalized data set, the MPR is simply the maximum value achieved during the run. Raw data can be passed to this function, but the argument ``data\_is\_norm'', must be set to FALSE.\ This will pass the raw data to ``normalize\_RFU'' before calculating the MPR values.
+            \item \textbf{calculate\_MPR()}: accepts raw or normalized data and returns the maximum value obtained during the run. If supplied with raw data, it will make a call to the normalize\_RFU() function.
+            % MPR is calculated by the ``calculate\_MPR'' function. Data must be normalized in order to derive this metric. In a normalized data set, the MPR is simply the maximum value achieved during the run. Raw data can be passed to this function, but the argument ``data\_is\_norm'', must be set to FALSE.\ This will pass the raw data to ``normalize\_RFU'' before calculating the MPR values.
 
-        \subsubsection{Maximum Slope}
-            MS is calculated by the ``calculate\_MS'' function. The function iterates through each row using a rolling window which can be adjusted (default value is 3). Given the window size, the slope is calculated based on change in fluorescence divided by the range of the window. The MS is simply the largest slope value recorded. The units are typically reported as $\Delta$RFU/h.
+            \item \textbf{calculate\_MS()}: computes the approximate derivative of the real-time data and returns the maximum value obtained during the run.
+            % MS is calculated by the ``calculate\_MS'' function. The function iterates through each row using a rolling window which can be adjusted (default value is 3). Given the window size, the slope is calculated based on change in fluorescence divided by the range of the window. The MS is simply the largest slope value recorded. The units are typically reported as $\Delta$RFU/h.
+        \end{enumerate}
+
+        \begin{figure}[h]
+            \caption{}
+            \centering{}
+            \includegraphics[width=\textwidth]{images/metric_example.png}
+            \label{fig:metrics}
+        \end{figure}
+
+    \subsection{Vizualization}
+        
     
     % \subsection{Sample code snippets analysis (optional)}
 \section{Illustrative examples}
