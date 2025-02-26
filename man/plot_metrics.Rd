@@ -33,6 +33,8 @@ A ggplot object
 Generates a faceted figure of boxplots.
 }
 \examples{
+# This test takes >5 sec
+\donttest{
 file <- system.file(
   "extdata/input_files",
   file = "test4.xlsx",
@@ -47,5 +49,6 @@ meta <- quicR::organize_tables(file) |>
 
 calculate_metrics(data, meta) |>
   plot_metrics()
+}
 
 }

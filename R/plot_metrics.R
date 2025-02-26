@@ -16,6 +16,8 @@
 #' @return A ggplot object
 #'
 #' @examples
+#' # This test takes >5 sec
+#' \donttest{
 #' file <- system.file(
 #'   "extdata/input_files",
 #'   file = "test4.xlsx",
@@ -30,6 +32,7 @@
 #'
 #' calculate_metrics(data, meta) |>
 #'   plot_metrics()
+#' }
 #'
 #' @export
 plot_metrics <- function(data, sample_col = "Sample IDs", fill = "Dilutions", dilution_bool = TRUE, nrow = 2, ncol = 2) {
