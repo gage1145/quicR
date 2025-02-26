@@ -71,4 +71,29 @@ ggsave("images/metric_example.png", width = 12, height = 6)
 
 
 
+# Boxplots ----------------------------------------------------------------
 
+
+
+file <- "../../inst/extdata/input_files/test4.xlsx"
+df_raw <- get_real(file)[[1]]
+df_norm <- normalize_RFU(df_raw)
+
+meta <- organize_tables(file) %>%
+  convert_tables()
+
+df_analyzed <- calculate_metrics(df_norm, meta) %>%
+  mutate(Dilutions = -log10(as.integer(Dilutions)))
+
+plot_metrics(df_analyzed)
+ggsave("images/boxplot.png", width = 12, height = 8)
+
+
+
+# Plate View --------------------------------------------------------------
+
+
+
+locations <- get_sample_locations(file)
+plate_view(df_raw, locations)
+ggsave("images/plate_view.png", width = 12, height = 8)
