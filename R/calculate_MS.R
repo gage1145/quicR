@@ -6,7 +6,7 @@
 #' @param window Integer designating how wide you want the sliding window to be for calculating the moving average slope.
 #' @param data_is_norm Logical; if FALSE, will make a call to normalize_RFU.
 #'
-#' @return A dataframe containing the real-time slope values as ΔRFU/sec.
+#' @return A dataframe containing the real-time slope values as change in RFU/sec.
 #'
 #' @importFrom slider slide_dbl
 #' @importFrom purrr map_dbl
