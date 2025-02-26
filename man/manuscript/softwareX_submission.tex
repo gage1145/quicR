@@ -139,8 +139,8 @@
 
     \section{Software description}
         \subsection{Software architecture}
-            quicR was developed to address the growing need for efficient data conversion, analysis, and visualization of RT-QuIC data (Figure \ref{fig:workflow}). With a focus on usability and reproducibility, the package is designed to standardize workflows and ensure compatibility across multiple laboratories. 
-            % Its primary input format is data exported as Excel workbooks from the proprietary MARS software (BMG Labtech, Ortenberg, Germany), providing seamless integration with existing experimental workflows.
+            quicR was developed to address the growing need for efficient data conversion, analysis, and visualization of RT-QuIC data (Figure \ref{fig:workflow}). With a focus on usability and reproducibility, the package is designed to standardize workflows and ensure compatibility across multiple laboratories. The overall architecture revolves around integration with the proprietary MARS software (BMG Labtech, Ortenberg, Germany) which exports raw data as Excel workbooks. The data from these workbooks is then curated into usable objects in the R environment, and visualized.
+
             \begin{figure}[ht]
                 \centering
                 \includegraphics[width=\textwidth]{images/workflow.png}
@@ -153,21 +153,22 @@
             
         \begin{enumerate}
             \item Format and input sample data into Omega control software (BMG Labtech, Ortenberg, Germany).
-            \item Extract, clean, and organize metadata and raw data and apply transformations and normalization for downstream analysis.
+            \item Extract, clean, and organize metadata and raw data and apply transformations/normalization for downstream analysis.
             \item Calculate critical analytical metrics, such as time-to-threshold (TtT), rate of amyloid formation (RAF), maxpoint ratio (MPR), and maximum slope (MS).
             \item Visualize raw and analyzed data.
         \end{enumerate}
 
-        These steps are designed to enhance reproducibility, minimize manual data handling, and enable seamless integration with the MARS software (BMG Labtech, Ortenberg, Germany) workflow. Through practical examples, this section illustrates how each function operates, along with expected input and output formats, ensuring clarity and ease of use for researchers.
+        These steps are designed to enhance reproducibility, minimize manual data handling, and enable seamless integration with the MARS software workflow.
 
         \subsubsection{Input of Sample IDs into Omega Control Software}
+            The Omega control software allows input of a TXT file containing sample IDs, dilution factors, and their well locations. This file is uniquely formatted, and not easily reproduced manually.
+
             \begin{enumerate}
-                \item \textbf{BMG\_format()}: The Omega control software allows input of a TXT file containing sample IDs, dilution factors, and their well locations. This file is uniquely formatted, and not easily reproduced manually. This function allows for input of a CSV file containing the plate layout (see Table \ref{tbl:layout} for proper formatting), and exports the formatted TXT file. The file can then be imported into the control software before running.
+                \item \textbf{BMG\_format()}: This function allows for input of a CSV file containing the plate layout (see Table \ref{tbl:layout} for proper formatting), and exports the formatted TXT file. The file can then be imported into the Omega control software before running.
             \end{enumerate}
             
             \begin{table}[ht]
                 \centering
-                \label{tbl:layout}
                 \begin{tblr}{
                     cells     = {font = \fontsize{11pt}{11pt}\selectfont},
                     colspec   = {|c|cccccccccccc|}, 
@@ -190,10 +191,11 @@
                     \hline
                 \end{tblr}
                 \caption{Example CSV file plate layout for input into the ``BMG\_format'' function. The top left corner should be cell ``A1'' in the CSV file. The top numbered row and the left-most lettered column should never be altered.}
+                \label{tbl:layout}
             \end{table}
 
         \subsubsection{Data Cleaning and Transformation}
-            The MARS software exports real-time data as an Excel workbook. Typically, the first sheet in the workbook will include microplate views of both raw data and metadata; however, the metadata on this page is what is most useful for downstream processes. Those tables include the ``Sample IDa'' and ``Dilutions'' tables (if dilutions were included in the MARS export). For much of the downstream analysis, it is crucial that the ``Sample IDs'' table was exported from MARS.\@ If there is no table, the user can simply add it manually (see [@fig-sheet1] for proper formatting).
+            The MARS software exports real-time data as an Excel workbook. Typically, the first sheet in the workbook will include microplate views of both raw data and metadata; however, the metadata on this page is what is most useful for downstream processes. Those tables include the ``Sample IDs'' and ``Dilutions'' tables (if dilutions were included in the MARS export). For much of the downstream analysis, it is crucial that the ``Sample IDs'' table was exported from MARS.\@ If there is no table, the user can simply add it manually.
 
             \begin{enumerate}
                 \item \textbf{organize\_tables()}: returns a list of tables contained in the first sheet of the exported Excel sheet. These tables contain valuable metadata such as sample IDs, dilution factors, and microplate locations.
@@ -211,13 +213,14 @@
             \end{enumerate}
 
         \subsubsection{Calculations}
-            Three analytical metrics have dedicated functions: time-to-threshold (TtT), maxpoint ratio (MPR), and maximum slope (MS). The rate of amyloid formation does not have a designated function since it is simply the reciprocal of the time-to-threshold (1/TtT). Each function below accepts input from the transpose\_real() or the normalize\_RFU() functions. See Figure \ref{fig:metrics} for an example of the output of these functions.
+            Three analytical metrics have dedicated functions: time-to-threshold (TtT), maxpoint ratio (MPR), and maximum slope (MS). The rate of amyloid formation (RAF) does not have a designated function since it is simply the reciprocal of the time-to-threshold (1/TtT). However, it can be calculated using the calculate\_metrics() function if TtT is chosen as an optional parameter. Each function below accepts input from the transpose\_real() or the normalize\_RFU() functions. See Figure \ref{fig:metrics} for an example of the output of these functions.
 
             \begin{enumerate}
                 \item \textbf{calculate\_threhold()}: returns a value which is a given number of standard deviations above the average background fluorescence of the entire microplate.
                 \item \textbf{calculate\_TtT()}: takes the real-time data and calculates the time in hours needed to reach a given threshold value.
                 \item \textbf{calculate\_MPR()}: accepts raw or normalized data and returns the maximum value obtained during the run. If supplied with raw data, it will make a call to the normalize\_RFU() function.
                 \item \textbf{calculate\_MS()}: computes the approximate derivative of the real-time data and returns the maximum value obtained during the run.
+                \item \textbf{calculate\_metrics()}: makes a call to functions 2--4 above and generates a data frame with the sample-matched metrics. Also computes RAF if TtT is given as an argument.
             \end{enumerate}
 
             \begin{figure}[ht]
@@ -231,17 +234,11 @@
             The ensuing goal of this package is visualizing RT-QuIC data. While there are many ways to represent this data, quicR includes two functions which provide a quick assessment of the reactions.
             \begin{enumerate}
                 \item \textbf{plate\_view()}: accepts the output from the get\_real() function and get\_sample\_locations() function. Makes an 8$\times$12 or 16$\times$24 faceted plot depending on if the plate has 96 or 384 wells. Each facet shows the real-time data of each well.
-                \item \textbf{plot\_metrics()}: generates a boxplot of each sample's MPR, MS, RAF, and TtT.
+                \item \textbf{plot\_metrics()}: requires the output of calculate\_metrics() and generates a boxplot of each sample's MPR, MS, RAF, and TtT.
             \end{enumerate}
         
-        % \subsection{Sample code snippets analysis (optional)}
     \section{Illustrative examples}
-
-    % \textit{Provide at least one illustrative example to demonstrate the major
-    % functions of your software/code.}
-
-    % \textit{\textbf{Optional}: you may include one explanatory  video or screencast that will appear next to your article, in the right hand side panel. Please upload any video as a single supplementary file with your article. Only one MP4 formatted, with 150MB maximum size, video is possible per article. Recommended video dimensions are 640 x 480 at a maximum of 30 frames / second. Prior to submission please test and validate your .mp4 file at  \url{http://elsevier-apps.sciverse.com/GadgetVideoPodcastPlayerWeb/verification} . This tool will display your video exactly in the same way as it will appear on ScienceDirect. }
-        To demonstrate the utility of quicR, we used a typical RT-QuIC run performed on a 96-well plate. The reaction was performed on a FLUOstar Omega plate reader (BMG Labtech, Ortenberg, Germany). The file was exported as an Excel worksheet where the metadata appears on the first sheet and the raw data on the second sheet.
+        To demonstrate the utility of quicR, we used a typical RT-QuIC run performed on a 96-well plate. The reaction was performed on a FLUOstar Omega plate reader (BMG Labtech, Ortenberg, Germany). The file was exported as an Excel workbook where the metadata appears on the first sheet and the raw data on the second.
         
         \subsection{Example Code}
             \# Step 1: Identify the raw file.\\
@@ -268,9 +265,11 @@
             \# Step 8: Plot the plate view.\\
             plate\_view(raw, locations)\\
 
-            Once the file name is identified, the function get\_real() is used to extract the raw data. This data is imported as a data frame with each sample designated as an individual column and the first column designated as time. Much of the downstream analysis works best with background-normalized data, so the raw data is then passed to the normalize\_RFU() function. This function accepts an integer as an argument for the desired cycle to be selected for background measurement. Next, the metadata is extracted using the organize\_tables() and convert\_tables() functions. These take the metadata found on the first sheet of the Excel file and convert them into data frame columns. Finally, metrics are calculated and assigned to their given sample ID using calculate\_metrics(). This generates a data frame with sample IDs, dilution factors (if chosen), MPR's, MS's, RAF's, and TtT's.
+            Once the file name is identified, the function get\_real() is used to extract the raw data. This data is imported as a data frame with each sample designated as an individual column and the first column designated as time. Much of the downstream analysis works best with background-normalized data, so the raw data is then passed to the normalize\_RFU() function. This function accepts an integer as an argument for the desired cycle to be selected for background measurement. 
+            
+            Next, the metadata is extracted using the organize\_tables() and convert\_tables() functions. These take the metadata found on the first sheet of the Excel file and convert them into data frame columns. Finally, metrics are calculated and assigned to their given sample ID using calculate\_metrics(). This generates a data frame with sample IDs, dilution factors (if chosen), MPR's, MS's, RAF's, and TtT's.
 
-            Once the proper variables have been defined, they can be used as input in the visualization functions. The analyzed data frame can be used as an argument in plot\_metrics() to generate a plot such as \ref{fig:boxplot}. Additionally, the raw data and sample locations are used to plot the plate view as in \ref{fig:plateview}.
+            Once the proper variables have been defined, they can be used as input in the visualization functions. The analyzed data frame can be used as an argument in plot\_metrics() to generate a plot such as Figure \ref{fig:boxplot}. Additionally, the raw data and sample locations are used to plot the plate view as in Figure \ref{fig:plateview}.
 
             \begin{figure}[ht]
                 \centering
@@ -292,9 +291,9 @@
 
         The quicR package represents a significant advancement in the standardization and reproducibility of RT-QuIC data analysis. By integrating key metrics such as time-to-threshold (TtT) \cite{Orru2015}, maxpoint ratio (MPR) \cite{Rowden2023}, and maximum slope (MS) \cite{Henderson2015}, quicR addresses critical gaps in the field, providing researchers and diagnosticians with a robust toolkit for interpreting RT-QuIC data.
 
-        One of the primary strengths of quicR lies in its flexibility and user-centric design. The package leverages R’s powerful ecosystem, including the tidyverse and ggplot2, to streamline workflows and create high-quality, customizable visualizations. This ensures accessibility for a wide range of users, from experienced data scientists to wet-lab researchers unfamiliar with programming. Additionally, the incorporation of open-source principles allows the broader scientific community to contribute to its development, fostering innovation and adaptability.
+        One of the primary strengths of quicR lies in its flexibility and user-centric design. The package leverages R’s powerful ecosystem and the tidyverse to streamline workflows and create high-quality, customizable visualizations. This ensures accessibility for a wide range of users, from experienced data scientists to wet-lab researchers unfamiliar with programming. Additionally, the incorporation of open-source principles allows the broader scientific community to contribute to its development, fostering innovation and adaptability.
 
-        Despite these strengths, there are limitations to consider. Currently, quicR is tailored to data exported from the MARS software, which may limit its applicability to researchers using alternative microplate readers. Future iterations of the package could expand compatibility by incorporating functions to handle diverse data formats. Furthermore, while quicR includes robust visualization tools, users seeking highly specialized plots may require additional customization beyond the package’s default capabilities.
+        Despite these strengths, there are limitations to consider. Currently, quicR is tailored to data exported from the MARS software, which may limit its applicability to researchers using alternative microplate readers. Future iterations of the package could expand compatibility by incorporating functions to handle diverse data formats. Furthermore, while quicR includes robust visualization tools, users seeking highly specialized plots like those made by Li, et al.\cite{Li2025} may require additional customization beyond the package’s default capabilities.
 
         Another avenue for improvement lies in the standardization of RT-QuIC diagnostic criteria. quicR provides tools to calculate key metrics, but consensus on thresholds and interpretations remains a challenge for the field \cite{Rowden2023}. Collaborative efforts among researchers and clinicians are necessary to define universal criteria, enabling quicR to fully realize its potential as a diagnostic aid. Diagnostic determinations could easily be built into the library, but a larger consensus within the research community will need to be reached to warrant inclusion.
 
