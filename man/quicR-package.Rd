@@ -7,9 +7,7 @@
 \title{@description
 Data handling for real-time quaking induced conversion assays}
 \description{
-See the README on
-\href{https://cran.r-project.org/web/packages/quicR/index.html}{CRAN}
-or \href{https://github.com/gage1145/quicR}{Github}
+See the README on \href{https://github.com/gage1145/quicR}{Github}
 }
 \details{
 @keywords internal
