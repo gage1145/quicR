@@ -524,20 +524,7 @@ meta <- file |>
   organize_tables() |>
   convert_tables()
 
-# Calculate Key Metrics ---------------------------------------------------
-
-mpr <- calculate_MPR(normal, data_is_norm = TRUE)
-ms  <- calculate_MS(normal, data_is_norm = TRUE)
-ttt <- calculate_TtT(normal, threshold = 2)
-
-analyzed <- data.frame(
-  `Sample IDs`                = meta$`Sample IDs`,
-  `Dilutions`                 = meta$Dilutions,
-  `Maxpoint Ratio`            = mpr,
-  `Max Slope`                 = ms,
-  `Time-to-Threshold`         = ttt,
-  `Rate of Amyloid Formation` = 1 / ttt
-)
+analyzed <- calculate_metrics(normal, meta)
 ```
 \newpage
 
