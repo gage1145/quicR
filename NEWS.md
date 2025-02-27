@@ -1,7 +1,12 @@
+# quicR 2.1.1
+
+## Bug fixes
+- Fixed an issue where `plot_metrics` and `calculate_metrics` would not work if the input data frames did not include dilution factors.
+
 # quicR 2.1.0
 
 ## New features
-- Included a new function `calculate_metrics` which will make calls to the "calculate" family of quicR functions, and return a dataframe of all the metrics passed to the function.
+- Included a new function `calculate_metrics` which will make calls to the "calculate" family of quicR functions, and return a data frame of all the metrics passed to the function.
 - Added the `plot_metrics` function which accepts the output of the `calculate_metrics` function and returns a faceted plot of the calculated metrics.
 
 # quicR 2.0.0
