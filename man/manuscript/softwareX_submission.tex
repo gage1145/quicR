@@ -44,7 +44,7 @@
 \usepackage{tabularray}
 \usepackage{float}
 \usepackage[T1]{fontenc}
-\usepackage{helvet}
+% \usepackage{helvet}
 \renewcommand{\familydefault}{\sfdefault}
 \newcommand{\tab}[1]{\hspace{.2\textwidth}\rlap{#1}}
 
@@ -57,7 +57,7 @@
 
     \begin{frontmatter}
 
-        \title{quicR:\ An R Library for Streamlined Data Handling of Real-Time Quaking Induced Conversion Assays}
+        \title{\textbf{quicR}:\ An R Library for Streamlined Data Handling of Real-Time Quaking Induced Conversion Assays}
         \author[label1,label2,label3]{Gage Rowden\corref{cor}}
         \fntext[ ]{\textit{E-mail address: }rowde002@umn.edu}
         \cortext[cor]{Corresponding author.}
@@ -67,7 +67,7 @@
         \address[label3]{Priogen Corp., USA.}
 
         \begin{abstract}
-            Real-time quaking induced conversion (RT-QuIC) has become a valuable diagnostic tool for protein misfolding disorders such as Creutzfeldt-Jakob disease and Parkinson's disease. Given that the technology is relatively new, academic and industry standards for quality filtering data and high throughput analysis of results have yet to be fully established. The open source R library, quicR, was developed to provide a standardized approach to RT-QuIC data analysis.\ quicR provides functions, which can be easily integrated into existing R workflows, for data curation, analysis, and visualization.
+            Real-time quaking induced conversion (RT-QuIC) has become a valuable diagnostic tool for protein misfolding disorders such as Creutzfeldt-Jakob disease and Parkinson's disease. Given that the technology is relatively new, academic and industry standards for quality filtering data and high throughput analysis of results have yet to be fully established. The open source R library, \textbf{quicR}, was developed to provide a standardized approach to RT-QuIC data analysis.\ \textbf{quicR} provides functions, which can be easily integrated into existing R workflows, for data curation, analysis, and visualization.
         \end{abstract}
 
         \begin{keyword}
@@ -81,37 +81,37 @@
     \section*{Metadata}
 
     \begin{table}[ht]
-        \label{tbl:codeMetadata} 
-        \begin{tabular}{|l|p{6cm}|p{6cm}|}
+        \fontsize{9pt}{9pt}\selectfont
+        \centering
+        \begin{tabular}{lp{6cm}p{6cm}}
             \hline{}
             \textbf{Nr.} & \textbf{Code metadata description} & \textbf{Metadata} \\
             \hline{}
             C1 & Current code version & V2.1.0 \\
-            \hline{}
-            C2 & Permanent link to code/repository used for this code version & \url{https://github.com/gage1145/quicR} \\
-            \hline{}
+            % \hline{}
+            C2 & Permanent link to code/repository used for this code version & \url{https://github.com/gage1145/quicR/releases/tag/v2.1.0} \\
+            % \hline{}
             C3  & Permanent link to Reproducible Capsule & \url{https://cran.r-project.org/web/packages/quicR}\\
-            \hline{}
+            % \hline{}
             C4 & Legal Code License & GPL-3 \\
-            \hline{}
+            % \hline{}
             C5 & Code versioning system used & Git \\
-            \hline{}
+            % \hline{}
             C6 & Software code languages, tools, and services used & R \\
-            \hline{}
+            % \hline{}
             C7 & Compilation requirements, operating environments \& dependencies & R (>=4.1.0) \\
-            \hline{}
+            % \hline{}
             C8 & If available Link to developer documentation/manual & \url{https://cran.r-project.org/web/packages/quicR/quicR.pdf}\\
-            \hline{}
+            % \hline{}
             C9 & Support email for questions & rowde002@umn.edu\\
             \hline{}
         \end{tabular}
-        \caption{Code metadata}
     \end{table}
 
     \section{Motivation and significance}
         Real-time quaking induced conversion (RT-QuIC) is a cutting-edge diagnostic assay that has garnered significant attention for its ultra-sensitive detection of misfolded protein aggregates \cite{Wilham2010, Atarashi2011}. The assay works by converting a recombinant protein substrate into an amyloid aggregate in the presence of a misfolded seed \cite{Wilham2010, Orru2012, Orru2017, Orru2015, Bongianni2019, Dassanayake2016, Hwang2018, Groveman2018, Metrick2020}. The assay's sensitivity and specificity make RT-QuIC a promising tool for diagnosing diseases such as prion disorders and other protein misfolding pathologies \cite{Fiorini2020, Franceschini2017, Picasso-Risso2022, Holz2021}. However, the relatively recent development and novelty of the assay have left a gap in widely accepted academic and industry standards for data analysis and interpretation \cite{Rowden2023}.
 
-        To address this gap, we introduce quicR, an open-source library, developed in R \cite{R2024}, dedicated to the cleaning, analysis, and visualization of RT-QuIC data. By consolidating key metrics and providing robust analytical tools, quicR aims to standardize the analysis pipeline and foster reproducibility within the field of quaking induced assays including related assays such as Nano-QuIC \cite{Christenson2023} and Micro-QuIC \cite{Lee2024}. quicR is designed with both researchers and diagnosticians in mind, providing a user-friendly interface that integrates seamlessly with existing R workflows.
+        To address this gap, we introduce \textbf{quicR}, an open-source library, developed in R \cite{R2024}, dedicated to the cleaning, analysis, and visualization of RT-QuIC data. By consolidating key metrics and providing robust analytical tools, \textbf{quicR} aims to standardize the analysis pipeline and foster reproducibility within the field of quaking induced assays including related assays such as Nano-QuIC \cite{Christenson2023} and Micro-QuIC \cite{Lee2024}. \textbf{quicR} is designed with both researchers and diagnosticians in mind, providing a user-friendly interface that integrates seamlessly with existing R workflows.
 
         While universal diagnostic criteria for RT-QuIC have yet to be established, certain analytical metrics have emerged as valuable tools for interpreting assay results and kinetics. These include:
 
@@ -124,32 +124,23 @@
 
         Together, these metrics enable researchers to characterize the kinetics of RT-QuIC reactions comprehensively, enhancing the rigor and reliability of diagnostic decisions.
 
-        In addition to analytical tools, quicR provides flexible and customizable visualization capabilities. Leveraging the powerful ggplot2 library \cite{ggplot2016}, quicR enables users to generate high-quality, publication-ready figures. These visualizations can be further customized using the intuitive `+' syntax of ggplot2, allowing for tailored presentations of RT-QuIC data.
+        In addition to analytical tools, \textbf{quicR} provides flexible and customizable visualization capabilities. Leveraging the powerful ggplot2 library \cite{ggplot2016}, \textbf{quicR} enables users to generate high-quality, publication-ready figures. These visualizations can be further customized using the intuitive `+' syntax of ggplot2, allowing for tailored presentations of RT-QuIC data.
 
-        By combining standardized metrics, advanced visualization tools, and a commitment to open source science, quicR serves as a foundational tool to empower researchers to analyze and present RT-QuIC data with clarity, consistency, and cohesion.
-
-    % \textit{In this section, we want you to introduce the scientific background and the motivation for developing the software.}
-    % 
-    % \begin{itemize}
-    %     \item \textit{Explain why the software is important and describe the exact (scientific) problem(s) it solves.}
-    %     \item \textit{Indicate in what way the software has contributed (or will contribute in the future) to the process of scientific discovery; if available, please cite a research paper using the software.}
-    %     \item \textit{Provide a description of the experimental setting. (How does the user use the software?)}
-    %     \item \textit{Introduce related work in literature (cite or list algorithms used, other software etc.).}
-    % \end{itemize}
+        By combining standardized metrics, advanced visualization tools, and a commitment to open source science, \textbf{quicR} serves as a foundational tool to empower researchers to analyze and present RT-QuIC data with clarity, consistency, and cohesion.
 
     \section{Software description}
         \subsection{Software architecture}
-            quicR was developed to address the growing need for efficient data conversion, analysis, and visualization of RT-QuIC data (Figure \ref{fig:workflow}). With a focus on usability and reproducibility, the package is designed to standardize workflows and ensure compatibility across multiple laboratories. The overall architecture revolves around integration with the proprietary MARS software (BMG Labtech, Ortenberg, Germany) which exports raw data as Excel workbooks. The data from these workbooks is then curated into usable objects in the R environment, and visualized.
+            \textbf{quicR} was developed to address the growing need for efficient data conversion, analysis, and visualization of RT-QuIC data (Figure \ref{fig:workflow}). With a focus on usability and reproducibility, the package is designed to standardize workflows and ensure compatibility across multiple laboratories. The overall architecture revolves around integration with the proprietary MARS software (BMG Labtech, Ortenberg, Germany) which exports raw data as Excel workbooks. The data from these workbooks is then curated into usable objects in the R environment, and visualized.
 
             \begin{figure}[ht]
                 \centering
                 \includegraphics[width=\textwidth]{images/workflow.png}
-                \caption{Workflow hierarchy of the quicR package. Blue nodes indicate steps where BMG software is needed. Purple nodes indicate functions dedicated to handling metadata. Red nodes are functions that acquire and manipulate raw data. Orange nodes are functions which calculate some metric. Finally, yellow nodes represent data analysis endpoints.}
+                \caption{Workflow hierarchy of the \textbf{quicR} package. Blue nodes indicate steps where BMG software is needed. Purple nodes indicate functions dedicated to handling metadata. Red nodes are functions that acquire and manipulate raw data. Orange nodes are functions which calculate some metric. Finally, yellow nodes represent data analysis endpoints.}
                 \label{fig:workflow}
             \end{figure}
 
     \subsection{Software functionalities}
-        The implementation of the quicR package encompasses several streamlined processes designed to facilitate data input, cleaning, transformation, and analysis of RT-QuIC data. This section provides a comprehensive guide to utilizing the package's key functionalities, detailing how to:
+        The implementation of the \textbf{quicR} package encompasses several streamlined processes designed to facilitate data input, cleaning, transformation, and analysis of RT-QuIC data. This section provides a comprehensive guide to utilizing the package's key functionalities, detailing how to:
             
         \begin{enumerate}
             \item Format and input sample data into Omega control software (BMG Labtech, Ortenberg, Germany).
@@ -216,8 +207,8 @@
             Three analytical metrics have dedicated functions: time-to-threshold (TtT), maxpoint ratio (MPR), and maximum slope (MS). The rate of amyloid formation (RAF) does not have a designated function since it is simply the reciprocal of the time-to-threshold (1/TtT). However, it can be calculated using the calculate\_metrics() function if TtT is chosen as an optional parameter. Each function below accepts input from the transpose\_real() or the normalize\_RFU() functions. See Figure \ref{fig:metrics} for an example of the output of these functions.
 
             \begin{enumerate}
-                \item \textbf{calculate\_threhold()}: returns a value which is a given number of standard deviations above the average background fluorescence of the entire microplate.
-                \item \textbf{calculate\_TtT()}: takes the real-time data and calculates the time in hours needed to reach a given threshold value.
+                \item \textbf{calculate\_threhold()}: returns a value which is a given number of standard deviations above the average background fluorescence of the entire microplate. This is a popular method of threshold calculation as reviewed in Rowden, et al.\cite{Rowden2023}.
+                \item \textbf{calculate\_TtT()}: takes the real-time data and calculates the time in hours needed to reach a given threshold value. This threshold can be supplied by calculate\_threshold() or determined separately by the user.
                 \item \textbf{calculate\_MPR()}: accepts raw or normalized data and returns the maximum value obtained during the run. If supplied with raw data, it will make a call to the normalize\_RFU() function.
                 \item \textbf{calculate\_MS()}: computes the approximate derivative of the real-time data and returns the maximum value obtained during the run.
                 \item \textbf{calculate\_metrics()}: makes a call to functions 2--4 above and generates a data frame with the sample-matched metrics. Also computes RAF if TtT is given as an argument.
@@ -231,37 +222,30 @@
             \end{figure}
 
         \subsubsection{Visualization}
-            The ensuing goal of this package is visualizing RT-QuIC data. While there are many ways to represent this data, quicR includes two functions which provide a quick assessment of the reactions.
+            The ensuing goal of this package is visualizing RT-QuIC data. While there are many ways to represent this data, \textbf{quicR} includes two functions which provide a quick assessment of the reactions.
             \begin{enumerate}
                 \item \textbf{plate\_view()}: accepts the output from the get\_real() function and get\_sample\_locations() function. Makes an 8$\times$12 or 16$\times$24 faceted plot depending on if the plate has 96 or 384 wells. Each facet shows the real-time data of each well.
                 \item \textbf{plot\_metrics()}: requires the output of calculate\_metrics() and generates a boxplot of each sample's MPR, MS, RAF, and TtT.
             \end{enumerate}
         
     \section{Illustrative examples}
-        To demonstrate the utility of quicR, we used a typical RT-QuIC run performed on a 96-well plate. The reaction was performed on a FLUOstar Omega plate reader (BMG Labtech, Ortenberg, Germany). The file was exported as an Excel workbook where the metadata appears on the first sheet and the raw data on the second.
+        To demonstrate the utility of \textbf{quicR}, we used a typical RT-QuIC run performed on a 96-well plate. The reaction was performed on a FLUOstar Omega plate reader (BMG Labtech, Ortenberg, Germany). The file was exported as an Excel workbook where the metadata appears on the first sheet and the raw data on the second.
         
         \subsection{Example Code}
             \# Step 1: Identify the raw file.\\
             file <- "example.xlsx"\\
-
             \# Step 2: Extract the raw data.\\
             raw <- get\_real(file)[[1]]\\
-
             \# Step 3: Normalize the data against the background.\\
             normal <- normalize\_RFU(raw, transposed = FALSE)\\
-
             \# Step 4: Extract the metadata.\\
-            meta <- file |> organize\_tables() |> convert\_tables()\\
-
+            meta <- organize\_tables(file) |> convert\_tables()\\
             \# Step 5: Get sample locations.\\
             locations <- get\_sample\_locations(file)\\
-            
             \# Step 6: Create the analyzed data frame.\\
             analyzed <- calculate\_metrics(normal, meta, dilution\_bool = TRUE)\\
-
             \# Step 7: Plot the analyzed data frame.\\
             plot\_metrics(analyzed)\\
-
             \# Step 8: Plot the plate view.\\
             plate\_view(raw, locations)\\
 
@@ -274,7 +258,7 @@
             \begin{figure}[ht]
                 \centering
                 \includegraphics[width=\textwidth]{images/boxplot.png}
-                \caption{Boxplot of the four metrics calculated in the quicR package.}
+                \caption{Boxplot of the four critical metrics calculated by the \textbf{quicR} package.}
                 \label{fig:boxplot}
             \end{figure}
 
@@ -285,54 +269,29 @@
                 \label{fig:plateview}
             \end{figure}
             
-            
-
     \section{Impact}
+        The \textbf{quicR} package represents a significant advancement in the standardization and reproducibility of RT-QuIC data analysis. By integrating key metrics such as time-to-threshold (TtT) \cite{Orru2015}, maxpoint ratio (MPR) \cite{Rowden2023}, and maximum slope (MS) \cite{Henderson2015}, \textbf{quicR} addresses critical gaps in the field, providing researchers and diagnosticians with a robust toolkit for interpreting RT-QuIC data.
 
-        The quicR package represents a significant advancement in the standardization and reproducibility of RT-QuIC data analysis. By integrating key metrics such as time-to-threshold (TtT) \cite{Orru2015}, maxpoint ratio (MPR) \cite{Rowden2023}, and maximum slope (MS) \cite{Henderson2015}, quicR addresses critical gaps in the field, providing researchers and diagnosticians with a robust toolkit for interpreting RT-QuIC data.
+        One of the primary strengths of \textbf{quicR} lies in its streamlined workflow and user-centric design. The package leverages R’s powerful ecosystem and the tidyverse to create high-quality, customizable visualizations, ensuring accessibility for a wide range of users, from experienced data scientists to wet-lab researchers unfamiliar with programming. Additionally, the incorporation of open-source principles allows the broader scientific community to contribute to its development, fostering innovation and adaptability.
 
-        One of the primary strengths of quicR lies in its flexibility and user-centric design. The package leverages R’s powerful ecosystem and the tidyverse to streamline workflows and create high-quality, customizable visualizations. This ensures accessibility for a wide range of users, from experienced data scientists to wet-lab researchers unfamiliar with programming. Additionally, the incorporation of open-source principles allows the broader scientific community to contribute to its development, fostering innovation and adaptability.
+        Despite these strengths, there are limitations to consider. Currently, \textbf{quicR} is tailored to data exported from the MARS software, which may limit its applicability to researchers using alternative microplate readers. Future iterations of the package could expand compatibility by incorporating functions to handle diverse data formats. Furthermore, while \textbf{quicR} includes robust visualization tools, users seeking highly specialized plots like those made by Li, et al.\cite{Li2025} may require additional customization beyond the package’s default capabilities.
 
-        Despite these strengths, there are limitations to consider. Currently, quicR is tailored to data exported from the MARS software, which may limit its applicability to researchers using alternative microplate readers. Future iterations of the package could expand compatibility by incorporating functions to handle diverse data formats. Furthermore, while quicR includes robust visualization tools, users seeking highly specialized plots like those made by Li, et al.\cite{Li2025} may require additional customization beyond the package’s default capabilities.
-
-        Another avenue for improvement lies in the standardization of RT-QuIC diagnostic criteria. quicR provides tools to calculate key metrics, but consensus on thresholds and interpretations remains a challenge for the field \cite{Rowden2023}. Collaborative efforts among researchers and clinicians are necessary to define universal criteria, enabling quicR to fully realize its potential as a diagnostic aid. Diagnostic determinations could easily be built into the library, but a larger consensus within the research community will need to be reached to warrant inclusion.
+        Another avenue for improvement lies in the standardization of RT-QuIC diagnostic criteria. \textbf{quicR} provides tools to calculate key metrics, but consensus on thresholds and interpretations remains a challenge for the field \cite{Rowden2023}. Collaborative efforts among researchers and clinicians are necessary to define universal criteria, enabling \textbf{quicR} to fully realize its potential as a diagnostic aid. Diagnostic determinations could easily be built into the library, but a larger consensus within the research community will need to be reached to warrant inclusion.
 
     \section{Conclusions}
-        quicR offers a powerful solution for the cleaning, analysis, and visualization of RT-QuIC data, addressing critical needs in a rapidly evolving field. By enabling consistent data handling and interpretation, quicR lays the groundwork for improved diagnostic consistency and reproducibility. The package's open-source nature ensures that it will continue to evolve, integrating new insights and technologies as they emerge.
+        \textbf{quicR} offers a powerful solution for the cleaning, analysis, and visualization of RT-QuIC data, addressing critical needs in a rapidly evolving field. By enabling consistent data handling and interpretation, \textbf{quicR} lays the groundwork for improved diagnostic consistency and reproducibility. The package's open-source nature ensures that it will continue to evolve, integrating new insights and technologies as they emerge.
 
-        As RT-QuIC technology advances, tools like quicR will play a pivotal role in bridging the gap between assay development and practical application. By equipping researchers with reliable, standardized tools, quicR not only supports the study of prion and protein misfolding disorders but also serves as a model for the development of software solutions in other diagnostic fields.
+        As RT-QuIC technology advances, tools like \textbf{quicR} will play a pivotal role in bridging the gap between assay development and practical application. By equipping researchers with reliable, standardized tools, \textbf{quicR} not only supports the study of prion and protein misfolding disorders but also serves as a model for the development of software solutions in other diagnostic fields.
 
     \section*{Acknowledgements}
         Special thanks to Beni Altmann at The Comprehensive R Archive Network (CRAN) for help during the submission process to CRAN. We thank Tiffany Wolf and Marc Schwabenlander for their support through the Minnesota Center for Prion Research and Outreach. We would like to acknowledge Suzanne Stone and Sarah Gresch for maintaining lab operations.
-
 
     %% The Appendices part is started with the command \appendix;
     %% appendix sections are then done as normal sections
     %% \appendix
 
-    %% \section{}
-    %% \label{}
-
-    %% References:
-    %% If you have bibdatabase file and want bibtex to generate the
-    %% bibitems, please use
-    %%
     \bibliographystyle{elsarticle-num} 
-    \bibliography{references.bib}
-
-    \textit{If the software repository you used supplied a DOI or another
-    Persistent IDentifier (PID), please add a reference for your software
-    here. For more guidance on software citation, please see our guide for
-    authors or \href{https://f1000research.com/articles/9-1257/v2}{this
-      article on the essentials of software citation by FORCE 11}, of
-    which Elsevier is a member.}
+    \bibliography{references}
 
 \end{document}
 \endinput
-%%
-%% End of file `SoftwareX_article_template.tex'.
-
-%%% Local Variables:
-%%% mode: latex
-%%% TeX-master: t
-%%% End:
