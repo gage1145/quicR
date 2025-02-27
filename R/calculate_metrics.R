@@ -50,10 +50,10 @@ calculate_metrics <- function(
 
   data.frame(
     `Sample IDs` = if ("Sample IDs" %in% colnames(meta)) meta$`Sample IDs`,
-    Dilutions = if ("Dilutions" %in% colnames(meta)) meta$Dilutions,
     check.names = FALSE
   ) |>
     mutate(
+      Dilutions = if ("Dilutions" %in% colnames(meta)) meta$Dilutions,
       MPR = if ("MPR" %in% metrics) calculate_MPR(data, start_col),
       MS = if ("MS" %in% metrics) calculate_MS(data, MS_window),
       TtT = if ("TtT" %in% metrics) calculate_TtT(data, threshold),
