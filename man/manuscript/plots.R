@@ -75,17 +75,17 @@ ggsave("images/metric_example.png", width = 12, height = 6)
 
 
 
-file <- "../../inst/extdata/input_files/test4.xlsx"
+file <- "../../inst/extdata/input_files/test5.xlsx"
 df_raw <- get_real(file)[[1]]
 df_norm <- normalize_RFU(df_raw)
 
 meta <- organize_tables(file) %>%
   convert_tables()
 
-df_analyzed <- calculate_metrics(df_norm, meta) %>%
-  mutate(Dilutions = -log10(as.integer(Dilutions)))
+df_analyzed <- calculate_metrics(df_norm, meta)
 
-plot_metrics(df_analyzed)
+plot_metrics(df_analyzed) +
+  guides(fill = guide_legend(nrow = 1))
 ggsave("images/boxplot.png", width = 12, height = 8)
 
 
@@ -94,6 +94,6 @@ ggsave("images/boxplot.png", width = 12, height = 8)
 
 
 
-locations <- get_sample_locations(file)
+locations <- get_sample_locations(file, dilution_bool = TRUE, sep = " ")
 plate_view(df_raw, locations)
 ggsave("images/plate_view.png", width = 12, height = 8)
