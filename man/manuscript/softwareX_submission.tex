@@ -58,10 +58,10 @@
     \begin{frontmatter}
 
         \title{\textbf{quicR}:\ An R Library for Streamlined Data Handling of Real-Time Quaking Induced Conversion Assays}
-        \author[label1,label2,label3]{Gage Rowden\corref{cor}}
+        \author[label1,label2,label3]{Gage R. Rowden\corref{cor}}
         \fntext[ ]{\textit{E-mail address: }rowde002@umn.edu}
         \cortext[cor]{Corresponding author.}
-        \author[label1,label2,label3]{Peter Larsen}
+        \author[label1,label2,label3]{Peter A. Larsen}
         \address[label1]{Department of Veterinary and Biomedical Sciences, University of Minnesota, USA.}
         \address[label2]{Minnesota Center for Prion Research and Outreach, University of Minnesota, USA.}
         \address[label3]{Priogen Corp., USA.}
@@ -130,7 +130,7 @@
 
     \section{Software description}
         \subsection{Software architecture}
-            \textbf{quicR} was developed to address the growing need for efficient data conversion, analysis, and visualization of RT-QuIC data (Figure \ref{fig:workflow}). With a focus on usability and reproducibility, the package is designed to standardize workflows and ensure compatibility across multiple laboratories. The overall architecture revolves around integration with the proprietary MARS software (BMG Labtech, Ortenberg, Germany) which exports raw data as Excel workbooks. The data from these workbooks is then curated into usable objects in the R environment, and visualized.
+            \textbf{quicR} was developed to address the growing need for efficient data conversion, analysis, and visualization of RT-QuIC data (Figure \ref{fig:workflow}). The overall architecture revolves around integration with the proprietary MARS software (BMG Labtech, Ortenberg, Germany) which exports raw data as Excel workbooks. The data from these workbooks is then curated into usable objects in the R environment, and visualized.
 
             \begin{figure}[ht]
                 \centering
@@ -181,7 +181,7 @@
                     H & N & S01 & S02 & S03 & S04 & S05 & S06 & S07 & S08 & S09 & S10 & S11 \\ 
                     \hline
                 \end{tblr}
-                \caption{Example CSV file plate layout for input into the ``BMG\_format'' function. The top left corner should be cell ``A1'' in the CSV file. The top numbered row and the left-most lettered column should never be altered.}
+                \caption{Example CSV file 96-well plate layout for input into the BMG\_format() function. The top left corner is cell ``A1'' in the CSV file. The top numbered row and the left-most lettered column should never be altered.}
                 \label{tbl:layout}
             \end{table}
 
@@ -190,7 +190,7 @@
 
             \begin{enumerate}
                 \item \textbf{organize\_tables()}: returns a list of tables contained in the first sheet of the exported Excel sheet. These tables contain valuable metadata such as sample IDs, dilution factors, and microplate locations.
-                \item \textbf{convert\_tables()}: accepts tables outputted from \textbf{organize\_tables} and converts them to columns in a data frame.
+                \item \textbf{convert\_tables()}: accepts tables outputted from organize\_tables() and converts them to columns in a data frame.
                 \item \textbf{get\_sample\_locations()}: extracts the well locations for each sample. Output of this function is used as an argument for visualizing a microplate-level view of real-time data.
             \end{enumerate}
 
@@ -199,12 +199,12 @@
 
             \begin{enumerate}
                 \item \textbf{get\_real()}: Retrieves the raw data from the Excel file, and outputs it as a data frame.
-                \item \textbf{transpose\_real()}: Swaps the rows and columns which makes some downstream analyses easier.
+                \item \textbf{transpose\_real()}: Swaps the rows and columns which facilitates downstream analyses.
                 \item \textbf{normalize\_RFU()}: normalizes the raw data by dividing each read by background fluorescence at a given cycle.
             \end{enumerate}
 
         \subsubsection{Calculations}
-            Three analytical metrics have dedicated functions: time-to-threshold (TtT), maxpoint ratio (MPR), and maximum slope (MS). The rate of amyloid formation (RAF) does not have a designated function since it is simply the reciprocal of the time-to-threshold (1/TtT). However, it can be calculated using the calculate\_metrics() function if TtT is chosen as an optional parameter. Each function below accepts input from the transpose\_real() or the normalize\_RFU() functions. See Figure \ref{fig:metrics} for an example of the output of these functions.
+            Three analytical metrics have dedicated functions: TtT, MPR, and MS. RAF does not have a designated function since it is simply the reciprocal of the time-to-threshold (1/TtT). However, it can be calculated using the calculate\_metrics() function if TtT is chosen as an optional parameter. Each function below accepts input from the transpose\_real() or the normalize\_RFU() functions. See Figure \ref{fig:metrics} for an example of the output of these functions.
 
             \begin{enumerate}
                 \item \textbf{calculate\_threhold()}: returns a value which is a given number of standard deviations above the average background fluorescence of the entire microplate. This is a popular method of threshold calculation as reviewed in Rowden, et al.\cite{Rowden2023}.
@@ -217,12 +217,12 @@
             \begin{figure}[ht]
                 \centering{}
                 \includegraphics[width=\textwidth]{images/metric_example.png}
-                \caption{Example graph highlighting the calculated metrics described above. The red curve represents a raw data curve that has been normalized against background. The maxpoint ratio is calculated as the maximum fluorescent value achieved in the normalized raw data. Time‐to‐threshold is determined as the time required to cross a given threshold (in this example, the threshold is set at 0.2). The blue curve represents the derivative of the raw data, and max slope is determined as the maximum of the derivative.}
+                \caption{Example graph highlighting the calculated metrics described herein. The red curve represents a raw data curve that has been normalized against background. The maxpoint ratio is calculated as the maximum fluorescent value achieved in the normalized raw data. Time‐to‐threshold is determined as the time required to cross a given threshold (in this example, the threshold is set at 0.2). The blue curve represents the derivative of the raw data, and max slope is determined as the maximum of the derivative.}
                 \label{fig:metrics}
             \end{figure}
 
         \subsubsection{Visualization}
-            The ensuing goal of this package is visualizing RT-QuIC data. While there are many ways to represent this data, \textbf{quicR} includes two functions which provide a quick assessment of the reactions.
+            The ensuing goal of this package is visualizing RT-QuIC data. While there are many ways to represent these data, \textbf{quicR} includes two functions which provide a rapid assessment of the RT-QuIC results.
             \begin{enumerate}
                 \item \textbf{plate\_view()}: accepts the output from the get\_real() function and get\_sample\_locations() function. Makes an 8$\times$12 or 16$\times$24 faceted plot depending on if the plate has 96 or 384 wells. Each facet shows the real-time data of each well.
                 \item \textbf{plot\_metrics()}: requires the output of calculate\_metrics() and generates a boxplot of each sample's MPR, MS, RAF, and TtT.
@@ -243,13 +243,13 @@
             \# Step 5: Get sample locations.\\
             locations <- get\_sample\_locations(file)\\
             \# Step 6: Create the analyzed data frame.\\
-            analyzed <- calculate\_metrics(normal, meta, dilution\_bool = TRUE)\\
+            analyzed <- calculate\_metrics(normal, meta)\\
             \# Step 7: Plot the analyzed data frame.\\
             plot\_metrics(analyzed)\\
             \# Step 8: Plot the plate view.\\
             plate\_view(raw, locations)\\
 
-            Once the file name is identified, the function get\_real() is used to extract the raw data. This data is imported as a data frame with each sample designated as an individual column and the first column designated as time. Much of the downstream analysis works best with background-normalized data, so the raw data is then passed to the normalize\_RFU() function. This function accepts an integer as an argument for the desired cycle to be selected for background measurement. 
+            Once the file name is identified, the get\_real() function is used to extract the raw data. This data is imported as a data frame with each sample designated as an individual column and the first column designated as time. Much of the downstream analysis works best with background-normalized data, so the raw data is then passed to the normalize\_RFU() function \cite{Rowden2023}. This function accepts an integer as an argument for the desired cycle to be selected for background measurement. 
             
             Next, the metadata is extracted using the organize\_tables() and convert\_tables() functions. These take the metadata found on the first sheet of the Excel file and convert them into data frame columns. Finally, metrics are calculated and assigned to their given sample ID using calculate\_metrics(). This generates a data frame with sample IDs, dilution factors (if chosen), MPR's, MS's, RAF's, and TtT's.
 
@@ -257,7 +257,7 @@
 
             \begin{figure}[ht]
                 \centering
-                \includegraphics[width=\textwidth]{images/boxplot.png}
+                \includegraphics[height=8in]{images/boxplot.png}
                 \caption{Boxplot of the four critical metrics calculated by the \textbf{quicR} package.}
                 \label{fig:boxplot}
             \end{figure}
@@ -270,7 +270,9 @@
             \end{figure}
             
     \section{Impact}
-        The \textbf{quicR} package represents a significant advancement in the standardization and reproducibility of RT-QuIC data analysis. By integrating key metrics such as time-to-threshold (TtT) \cite{Orru2015}, maxpoint ratio (MPR) \cite{Rowden2023}, and maximum slope (MS) \cite{Henderson2015}, \textbf{quicR} addresses critical gaps in the field, providing researchers and diagnosticians with a robust toolkit for interpreting RT-QuIC data.
+        Since its development in 2010 \cite{Wilham2010,Atarashi2011}, the utility of RT-QuIC has expanded to a host of neurodegenerative diseases caused by prions and other misfolded proteins \cite{Orru2024,ALWAKIL202597,Wang2024}. The improved speed and accuracy of the assay has been a boon to human health \cite{Orru2015,green2019rt,race2019transmission,vascellari2022real} and animal management efforts \cite{huang2025chronic,cooper2019detection,piel2024validation,harpaz2024transmission}. Thus, given the increasing usage of the assay, it is imperative that standardized practices and analyses are adopted.
+
+        The \textbf{quicR} package represents a significant advancement in the standardization and reproducibility of RT-QuIC data analysis. By integrating key metrics such as TtT \cite{Orru2015}, RAF \cite{Gallups2022}, MPR \cite{Rowden2023}, and MS \cite{Henderson2015}, \textbf{quicR} addresses critical gaps in the field, providing researchers and diagnosticians with a robust toolkit for interpreting RT-QuIC data.
 
         One of the primary strengths of \textbf{quicR} lies in its streamlined workflow and user-centric design. The package leverages R’s powerful ecosystem and the tidyverse to create high-quality, customizable visualizations, ensuring accessibility for a wide range of users, from experienced data scientists to wet-lab researchers unfamiliar with programming. Additionally, the incorporation of open-source principles allows the broader scientific community to contribute to its development, fostering innovation and adaptability.
 
@@ -279,12 +281,12 @@
         Another avenue for improvement lies in the standardization of RT-QuIC diagnostic criteria. \textbf{quicR} provides tools to calculate key metrics, but consensus on thresholds and interpretations remains a challenge for the field \cite{Rowden2023}. Collaborative efforts among researchers and clinicians are necessary to define universal criteria, enabling \textbf{quicR} to fully realize its potential as a diagnostic aid. Diagnostic determinations could easily be built into the library, but a larger consensus within the research community will need to be reached to warrant inclusion.
 
     \section{Conclusions}
-        \textbf{quicR} offers a powerful solution for the cleaning, analysis, and visualization of RT-QuIC data, addressing critical needs in a rapidly evolving field. By enabling consistent data handling and interpretation, \textbf{quicR} lays the groundwork for improved diagnostic consistency and reproducibility. The package's open-source nature ensures that it will continue to evolve, integrating new insights and technologies as they emerge.
+        \textbf{quicR} offers a powerful solution for the cleaning, analysis, and visualization of RT-QuIC data, addressing critical needs in a rapidly evolving field. By enabling consistent data handling and interpretation, \textbf{quicR} provides the foundation for improved diagnostic consistency and reproducibility. The package's open-source nature ensures that it will continue to evolve, integrating new insights and technologies as they emerge.
 
         As RT-QuIC technology advances, tools like \textbf{quicR} will play a pivotal role in bridging the gap between assay development and practical application. By equipping researchers with reliable, standardized tools, \textbf{quicR} not only supports the study of prion and protein misfolding disorders but also serves as a model for the development of software solutions in other diagnostic fields.
 
     \section*{Acknowledgements}
-        Special thanks to Beni Altmann at The Comprehensive R Archive Network (CRAN) for help during the submission process to CRAN. We thank Tiffany Wolf and Marc Schwabenlander for their support through the Minnesota Center for Prion Research and Outreach. We would like to acknowledge Suzanne Stone and Sarah Gresch for maintaining lab operations.
+        Special thanks to Beni Altmann at The Comprehensive R Archive Network (CRAN) for help during the submission process to CRAN. We thank Tiffany Wolf and Marc Schwabenlander for their support through the Minnesota Center for Prion Research and Outreach. We would like to acknowledge Suzanne Stone and Sarah Gresch for maintaining lab operations. This work was funded by the Legislative-Citizen Commission on Minnesota Resources.
 
     %% The Appendices part is started with the command \appendix;
     %% appendix sections are then done as normal sections

@@ -3,46 +3,46 @@ Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: softwareX_submission.aux
 Reallocating 'name_of_file' (item size: 1) to 15 items.
 The style file: elsarticle-num.bst
-Reallocating 'name_of_file' (item size: 1) to 15 items.
+Reallocating 'name_of_file' (item size: 1) to 11 items.
 Database file #1: references.bib
-You've used 21 entries,
+You've used 32 entries,
             2952 wiz_defined-function locations,
-            839 strings with 12331 characters,
-and the built_in function-call counts, 7619 in all, are:
-= -- 643
-> -- 483
-< -- 2
-+ -- 175
-- -- 154
-* -- 682
-:= -- 1195
-add.period$ -- 32
-call.type$ -- 21
-change.case$ -- 20
+            920 strings with 15946 characters,
+and the built_in function-call counts, 11552 in all, are:
+= -- 959
+> -- 726
+< -- 3
++ -- 263
+- -- 231
+* -- 1045
+:= -- 1788
+add.period$ -- 46
+call.type$ -- 32
+change.case$ -- 31
 chr.to.int$ -- 0
-cite$ -- 21
-duplicate$ -- 198
-empty$ -- 711
-format.name$ -- 173
-if$ -- 1862
+cite$ -- 32
+duplicate$ -- 301
+empty$ -- 1088
+format.name$ -- 259
+if$ -- 2814
 int.to.chr$ -- 0
-int.to.str$ -- 21
-missing$ -- 21
-newline$ -- 91
-num.names$ -- 21
-pop$ -- 115
+int.to.str$ -- 32
+missing$ -- 32
+newline$ -- 130
+num.names$ -- 34
+pop$ -- 176
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 415
+skip$ -- 627
 stack$ -- 0
-substring$ -- 222
-swap$ -- 62
-text.length$ -- 2
+substring$ -- 398
+swap$ -- 90
+text.length$ -- 3
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
 warning$ -- 0
-while$ -- 37
-width$ -- 23
-write$ -- 216
+while$ -- 64
+width$ -- 34
+write$ -- 313

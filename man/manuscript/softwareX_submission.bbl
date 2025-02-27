@@ -171,4 +171,82 @@ H.~Wickham, \href{https://ggplot2.tidyverse.org}{ggplot2: Elegant Graphics for
   Data Analysis}, Springer-Verlag New York, 2016.
 \newline\urlprefix\url{https://ggplot2.tidyverse.org}
 
+\bibitem{Orru2024}
+C.~D. Orrú, B.~R. Groveman, A.~G. Hughson, T.~Barrio, K.~Isiofia, B.~Race,
+  N.~C. Ferreira, P.~Gambetti, D.~A. Schneider, K.~Masujin, K.~Miyazawa,
+  B.~Ghetti, G.~Zanusso, B.~Caughey,
+  \href{https://doi.org/10.1371/journal.ppat.1012175}{Sensitive detection of
+  pathological seeds of $\alpha$-synuclein, tau and prion protein on solid
+  surfaces}, PLOS Pathogens 20~(4) (2024) 1--22.
+\newblock \href {https://doi.org/10.1371/journal.ppat.1012175}
+  {\path{doi:10.1371/journal.ppat.1012175}}.
+\newline\urlprefix\url{https://doi.org/10.1371/journal.ppat.1012175}
+
+\bibitem{ALWAKIL202597}
+E.~Alwakil,
+  \href{https://www.sciencedirect.com/science/article/pii/B9780443161285000062}{Chapter
+  6 - $\alpha$-synuclein seeding assay and analysis}, in: W.~Mohamed (Ed.),
+  Translational Models of Parkinson' s Disease and Related Movement Disorders,
+  Academic Press, 2025, pp. 97--109.
+\newblock \href
+  {https://doi.org/https://doi.org/10.1016/B978-0-443-16128-5.00006-2}
+  {\path{doi:https://doi.org/10.1016/B978-0-443-16128-5.00006-2}}.
+\newline\urlprefix\url{https://www.sciencedirect.com/science/article/pii/B9780443161285000062}
+
+\bibitem{Wang2024}
+Z.~Wang, L.~Wu, M.~Gerasimenko, T.~Gilliland, S.~A. Gunzler, V.~Donadio,
+  R.~Liguori, B.~Xu, W.-Q. Zou, R.~Article,
+  \href{https://doi.org/10.21203/rs.3.rs-3968879/v1}{{Seeding Activity of Skin
+  Misfolded Tau as a Biomarker for Tauopathies}}, Molecular Neurodegeneration
+  (2024) 1--19\href {https://doi.org/10.1186/s13024-024-00781-1}
+  {\path{doi:10.1186/s13024-024-00781-1}}.
+\newline\urlprefix\url{https://doi.org/10.21203/rs.3.rs-3968879/v1}
+
+\bibitem{green2019rt}
+A.~J. Green, Rt-quic: a new test for sporadic cjd, Practical neurology 19~(1)
+  (2019) 49--55.
+
+\bibitem{race2019transmission}
+B.~Race, K.~Williams, B.~Chesebro, Transmission studies of chronic wasting
+  disease to transgenic mice overexpressing human prion protein using the
+  rt-quic assay, Veterinary research 50~(1) (2019) 6.
+
+\bibitem{vascellari2022real}
+S.~Vascellari, C.~D. Orr{\`u}, B.~Caughey, Real-time quaking-induced conversion
+  assays for prion diseases, synucleinopathies, and tauopathies, Frontiers in
+  Aging Neuroscience 14 (2022) 853050.
+
+\bibitem{huang2025chronic}
+M.~H. Huang, S.~Demarais, M.~D. Schwabenlander, B.~K. Strickland, K.~C.
+  VerCauteren, W.~T. McKinley, G.~Rowden, C.~C. Valencia~Tibbitts, S.~C.
+  Gresch, S.~S. Lichtenberg, et~al., Chronic wasting disease prions on deer
+  feeders and wildlife visitation to deer feeding areas, The Journal of
+  Wildlife Management (2025) e70000.
+
+\bibitem{cooper2019detection}
+S.~K. Cooper, C.~E. Hoover, D.~M. Henderson, N.~J. Haley, C.~K. Mathiason,
+  E.~A. Hoover, Detection of cwd in cervids by rt-quic assay of third eyelids,
+  PloS one 14~(8) (2019) e0221654.
+
+\bibitem{piel2024validation}
+R.~B. Piel~III, S.~E. Veneziano, E.~M. Nicholson, D.~P. Walsh, A.~D. Lomax,
+  T.~A. Nichols, C.~M. Seabury, D.~A. Schneider, Validation of a real-time
+  quaking-induced conversion (rt-quic) assay protocol to detect chronic wasting
+  disease using rectal mucosa of naturally infected, pre-clinical white-tailed
+  deer (odocoileus virginianus), PLoS One 19~(6) (2024) e0303037.
+
+\bibitem{harpaz2024transmission}
+E.~Harpaz, F.~A. Cazzaniga, L.~Tran, T.~T. Vuong, G.~Bufano, {\O}.~Salvesen,
+  M.~Gravdal, D.~Aldaz, J.~Sun, S.~Kim, et~al., Transmission of norwegian
+  reindeer cwd to sheep by intracerebral inoculation results in an unusual
+  phenotype and prion distribution, Veterinary Research 55~(1) (2024) 94.
+
+\bibitem{Li2025}
+M.~Li, D.~N. Bryant, S.~Gresch, M.~S. Milstein, P.~R. Christenson, S.~S.
+  Lichtenberg, P.~A. Larsen, S.~H. Oh, {QuICSeedR: An R package for analyzing
+  fluorophore-assisted seed amplification assay data}, Bioinformatics 41~(1)
+  (2025) 1--7.
+\newblock \href {https://doi.org/10.1093/bioinformatics/btae752}
+  {\path{doi:10.1093/bioinformatics/btae752}}.
+
 \end{thebibliography}
