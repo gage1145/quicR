@@ -1,13 +1,13 @@
 # Fdb version 4
-["bibtex softwareX_submission"] 1740688206.38474 "softwareX_submission.aux" "softwareX_submission.bbl" "softwareX_submission" 1740688282.60713 0
+["bibtex softwareX_submission"] 1740688206.38474 "softwareX_submission.aux" "softwareX_submission.bbl" "softwareX_submission" 1740774670.73104 0
   "./references.bib" 1740688191 23275 3f867d5fcab4d68bc1dfd446a3c0ce62 ""
   "C:/Users/rowde002/AppData/Local/Programs/MiKTeX/bibtex/bst/elsarticle/elsarticle-num.bst" 1737286288 29462 3b2a1af2ce1e224a3b46ee048ffd4b98 ""
-  "softwareX_submission.aux" 1740688281 7464 8f6b057c7975efc7a087c48ee4ae0885 "pdflatex"
+  "softwareX_submission.aux" 1740774669 7464 8f6b057c7975efc7a087c48ee4ae0885 "pdflatex"
   (generated)
   "softwareX_submission.bbl"
   "softwareX_submission.blg"
   (rewritten before read)
-["pdflatex"] 1740688278.12769 "c:/Users/rowde002/Documents/quicR/man/manuscript/softwareX_submission.tex" "softwareX_submission.pdf" "softwareX_submission" 1740688282.60777 0
+["pdflatex"] 1740774665.54318 "c:/Users/rowde002/Documents/quicR/man/manuscript/softwareX_submission.tex" "softwareX_submission.pdf" "softwareX_submission" 1740774670.73166 0
   "C:/Users/rowde002/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1740590118 171870 e3477af95409bade4bbd916ccad68f15 ""
   "C:/Users/rowde002/AppData/Local/MiKTeX/fonts/pk/ljfour/jknappen/ec/dpi525/ecsi0800.pk" 1740672748 16820 b1f7cd4b2b10a6d51440a66ba89ee496 ""
   "C:/Users/rowde002/AppData/Local/MiKTeX/fonts/pk/ljfour/jknappen/ec/dpi525/ecss0800.pk" 1740672743 14032 18ff7f9ee5b021d2b06a2349ae07fc5e ""
@@ -111,16 +111,16 @@
   "C:/Users/rowde002/AppData/Local/Programs/MiKTeX/tex/latex/rerunfilecheck/rerunfilecheck.sty" 1657800696 9714 ba3194bd52c8499b3f1e3eb91d409670 ""
   "C:/Users/rowde002/AppData/Local/Programs/MiKTeX/tex/latex/tabularray/tabularray.sty" 1708165779 255677 5fa41b80e5de95b8eaa15ecb137e1cf0 ""
   "C:/Users/rowde002/AppData/Local/Programs/MiKTeX/tex/latex/url/url.sty" 1388490452 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
-  "c:/Users/rowde002/Documents/quicR/man/manuscript/softwareX_submission.tex" 1740688277 25249 7ae4187e732286c540faf77d34ea43b3 ""
+  "c:/Users/rowde002/Documents/quicR/man/manuscript/softwareX_submission.tex" 1740774663 25312 0a46b059f9481c9ec313bb674c2d470f ""
   "images/boxplot.png" 1740684976 94710 8facc3b1969e9e2396e335881610b6c0 ""
   "images/metric_example.png" 1739384041 179032 762ab95b98ff63bcadcb3e68f5239442 ""
   "images/plate_view.png" 1740685141 344426 726b07bed122324a17f78df038d9a62f ""
   "images/workflow.png" 1740678498 285784 fbfe5cd8e11616689f79c32558ffc498 ""
-  "softwareX_submission.aux" 1740688281 7464 8f6b057c7975efc7a087c48ee4ae0885 "pdflatex"
+  "softwareX_submission.aux" 1740774669 7464 8f6b057c7975efc7a087c48ee4ae0885 "pdflatex"
   "softwareX_submission.bbl" 1740688206 12640 5e51cb2fc0972db4644689e00db311d0 "bibtex softwareX_submission"
-  "softwareX_submission.out" 1740688281 2198 64c1af5bbc955d3f1984c2efd5650c61 "pdflatex"
-  "softwareX_submission.spl" 1740688278 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
-  "softwareX_submission.tex" 1740688277 25249 7ae4187e732286c540faf77d34ea43b3 ""
+  "softwareX_submission.out" 1740774669 2198 64c1af5bbc955d3f1984c2efd5650c61 "pdflatex"
+  "softwareX_submission.spl" 1740774666 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+  "softwareX_submission.tex" 1740774663 25312 0a46b059f9481c9ec313bb674c2d470f ""
   (generated)
   "softwareX_submission.aux"
   "softwareX_submission.log"

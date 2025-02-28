@@ -84,9 +84,9 @@ meta <- organize_tables(file) %>%
 
 df_analyzed <- calculate_metrics(df_norm, meta)
 
-plot_metrics(df_analyzed) +
+plot_metrics(df_analyzed, nrow = 4, ncol = 1) +
   guides(fill = guide_legend(nrow = 1))
-ggsave("images/boxplot.png", width = 12, height = 8)
+ggsave("images/boxplot.png", width = 4, height = 8)
 
 
 
@@ -95,5 +95,8 @@ ggsave("images/boxplot.png", width = 12, height = 8)
 
 
 locations <- get_sample_locations(file, dilution_bool = TRUE, sep = " ")
-plate_view(df_raw, locations)
+plate_view(df_raw, locations) +
+  theme(
+    strip.text = element_text(face = "bold", size = 12)
+  )
 ggsave("images/plate_view.png", width = 12, height = 8)
