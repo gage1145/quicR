@@ -257,7 +257,7 @@
 
             \begin{figure}[ht]
                 \centering
-                \includegraphics[height=8in]{images/boxplot.png}
+                \includegraphics[width=\textwidth]{images/boxplot.png}
                 \caption{Boxplot of the four critical metrics calculated by the \textbf{quicR} package.}
                 \label{fig:boxplot}
             \end{figure}
@@ -270,17 +270,17 @@
             \end{figure}
             
     \section{Impact}
-        Since its development in 2010 \cite{Wilham2010,Atarashi2011}, the utility of RT-QuIC has expanded to a host of neurodegenerative diseases caused by prions and other misfolded proteins \cite{Orru2024,ALWAKIL202597,Wang2024}. The improved speed and accuracy of the assay has been a boon to human health \cite{Orru2015,green2019rt,race2019transmission,vascellari2022real} and animal management efforts \cite{huang2025chronic,cooper2019detection,piel2024validation,harpaz2024transmission}. Thus, given the increasing usage of the assay, it is imperative that standardized practices and analyses are adopted.
+        Since its development in 2010 \cite{Wilham2010,Atarashi2011}, the utility of RT-QuIC has expanded to a host of neurodegenerative diseases caused by prions and other misfolded proteins \cite{Orru2024,ALWAKIL202597,Wang2024}. The improved speed and accuracy of the assay has been a boon to human health \cite{Orru2015,green2019rt,race2019transmission,vascellari2022real} and animal management efforts \cite{huang2025chronic,cooper2019detection,piel2024validation,harpaz2024transmission}. Thus, it is imperative that standardized practices and analyses are adopted.
 
         The \textbf{quicR} package represents a significant advancement in the standardization and reproducibility of RT-QuIC data analysis. By integrating key metrics such as TtT \cite{Orru2015}, RAF \cite{Gallups2022}, MPR \cite{Rowden2023}, and MS \cite{Henderson2015}, \textbf{quicR} addresses critical gaps in the field, providing researchers and diagnosticians with a robust toolkit for interpreting RT-QuIC data.
 
-        One of the primary strengths of \textbf{quicR} lies in its streamlined workflow and user-centric design. The package leverages R’s powerful ecosystem and the tidyverse to create high-quality, customizable visualizations, ensuring accessibility for a wide range of users, from experienced data scientists to wet-lab researchers unfamiliar with programming. Additionally, the incorporation of open-source principles allows the broader scientific community to contribute to its development, fostering innovation and adaptability.
+        One of the primary strengths of \textbf{quicR} lies in its streamlined workflow and user-centric design. The package leverages R’s powerful ecosystem and the tidyverse \cite{tidyverse2019} to create high-quality, customizable visualizations, ensuring accessibility for a wide range of users. Additionally, the incorporation of open-source principles allows the broader scientific community to contribute to its development, fostering innovation and adaptability.
 
         Despite these strengths, there are limitations to consider. Currently, \textbf{quicR} is tailored to data exported from the MARS software, which may limit its applicability to researchers using alternative microplate readers. Future iterations of the package could expand compatibility by incorporating functions to handle diverse data formats. Furthermore, while \textbf{quicR} includes robust visualization tools, users seeking highly specialized plots like those made by Li, et al.\cite{Li2025} may require additional customization beyond the package’s default capabilities.
 
-        Another avenue for improvement lies in the standardization of RT-QuIC diagnostic criteria. \textbf{quicR} provides tools to calculate key metrics, but consensus on thresholds and interpretations remains a challenge for the field \cite{Rowden2023}. Collaborative efforts among researchers and clinicians are necessary to define universal criteria, enabling \textbf{quicR} to fully realize its potential as a diagnostic aid. Diagnostic determinations could easily be built into the library, but a larger consensus within the research community will need to be reached to warrant inclusion.
+        Another avenue for improvement lies in the standardization of RT-QuIC diagnostic criteria. \textbf{quicR} provides tools to calculate key metrics, but consensus on thresholds and diagnostic interpretations remains a challenge for the field \cite{Rowden2023}. Collaborative efforts among researchers and clinicians are necessary to define universal criteria, enabling \textbf{quicR} to fully realize its potential as a diagnostic tool. Diagnostic determinations could easily be built into the library, but a larger consensus within the research community will need to be reached to warrant inclusion.
 
-    \section{Conclusions}
+    \section{Conclusions} 
         \textbf{quicR} offers a powerful solution for the cleaning, analysis, and visualization of RT-QuIC data, addressing critical needs in a rapidly evolving field. By enabling consistent data handling and interpretation, \textbf{quicR} provides the foundation for improved diagnostic consistency and reproducibility. The package's open-source nature ensures that it will continue to evolve, integrating new insights and technologies as they emerge.
 
         As RT-QuIC technology advances, tools like \textbf{quicR} will play a pivotal role in bridging the gap between assay development and practical application. By equipping researchers with reliable, standardized tools, \textbf{quicR} not only supports the study of prion and protein misfolding disorders but also serves as a model for the development of software solutions in other diagnostic fields.
