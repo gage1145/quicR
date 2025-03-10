@@ -9,6 +9,7 @@ nul
 .bbl
 .blg
 .fdb_latexmk
+.log
 .manuscript_files.log
 .out
 .spl
