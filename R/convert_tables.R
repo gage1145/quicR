@@ -22,20 +22,19 @@
 #'
 #' @export
 convert_tables <- function(tab, na_omit = TRUE) {
-  df_list <- data.frame()
-  if (is.vector(tab)) {
-    for (i in 1:length(tab)) {
-      message(paste0(i, ": ", names(tab[i])))
-      column <- tab[[i]] |>
-        t() |>
-        as.data.frame() |>
-        tidyr::gather() |>
-        dplyr::select("value")
-      df_list <- append(df_list, column)
+  if (!is.vector(tab)) stop("Input should be of type vector.")
+
+  df_ <- lapply(
+    seq_along(tab),
+    function(i) {
+      message(paste0(i, ": ", names(tab)[i]))
+      data.frame(as.vector(t(tab[[i]])), stringsAsFactors = FALSE)
     }
-    df_ <- as.data.frame(df_list)
-    colnames(df_) <- names(tab)
-    if (na_omit) df_ <- na.omit(df_)
-    return(df_)
-  }
+  )
+  df_ <- do.call(cbind, df_)
+  colnames(df_) <- names(tab)
+
+  if (na_omit) df_ <- na.omit(df_)
+
+  return(df_)
 }
