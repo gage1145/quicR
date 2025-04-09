@@ -20,9 +20,6 @@
 #' )
 #' df_ <- get_real(file)[[1]]
 #'
-#' # Export the tables in the first sheet of the file.
-#' dic <- quicR::organize_tables(file)
-#'
 #' # Normalize the raw data against the background reading.
 #' normalize_RFU(df_)
 #' }
@@ -31,7 +28,6 @@
 normalize_RFU <- function(data, bg_cycle = 4, transposed = FALSE) {
 
   curate <- function(x) {
-
     colnames(x) %>%
       rbind(x) %>%
       unname() %>%
@@ -43,16 +39,7 @@ normalize_RFU <- function(data, bg_cycle = 4, transposed = FALSE) {
   }
 
   normalize <- function(x) {
-
-    df_norm <- x
-    for (i in 1:nrow(x)) {
-      for (j in 2:ncol(x)) {
-        raw_value <- df_norm[i, j]
-        df_norm[i, j] <- raw_value / x[i, bg_cycle + 1]
-      }
-    }
-
-    return(df_norm)
+    cbind(x[1], sweep(x[-1], 1, x[[bg_cycle + 1]], FUN = "/"))
   }
 
   if (transposed) normalize(data) else normalize(curate(data))

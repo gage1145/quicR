@@ -44,22 +44,14 @@ organize_tables <- function(file, plate = 96) {
 
   # Create a vector with named tibbles for each table.
   step <- ifelse(plate == 96, 11, 19)
-  name_list <- list()
   df_dic <- list()
   i <- 1
 
   while (i < nrow(data)) {
-    name_list <- append(
-      name_list,
-      paste0(sub("^\\d+\\. ", "", data[i, 1]))
-    )
-    df_dic <- append(
-      df_dic,
-      data[(i + 2): (i + step - 2), ] |> list()
-    )
+    name <- paste0(sub("^\\d+\\. ", "", data[[i, 1]]))
+    df_dic[[name]] <- data[(i + 2): (i + step - 2), ]
     i <- i + step
   }
-  names(df_dic) <- name_list
 
   return(df_dic)
 }
