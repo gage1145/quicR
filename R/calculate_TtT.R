@@ -23,42 +23,43 @@
 #'
 #' @export
 calculate_TtT <- function(data, threshold, start_col = 3) {
-  # Initialize the list containing the times-to-threshold.
-  TtT_list <- c(rep(NA, nrow(data)))
+  # Get numeric cycle times
+  cycles <- as.numeric(colnames(data)[start_col:ncol(data)])
+  cycle_interval <- diff(cycles[1:2])  # assumes uniform intervals
 
-  # Set the cycle interval.
-  cycle_interval <- diff(as.numeric(colnames(data[, start_col:(start_col + 1)])))
+  # Extract just the numeric matrix portion
+  readings <- as.matrix(data[, start_col:ncol(data)])
 
-  # Calculate the Time to Threshold
-  for (i in 1:nrow(data)) {
-    for (j in start_col:(ncol(data))) {
-      # Use the threshold argument.
-      current_read <- data[i, j]
+  # Apply function across rows
+  TtT <- apply(
+    readings,
+    1,
+    function(row) {
+      # Find first index where threshold is crossed
+      cross_idx <- which(row >= threshold)[1]
 
-      if (is.na(current_read)) {
-        TtT_list[i] <- as.numeric(colnames(data[j - 1]))
-        break
-      }
+      if (!is.na(cross_idx)) {
+        if (cross_idx == 1) {
+          return(cycles[1])  # threshold met at first timepoint
+        }
 
-      if (current_read >= threshold) {
-        previous_read <- data[i, j - 1]
+        # Linear interpolation
+        prev <- row[cross_idx - 1]
+        curr <- row[cross_idx]
+        slope <- curr - prev
 
-        delta_rfu <- current_read - previous_read
-        slope <- delta_rfu / cycle_interval
+        if (slope == 0) return(cycles[cross_idx])  # avoid division by zero
 
-        delta_threshold <- threshold - previous_read
-        delta_t <- delta_threshold / slope
+        delta_threshold <- threshold - prev
+        delta_time <- delta_threshold / slope
 
-        previous_cycle <- as.numeric(colnames(data[j - 1]))
-        TtT_list[i] <- previous_cycle + delta_t
-
-        break
-      }
-
-      if (j == ncol(data)) {
-        TtT_list[i] <- as.numeric(colnames(data[j]))
+        return(cycles[cross_idx - 1] + delta_time)
+      } else {
+        # If never crossed, return last cycle time
+        return(cycles[length(cycles)])
       }
     }
-  }
-  return(TtT_list)
+  )
+
+  return(TtT)
 }
