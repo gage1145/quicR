@@ -22,18 +22,15 @@
 #' @export
 get_meta <- function(file) {
   if (is.character(file)) { # Read the Excel file into R.
-    data <- read_excel(file, sheet = 1, col_names = FALSE)
+    data <- read_excel(file, sheet = 1, col_names = FALSE) %>%
+      suppressMessages()
   } else if (is.data.frame(file)) {
     data <- file
   } else {
     stop("Please enter either .xlsx string or dataframe. ")
   }
-  for (i in 1:nrow(data[, 1])) {
-    if (is.na(data[i, 1])) {
-      break
-    }
-  }
-  data <- data[1:i, 1] |>
+
+  data[1:which(is.na(data[[1]]))[1], 1] |>
     as.data.frame() |>
     na.omit() |>
     separate_wider_delim(
@@ -43,5 +40,4 @@ get_meta <- function(file) {
       too_few = "align_start",
       too_many = "merge"
     )
-  return(data)
 }
