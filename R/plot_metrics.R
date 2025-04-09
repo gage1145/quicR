@@ -16,6 +16,8 @@
 #' @return A ggplot object
 #'
 #' @examples
+#' # This test takes >5 sec
+#' \donttest{
 #' file <- system.file(
 #'   "extdata/input_files",
 #'   file = "test4.xlsx",
@@ -30,18 +32,31 @@
 #'
 #' calculate_metrics(data, meta) |>
 #'   plot_metrics()
+#' }
 #'
 #' @export
 plot_metrics <- function(data, sample_col = "Sample IDs", fill = "Dilutions", dilution_bool = TRUE, nrow = 2, ncol = 2) {
 
   variables <- function() {
-    (data %>% gather("variable", "value", -c(sample_col, fill)))$variable %>%
-      unique() %>%
-      length()
+    if (dilution_bool) {
+      (data %>% gather("variable", "value", -c(sample_col, fill)))$variable %>%
+        unique() %>%
+        length()
+    } else {
+      (data %>% gather("variable", "value", -c(sample_col)))$variable %>%
+        unique() %>%
+        length()
+    }
   }
 
   data %>%
-    gather("variable", "value", -c(sample_col, fill)) %>%
+    {
+      if (dilution_bool) {
+        gather(., "variable", "value", -c(sample_col, fill))
+      } else {
+        gather(., "variable", "value", -c(sample_col))
+      }
+    } %>%
     ggplot(
       aes(!!sym(sample_col),
         .data$value,
@@ -54,9 +69,9 @@ plot_metrics <- function(data, sample_col = "Sample IDs", fill = "Dilutions", di
     {if (variables() > 1) {
       facet_wrap(~variable, scales = "free_y", nrow = nrow, ncol = ncol)
     }} +
-    labs(
-      fill = if (dilution_bool) "Dilutions"
-    ) +
+    {if (dilution_bool) {
+      labs(fill = "Dilutions")
+    }} +
     theme(
       legend.position = "bottom",
       strip.text = element_text(face = "bold"),

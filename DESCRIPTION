@@ -1,6 +1,6 @@
 Package: quicR
 Title: RT-QuIC Data Formatting and Analysis
-Version: 2.1.0
+Version: 2.1.1
 Authors@R: 
     person(
       given = "Gage",
@@ -23,6 +23,7 @@ Imports:
   stats,
   stringr,
   tidyr
+Depends: R (>= 4.1.0)
 License: GPL-3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
