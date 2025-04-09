@@ -20,9 +20,6 @@
 #' )
 #' df_ <- get_real(file)[[1]]
 #'
-#' # Export the tables in the first sheet of the file.
-#' dic <- quicR::organize_tables(file)
-#'
 #' # Normalize the raw data against the background reading.
 #' normalize_RFU(df_)
 #' }
