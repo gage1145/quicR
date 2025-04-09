@@ -22,7 +22,8 @@
 #' @export
 get_meta <- function(file) {
   if (is.character(file)) { # Read the Excel file into R.
-    data <- read_excel(file, sheet = 1, col_names = FALSE)
+    data <- read_excel(file, sheet = 1, col_names = FALSE) %>%
+      suppressMessages()
   } else if (is.data.frame(file)) {
     data <- file
   } else {
