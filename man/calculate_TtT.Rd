@@ -27,10 +27,9 @@ file <- system.file(
   file = "test2.xlsx",
   package = "quicR"
 )
-df_ <- get_real(file)[[1]] |>
-  quicR::transpose_real() |>
-  quicR::normalize_RFU(transposed = TRUE)
-calculate_TtT(df_, threshold = 2)
+get_real(file)[[1]] |>
+  quicR::normalize_RFU() |>
+  calculate_TtT(threshold = 2)
 }
 
 }
