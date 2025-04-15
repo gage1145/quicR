@@ -4,10 +4,12 @@
 \alias{get_wells}
 \title{Get the Wells Used in the RT-QuIC Run.}
 \usage{
-get_wells(file)
+get_wells(file, sheet = 2)
 }
 \arguments{
 \item{file}{Excel file exported from MARS}
+
+\item{sheet}{The sheet containing the well IDs in the Excel file.}
 }
 \value{
 A vector containing well IDs.
