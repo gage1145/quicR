@@ -3,6 +3,7 @@
 #' Returns the well IDs used in the plate.
 #'
 #' @param file Excel file exported from MARS
+#' @param sheet The sheet containing the well IDs in the Excel file.
 #'
 #' @return A vector containing well IDs.
 #'
@@ -26,7 +27,7 @@ get_wells <- function(file, sheet = 2) {
       stop("Please enter either .xlsx string or dataframe. ")
     }
   } %>%
-    filter(`...1` == "Well") %>%
+    filter(.$`...1` == "Well") %>%
     select(-(1:2)) %>%
     as.character()
 }
