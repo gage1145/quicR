@@ -147,6 +147,8 @@ meta <- organize_tables(file) |>
 
 analyzed <- calculate_metrics(normal, meta)
 ```
+## Dependencies
+This package requires the following dependencies: [dplyr](https://dplyr.tidyverse.org/), [ggplot2](https://ggplot2.tidyverse.org/), [stringr](https://stringr.tidyverse.org/), [tidyr](https://tidyr.tidyverse.org/), [janitor](https://cran.r-project.org/web/packages/janitor/index.html), [openxlsx](https://cran.r-project.org/web/packages/readxl/index.html), [readxl](https://cran.r-project.org/web/packages/openxlsx/index.html), and [slider](https://cran.r-project.org/web/packages/slider/index.html). The packages, openxlsx and readxl, were fundamental to performing initial data handling of raw data Excel files. The [tidyverse](https://tidyverse.org/) packages (dplyr, ggplot2, stringr, and tidyr), were vital for writing easy-to-read code and for data visualization. The janitor package has data cleaning functions which were useful when importing data from Excel. The slider package provides tools which apply some function to a moving window which was crucial for determining the approximate derivative of raw data.
 
 ## Funding
 This work was funded through the Legislative-Citizen Commission on Minnesota Resources (LCCMR).
