@@ -4,6 +4,9 @@
 
 [![CRAN status](https://www.r-pkg.org/badges/version/quicR)](https://cran.r-project.org/package=quicR)
 [![R-CMD-check](https://github.com/gage1145/quicR/actions/workflows/R-CMD-check.yml/badge.svg)](https://github.com/gage1145/quicR/actions/workflows/R-CMD-check.yml)
+[![DOI](https://img.shields.io/badge/DOI-10.2139%2Fssrn.5188757-blue)](https://doi.org/10.2139/ssrn.5188757)
+[![](https://cranlogs.r-pkg.org/badges/quicR)](https://cran.r-project.org/package=quicR)
+[![GPL-3](https://img.shields.io/badge/license-GPL3-blue.svg)](LICENSE)
 
 <!-- badges: end -->
 
