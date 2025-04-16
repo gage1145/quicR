@@ -124,9 +124,21 @@ calculate_metrics(df_norm, meta)
 ![](man/manuscript/images/boxplot.png)
 
 ## Example Files
-For example .xlsx files, see: 
-```
-inst/extdata/input_files/
+Example XLSX files can be found in the relative path: ```inst/extdata/input_files/```
+
+Example scripts can be found in ```.example_scripts/```
+
+## Example Workflow
+``` R
+library(quicR)
+
+file <- "file.xlsx"
+raw <- get_real(file)[[1]]
+normal <- normalize_RFU(raw, transposed = FALSE)
+meta <- organize_tables(file) |>
+  convert_tables()
+
+analyzed <- calculate_metrics(normal, meta)
 ```
 
 ## Installation
