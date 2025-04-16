@@ -102,7 +102,7 @@ quicR provides functions for calculating kinetic information from real-time data
 
 There is no function included for RAF since that can be calculated as the inverse of time-to-threshold.
 
-Additionally, a useful function, ```calculate_metrics```, has been included which will automatically calculate all these metrics, including RAF (assuming TtT was selected), and add them to a single data frame.
+Additionally, a useful function, ```calculate_metrics```, has been included which will automatically calculate all these metrics, including RAF (assuming TtT was selected), and add them to a single data frame. These metrics can be automatically plotted using ```plot_metrics```. This function generates a faceted figure.
 
 ``` R
 df_norm <- get_real("file.xlsx")[[1]] |> 
@@ -122,7 +122,10 @@ data.frame("Sample IDs" = meta$`Sample IDs`) |>
   )
 
 # Optionally, calculate all metrics at once.
-calculate_metrics(df_norm, meta)
+analyzed <- calculate_metrics(df_norm, meta)
+
+# Use plot_metrics() to automatically generate a facet plot of the metrics.
+plot_metrics(analyzed)
 ```
 
 ![](man/manuscript/images/boxplot.png)
