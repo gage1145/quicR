@@ -76,11 +76,19 @@ If you need to know which wells were used in the plate, run:
 get_wells("file.xlsx")
 ```
 
-### Plate View
+### Sample Locations & Plate View
+The functions, ```get_sample_location``` and ```plate_view```, are used in tandem to generate plate-level overviews of an RT-QuIC assay. Together, they plot every sample in an 8x12 or 16x24 faceted grid for 96-well and 384-well micro-plates, respectively.
 
-The function, ```plate_view``` exports a useful figure for quickly analyzing real-time data. It plots every sample in an 8x12 or 16x24 faceted grid for 96-well and 384-well plates, respectively.
+``` R
+sample_locations <- get_sample_locations(
+  "file.xlsx", 
+  dilution_bool = TRUE,
+  dilution_fun = function(x) -log10(x)
+)
 
-Use ```.example_scripts/plate_view_export``` to export a plate view of the real-time data from an Excel file made in MARS.
+plate_view(df_, sample_locations)
+```
+![Plate‐view analog of a 96‐well microplate. Each facet in the 8x12 grid shows the real‐time curves of an RT‐QuIC reaction. The numbers underneath the sample IDs are the dilution factors.](man/manuscript/images/plate_view.png)
 
 ### Calculations
 
