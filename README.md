@@ -8,7 +8,11 @@
 <!-- badges: end -->
 
 ## Description
-Real-time quaking induced conversion (RT-QuIC) has quickly become a valuable diagnostic tool for protein misfolding disorders such as Creutzfeldt-Jakob disease and Parkinson's disease. Given that the technology is relatively new, academic and industry standards for quality filtering data and high throughput analysis of results have yet to be fully established. The open source R library, quicR, was developed to provide a standradized approach to RT-QuIC data analysis. quicR provides functions, which can be easily integrated into existing R workflows, for data curation, analysis, and vizualization.
+**quicR** is an open-source R package for the analysis of real-time quaking-induced conversion (RT-QuIC) assay data—a powerful technique used in the diagnosis of protein misfolding disorders like Creutzfeldt-Jakob disease (CJD) and Parkinson’s disease.
+
+As RT-QuIC becomes increasingly adopted in research and clinical settings, standardized methods for data processing, quality control, and high-throughput analysis remain limited. **quicR** fills this gap by offering a reproducible and flexible framework for RT-QuIC data curation, metric calculation, and visualization.
+
+Built for integration into existing R workflows, **quicR** helps labs streamline RT-QuIC analysis and improve reproducibility across studies.
 
 ![](man/manuscript/images/workflow.png)
 *Workflow hierarchy of the **quicR** package. Blue nodes indicate steps where BMG software is needed. Purple nodes indicate functions dedicated to handling metadata. Red nodes are functions that acquire and manipulate raw data. Orange nodes are functions which calculate some metric. Finally, yellow nodes represent data analysis endpoints.*
@@ -23,7 +27,7 @@ Much of the functionality is designed to be integrated with the Excel output fil
 </p>
 
 ## Key Metrics & Calculations
-quicR has functions for calculating time-to-threshold (TtT), maxpoint ratio (MPR), and max slope (MS). There is no dedicated function for rate of amyloid formation (RAF) since it can be expressed as the inverse of TtT, and can therefore be calculated separately.
+**quicR** has functions for calculating time-to-threshold (TtT), maxpoint ratio (MPR), and max slope (MS). There is no dedicated function for rate of amyloid formation (RAF) since it can be expressed as the inverse of TtT, and can therefore be calculated separately.
 
 TtT is calculated by iterating through each sample until a value is greater than the user-supplied threshold. It then determines the intersection between the previous and current read times and the threshold. If no value was found larger than the threshold, the total reaction run-time is returned.
 
@@ -95,7 +99,7 @@ plate_view(df_, sample_locations)
 *Plate‐view analog of a 96‐well microplate. Each facet in the 8x12 grid shows the real‐time curves of an RT‐QuIC reaction. The numbers underneath the sample IDs are the dilution factors.*
 
 ### Calculations
-quicR provides functions for calculating kinetic information from real-time data. These metrics include:
+**quicR** provides functions for calculating kinetic information from real-time data. These metrics include:
 1. Maxpoint ratio: ```calculate_MPR```
 2. Maximum slope: ```calculate_MS```
 3. Time-to-threshold: ```calculate_TtT```
