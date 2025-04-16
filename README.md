@@ -141,6 +141,9 @@ meta <- organize_tables(file) |>
 analyzed <- calculate_metrics(normal, meta)
 ```
 
+## Funding
+This work was funded through the Legislative-Citizen Commission on Minnesota Resources (LCCMR).
+
 ## Installation
 ``` R
 # For latest release
@@ -151,5 +154,4 @@ devtools::install_github("https://github.com/gage1145/quicR")
 ```
 
 ## Author
-
 Gage Rowden
