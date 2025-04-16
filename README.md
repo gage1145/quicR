@@ -91,7 +91,6 @@ plate_view(df_, sample_locations)
 ![Plate‐view analog of a 96‐well microplate. Each facet in the 8x12 grid shows the real‐time curves of an RT‐QuIC reaction. The numbers underneath the sample IDs are the dilution factors.](man/manuscript/images/plate_view.png)
 
 ### Calculations
-
 quicR provides functions for calculating kinetic information from real-time data. These metrics include:
 1. Maxpoint ratio: ```calculate_MPR```
 2. Maximum slope: ```calculate_MS```
@@ -99,10 +98,30 @@ quicR provides functions for calculating kinetic information from real-time data
 
 There is no function included for rate of amyloid formation (RAF) since that can be calculated as the inverse of time-to-threshold.
 
-The script provided at ```.example_scripts/calculate_metrics.R``` will calculate these metrics.
+Additionally, a useful function ```calculate_metrics``` has been included which will automatically calculate all these metrics, including RAF (assuming TtT was selected), and add them to a single data frame.
 
-An Excel file will also be created with the full data and summarized
-data. A plot of the summarized data will also be created.
+``` R
+df_norm <- get_real("file.xlsx")[[1]] |> 
+  normalize_RFU()
+
+meta <- organize_tables("file.xlsx") |>
+  convert_tables()
+
+# Calculate each metric individually
+data.frame("Sample IDs" = meta$`Sample IDs`) |>
+  mutate(
+    Dilutions = -log10(meta$dilutions),
+    MPR = calculate_MPR(df_norm, start_col = 3, data_is_norm = TRUE),
+    MS  = calculate_MS(df_norm, data_is_norm = TRUE),
+    TtT = calculate_TtT(df_norm, threshold = 2, start_col = 3),
+    RAF = 1 / TtT
+  )
+
+# Optionally, calculate all metrics at once.
+calculate_metrics(df_norm, meta)
+```
+
+![](man/manuscript/images/boxplot.png)
 
 ## Example Files
 For example .xlsx files, see: 
