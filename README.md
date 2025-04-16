@@ -43,7 +43,6 @@ For an example CSV file, see ```inst/extdata/BMG_formatting/plate_layout.csv```
 The file, “formatted.txt” in the same folder, is how the export should look before importing into MARS.
 
 ### Importing Raw Real-Time Data
-
 Getting the real-time data from the MARS export is quite simple. Normalization can also be performed on the data.
 
 ``` R
@@ -55,7 +54,6 @@ df_norm <- normalize_RFU(df_)
 ```
 
 ### Importing Metadata
-
 The MARS software exports microplate views of the samples with information that the user chose. Often, you will want to ensure that you included "Sample IDs" in that export. To import the metadata into your environment, run the following:
 
 ``` R
@@ -66,7 +64,7 @@ tabs <- organize_tables("file.xlsx", plate = 96)
 df_ <- convert_tables(tabs)
 ```
 
-Additionally, MARS will also export the run metadata which is not sample dependent. This includes information such as the date, run ID, user ID, etc. To get this information run the following:
+Additionally, MARS will export the run's metadata which is not sample-dependent. This includes information such as the date, run ID, user ID, etc. To get this information run the following:
 
 ``` R
 get_meta("file.xlsx")
@@ -75,7 +73,7 @@ get_meta("file.xlsx")
 If you need to know which wells were used in the plate, run:
 
 ``` R
-wells <- get_wells("file.xlsx")
+get_wells("file.xlsx")
 ```
 
 ### Plate View
