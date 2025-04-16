@@ -18,10 +18,18 @@ Much of the functionality is designed to be integrated with the Excel output fil
 ![](man/manuscript/images/MARS_settings.png){width=100%}
 
 Having both the microplate view and the table view helps with
-integrating plate layouts and the real-time data.
+integrating plate layouts and the real-time data. For many of the functions, it is important to have a table labelled “Sample IDs” on the microplate view sheet of the Excel file.
 
-For many of the functions, it is important to have a table labelled
-“Sample IDs” on the microplate view sheet of the Excel file.
+## Key Metrics & Calculations
+quicR has functions for calculating TtT, MPR, and MS (vizualized in [@fig-metrics]). There is no dedicated function for RAF since it can be expressed as the inverse of TtT, and can therefore be calculated separately as in the example in the Calculations section.
+
+TtT is calculated by iterating through each sample until a value is greater than the user-supplied threshold. It then determines the intersection between the previous and current read times and the threshold. If no value was found larger than the threshold, the total reaction run-time is returned.
+
+MPR is defined as the maximum fluorescence divided by the background fluorescence [@Rowden2023]. Thus, in order to calculate, the raw data must first be normalized against the background. This is done by the user choosing a cycle for background determination, and then dividing each read by that value. The MPR is taken as the max value of the normalized data.
+
+MS is determined by approximating the maximum of the derivative of the raw data and is typically reported in units of $\Delta$RFU/h (i.e. the change in relative fluorescent units per hour). Slopes are calculated using differences between two data points within the range of a sliding window. While this slightly reduces the accuracy of the approximation, the improvement in computation time exceeded the loss in resolution.
+
+![Example graph highlighting the calculated metrics described above. The red curve represents a raw data curve that has been normalized against background. The maxpoint ratio is calculated as the maximum fluorescent value achieved in the normalized raw data. Time-to-threshold is determined as the time required to cross a given threshold (in this example, the threshold is set at 0.2). The blue curve represents the approximate derivative of the raw data, and max slope is determined as the maximum of the derivative.](man/manuscript/images/metric_example.png){#fig-metrics}
 
 ## Examples
 
