@@ -162,5 +162,9 @@ install.packages("quicR")
 devtools::install_github("https://github.com/gage1145/quicR")
 ```
 
-## Author
-Gage Rowden
+## Authors
+**Gage Rowden<sup>a,b,c,+</sup>**
+<sup>a</sup> University of Minnesota Twin Cities
+<sup>b</sup> Minnesota Center for Prion Research & Outreach
+<sup>c</sup> Priogen Corp.
+<sup>+</sup> Corresponding author
