@@ -34,14 +34,13 @@ MS is determined by approximating the maximum of the derivative of the raw data 
 ## Examples
 
 ### Plate IDs for BMG Import
+``` R
+BMG_format("plate_layout.csv", write_file = TRUE, save_path = "", save_name = "formatted.txt")
+```
 
-Use BMG_format.R script to format a .CSV file with a Sample IDs in a
-plate view into a format importable into the BMG control software.
+For an example CSV file, see ```inst/extdata/BMG_formatting/plate_layout.csv```
 
-For example .CSV file, see ```tests/testthat/BMG_formatting/plate_layout.csv```
-
-The file, “formatted.txt” in the same folder, is how the export should
-look to be imported into the BMG software.
+The file, “formatted.txt” in the same folder, is how the export should look before importing into MARS.
 
 ### Importing Raw Real-Time Data
 
