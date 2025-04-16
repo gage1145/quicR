@@ -1,3 +1,14 @@
+# quicR 2.1.3
+
+## Updated README
+- Removed the mermaid diagram and replaced it with a workflow diagram image and a screenshot of the window where export selections are made.
+- Added a plate view section with example figure.
+- Added a section explaining key calculated metrics such as maxpoint ratio, max slope, time-to-threshold, and rate of amyloid formation.
+- Included examples with newly created functions that were not present in previous versions such as `calculate_metrics` and `plot_metrics`.
+- Added a funding section.
+- Added a dependency section with hyperlinks to all dependencies.
+- Updated the author section.
+
 # quicR 2.1.2
 
 ## Optimizations
