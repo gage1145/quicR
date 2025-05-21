@@ -139,114 +139,163 @@
                 \label{fig:workflow}
             \end{figure}
 
-    \subsection{Software functionalities}
-        The implementation of the \textbf{quicR} package encompasses several streamlined processes designed to facilitate data input, cleaning, transformation, and analysis of RT-QuIC data. This section provides a comprehensive guide to utilizing the package's key functionalities, detailing how to:
-            
-        \begin{enumerate}
-            \item Format and input sample data into Omega control software (BMG Labtech, Ortenberg, Germany).
-            \item Extract, clean, and organize metadata and raw data and apply transformations/normalization for downstream analysis.
-            \item Calculate critical analytical metrics, such as time-to-threshold (TtT), rate of amyloid formation (RAF), maxpoint ratio (MPR), and maximum slope (MS).
-            \item Visualize raw and analyzed data.
-        \end{enumerate}
-
-        These steps are designed to enhance reproducibility, minimize manual data handling, and enable seamless integration with the MARS software workflow.
-
-        \subsubsection{Input of Sample IDs into Omega Control Software}
-            The Omega control software allows input of a TXT file containing sample IDs, dilution factors, and their well locations. This file is uniquely formatted, and not easily reproduced manually.
-
+        \subsection{Software functionalities}
+            The implementation of the \textbf{quicR} package encompasses several streamlined processes designed to facilitate data input, cleaning, transformation, and analysis of RT-QuIC data. This section provides a comprehensive guide to utilizing the package's key functionalities, detailing how to:
+                
             \begin{enumerate}
-                \item \textbf{BMG\_format()}: This function allows for input of a CSV file containing the plate layout (see Table \ref{tbl:layout} for proper formatting), and exports the formatted TXT file. The file can then be imported into the Omega control software before running.
+                \item Format and input sample data into Omega control software (BMG Labtech, Ortenberg, Germany).
+                \item Extract, clean, and organize metadata and raw data and apply transformations/normalization for downstream analysis.
+                \item Calculate critical analytical metrics, such as time-to-threshold (TtT), rate of amyloid formation (RAF), maxpoint ratio (MPR), and maximum slope (MS).
+                \item Visualize raw and analyzed data.
             \end{enumerate}
-            
+
+            These steps are designed to enhance reproducibility, minimize manual data handling, and enable seamless integration with the MARS software workflow.
+
+            \subsubsection{Input of Sample IDs into Omega Control Software}
+                The Omega control software allows input of a TXT file containing sample IDs, dilution factors, and their well locations. This file is uniquely formatted, and not easily reproduced manually.
+
+                \begin{enumerate}
+                    \item \textbf{BMG\_format()}: This function allows for input of a CSV file containing the plate layout (see Table \ref{tbl:layout} for proper formatting), and exports the formatted TXT file. The file can then be imported into the Omega control software before running.
+                \end{enumerate}
+                
+                \begin{table}[ht]
+                    \centering
+                    \begin{tblr}{
+                        cells     = {font = \fontsize{11pt}{11pt}\selectfont},
+                        colspec   = {|c|cccccccccccc|}, 
+                        row{1}    = {font=\bfseries}, 
+                        column{1} = {font=\bfseries}, 
+                        rowhead   = 1,
+                        width     = \textwidth
+                    }
+                        \hline
+                        & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 \\ 
+                        \hline
+                        A & P & S01 & S02 & S03 & S04 & S05 & S06 & S07 & S08 & S09 & S10 & S11 \\ 
+                        B & P & S01 & S02 & S03 & S04 & S05 & S06 & S07 & S08 & S09 & S10 & S11 \\ 
+                        C & P & S01 & S02 & S03 & S04 & S05 & S06 & S07 & S08 & S09 & S10 & S11 \\ 
+                        D & P & S01 & S02 & S03 & S04 & S05 & S06 & S07 & S08 & S09 & S10 & S11 \\ 
+                        E & N & S01 & S02 & S03 & S04 & S05 & S06 & S07 & S08 & S09 & S10 & S11 \\ 
+                        F & N & S01 & S02 & S03 & S04 & S05 & S06 & S07 & S08 & S09 & S10 & S11 \\ 
+                        G & N & S01 & S02 & S03 & S04 & S05 & S06 & S07 & S08 & S09 & S10 & S11 \\ 
+                        H & N & S01 & S02 & S03 & S04 & S05 & S06 & S07 & S08 & S09 & S10 & S11 \\ 
+                        \hline
+                    \end{tblr}
+                    \caption{Example CSV file 96-well plate layout for input into the BMG\_format() function. The top left corner is cell ``A1'' in the CSV file. The top numbered row and the left-most lettered column should never be altered.}
+                    \label{tbl:layout}
+                \end{table}
+
+            \subsubsection{Data Cleaning and Transformation}
+                The MARS software exports real-time data as an Excel workbook. Typically, the first sheet in the workbook will include microplate views of both raw data and metadata; however, the metadata on this page is what is most useful for downstream processes. Those tables include the ``Sample IDs'' and ``Dilutions'' tables (if dilutions were included in the MARS export). For much of the downstream analysis, it is crucial that the ``Sample IDs'' table was exported from MARS.\@ If there is no table, the user can simply add it manually.
+
+                \begin{enumerate}
+                    \item \textbf{organize\_tables()}: returns a list of tables contained in the first sheet of the exported Excel sheet. These tables contain valuable metadata such as sample IDs, dilution factors, and microplate locations.
+                    \item \textbf{convert\_tables()}: accepts tables outputted from organize\_tables() and converts them to columns in a data frame.
+                    \item \textbf{get\_sample\_locations()}: extracts the well locations for each sample. Output of this function is used as an argument for visualizing a microplate-level view of real-time data.
+                \end{enumerate}
+
+            \subsubsection{Retrieving and Manipulating Raw Data}
+                The raw, real-time data is typically found on the second sheet of the Excel workbook exported from MARS. There are three functions dedicated to the retrieval and cleaning of raw data.
+
+                \begin{enumerate}
+                    \item \textbf{get\_real()}: Retrieves the raw data from the Excel file, and outputs it as a data frame.
+                    \item \textbf{transpose\_real()}: Swaps the rows and columns which facilitates downstream analyses.
+                    \item \textbf{normalize\_RFU()}: normalizes the raw data by dividing each read by background fluorescence at a given cycle.
+                \end{enumerate}
+
+            \subsubsection{Calculations}
+                Three analytical metrics have dedicated functions: TtT, MPR, and MS. RAF does not have a designated function since it is simply the reciprocal of the time-to-threshold (1/TtT). However, it can be calculated using the calculate\_metrics() function if TtT is chosen as an optional parameter. Each function below accepts input from the transpose\_real() or the normalize\_RFU() functions. See Figure \ref{fig:metrics} for an example of the output of these functions.
+
+                \begin{enumerate}
+                    \item \textbf{calculate\_threhold()}: returns a value which is a given number of standard deviations above the average background fluorescence of the entire microplate. This is a popular method of threshold calculation as reviewed in Rowden, et al.\cite{Rowden2023}.
+                    \item \textbf{calculate\_TtT()}: takes the real-time data and calculates the time in hours needed to reach a given threshold value. This threshold can be supplied by calculate\_threshold() or determined separately by the user.
+                    \item \textbf{calculate\_MPR()}: accepts raw or normalized data and returns the maximum value obtained during the run. If supplied with raw data, it will make a call to the normalize\_RFU() function.
+                    \item \textbf{calculate\_MS()}: computes the approximate derivative of the real-time data and returns the maximum value obtained during the run.
+                    \item \textbf{calculate\_metrics()}: makes a call to functions 2--4 above and generates a data frame with the sample-matched metrics. Also computes RAF if TtT is given as an argument.
+                \end{enumerate}
+
+                \begin{figure}[ht]
+                    \centering{}
+                    \includegraphics[width=\textwidth]{images/metric_example.png}
+                    \caption{Example graph highlighting the calculated metrics described herein. The red curve represents a raw data curve that has been normalized against background. The maxpoint ratio is calculated as the maximum fluorescent value achieved in the normalized raw data. Time‐to‐threshold is determined as the time required to cross a given threshold (in this example, the threshold is set at 0.2). The blue curve represents the derivative of the raw data, and max slope is determined as the maximum of the derivative.}
+                    \label{fig:metrics}
+                \end{figure}
+
+            \subsubsection{Visualization}
+                The ensuing goal of this package is visualizing RT-QuIC data. While there are many ways to represent these data, \textbf{quicR} includes two functions which provide a rapid assessment of the RT-QuIC results.
+                \begin{enumerate}
+                    \item \textbf{plate\_view()}: accepts the output from the get\_real() function and get\_sample\_locations() function. Makes an 8$\times$12 or 16$\times$24 faceted plot depending on if the plate has 96 or 384 wells. Each facet shows the real-time data of each well.
+                    \item \textbf{plot\_metrics()}: requires the output of calculate\_metrics() and generates a boxplot of each sample's MPR, MS, RAF, and TtT.
+                \end{enumerate}
+        
+        \subsection{Comparable Methods}
+            To contextualize the functionality and performance of \textbf{quicR}, we compared it with existing RT-QuIC analysis approaches from the published R package, \textbf{QuICSeedR} \cite{Li2025}. While both \textbf{quicR} and \textbf{QuICSeedR} offer overlapping core functionalities, their design philosophies, input handling, and computational trade-offs differ substantially.
+
+            Benchmarking was performed using equivalent functions between the two packages, and results are summarized in Table~\ref{tbl:benchmark}. In general, \textbf{QuICSeedR} out-performs \textbf{quicR} across the board. However, \textbf{quicR} addresses several practical limitations that the authors believe justifies the slower times. Notably, \textbf{QuICSeedR} requires an additional, manually formatted Excel file to input sample metadata, whereas \textbf{quicR} directly parses raw and meta data embedded within a single MARS export file. This design reduces user overhead and minimizes potential for transcription errors.
+
+            \textbf{quicR} also provides more granular control over metric calculations, allowing users to compute MPR, MS, TtT, and RAF independently rather than as a fixed batch. While \textbf{QuICSeedR} includes built-in support for bulk analysis and diagnostic outputs, these features can be approximated in \textbf{quicR} via standard R idioms (e.g., \textbf{apply} family of functions), and are planned for future development.
+
+            Importantly, \textbf{quicR} is actively maintained, in contrast to \textbf{QuICSeedR}, which, to the authors’ knowledge, is no longer under active development. Overall, \textbf{quicR} favors flexibility, reproducibility, and usability with raw instrument output at the expense of execution speed—trade-offs that align with the package’s intended use in diagnostic pipelines.
+
             \begin{table}[ht]
                 \centering
                 \begin{tblr}{
                     cells     = {font = \fontsize{11pt}{11pt}\selectfont},
-                    colspec   = {|c|cccccccccccc|}, 
-                    row{1}    = {font=\bfseries}, 
-                    column{1} = {font=\bfseries}, 
+                    colspec   = {rcc}, 
+                    row{1}    = {font=\bfseries},
                     rowhead   = 1,
                     width     = \textwidth
                 }
                     \hline
-                    & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 \\ 
+                    \SetCell[c=1]{c}Feature / Benchmark & \textbf{quicR} & \textbf{QuICSeedR} \\ 
                     \hline
-                    A & P & S01 & S02 & S03 & S04 & S05 & S06 & S07 & S08 & S09 & S10 & S11 \\ 
-                    B & P & S01 & S02 & S03 & S04 & S05 & S06 & S07 & S08 & S09 & S10 & S11 \\ 
-                    C & P & S01 & S02 & S03 & S04 & S05 & S06 & S07 & S08 & S09 & S10 & S11 \\ 
-                    D & P & S01 & S02 & S03 & S04 & S05 & S06 & S07 & S08 & S09 & S10 & S11 \\ 
-                    E & N & S01 & S02 & S03 & S04 & S05 & S06 & S07 & S08 & S09 & S10 & S11 \\ 
-                    F & N & S01 & S02 & S03 & S04 & S05 & S06 & S07 & S08 & S09 & S10 & S11 \\ 
-                    G & N & S01 & S02 & S03 & S04 & S05 & S06 & S07 & S08 & S09 & S10 & S11 \\ 
-                    H & N & S01 & S02 & S03 & S04 & S05 & S06 & S07 & S08 & S09 & S10 & S11 \\ 
+                    Number of input files required & 1 & 2 \\ 
+                    Number of threshold methods & 2 & 3 \\
+                    Requires manual metadata entry & No & Yes \\
+                    Actively maintained & Yes & No \\
+                    Built-in bulk analysis support & No & Yes \\
+                    Diagnostic analysis functionality & No & Yes \\
+                    Incorporates dilution factors & Yes & No \\
+                    Converts time units & No & Yes \\
+                    Calculates individual metrics independently & Yes & No \\
+                    \hline
+                    Plate view plot execution time (s) & 0.0978 & 0.0616 \\
+                    Metric plot execution time (s) & 0.0108 & 0.0052 \\
+                    Metric calculations (MPR, MS, etc.) (s) & 0.3912 & 0.0184 \\
+                    Metadata parsing time (s) & 0.1376 & 0.0374 \\
+                    Raw data parsing time (s) & 0.0722 & 0.0498 \\
+                    Bulk analysis (6 files) (s) & 10.9738 & 0.8486 \\
                     \hline
                 \end{tblr}
-                \caption{Example CSV file 96-well plate layout for input into the BMG\_format() function. The top left corner is cell ``A1'' in the CSV file. The top numbered row and the left-most lettered column should never be altered.}
-                \label{tbl:layout}
+                \caption{Comparison of core features and execution times between \textbf{quicR} and \textbf{QuICSeedR}. While \textbf{QuICSeedR} demonstrates superior execution speed, \textbf{quicR} offers enhanced metadata handling, metric flexibility, and support for unprocessed instrument output files. All benchmarks were performed using the same dataset and machine (Windows 11, 16GB RAM).}
+                \label{tbl:benchmark}
             \end{table}
 
-        \subsubsection{Data Cleaning and Transformation}
-            The MARS software exports real-time data as an Excel workbook. Typically, the first sheet in the workbook will include microplate views of both raw data and metadata; however, the metadata on this page is what is most useful for downstream processes. Those tables include the ``Sample IDs'' and ``Dilutions'' tables (if dilutions were included in the MARS export). For much of the downstream analysis, it is crucial that the ``Sample IDs'' table was exported from MARS.\@ If there is no table, the user can simply add it manually.
+        \subsection{Maintenance and Community Involvement}
+            The \textbf{quicR} package is developed with long-term maintainability and community engagement in mind. The source code is hosted on GitHub (\url{https://github.com/gagerowden/quicR}), where users can report issues, request features, and contribute improvements via pull requests. A comprehensive \textbf{CONTRIBUTING.md} file and issue templates are provided to streamline collaboration and lower the barrier for external contributions. In addition to continuous integration testing, we plan to tag releases with semantic versioning and maintain a changelog to track updates and improvements. Feedback from diagnostic users has already led to enhancements in metadata parsing and output plotting, and we anticipate continued improvements through engagement with the broader scientific community. We encourage users to share their use cases, raise issues, and help shape future development directions.
 
-            \begin{enumerate}
-                \item \textbf{organize\_tables()}: returns a list of tables contained in the first sheet of the exported Excel sheet. These tables contain valuable metadata such as sample IDs, dilution factors, and microplate locations.
-                \item \textbf{convert\_tables()}: accepts tables outputted from organize\_tables() and converts them to columns in a data frame.
-                \item \textbf{get\_sample\_locations()}: extracts the well locations for each sample. Output of this function is used as an argument for visualizing a microplate-level view of real-time data.
-            \end{enumerate}
-
-        \subsubsection{Retrieving and Manipulating Raw Data}
-            The raw, real-time data is typically found on the second sheet of the Excel workbook exported from MARS. There are three functions dedicated to the retrieval and cleaning of raw data.
-
-            \begin{enumerate}
-                \item \textbf{get\_real()}: Retrieves the raw data from the Excel file, and outputs it as a data frame.
-                \item \textbf{transpose\_real()}: Swaps the rows and columns which facilitates downstream analyses.
-                \item \textbf{normalize\_RFU()}: normalizes the raw data by dividing each read by background fluorescence at a given cycle.
-            \end{enumerate}
-
-        \subsubsection{Calculations}
-            Three analytical metrics have dedicated functions: TtT, MPR, and MS. RAF does not have a designated function since it is simply the reciprocal of the time-to-threshold (1/TtT). However, it can be calculated using the calculate\_metrics() function if TtT is chosen as an optional parameter. Each function below accepts input from the transpose\_real() or the normalize\_RFU() functions. See Figure \ref{fig:metrics} for an example of the output of these functions.
-
-            \begin{enumerate}
-                \item \textbf{calculate\_threhold()}: returns a value which is a given number of standard deviations above the average background fluorescence of the entire microplate. This is a popular method of threshold calculation as reviewed in Rowden, et al.\cite{Rowden2023}.
-                \item \textbf{calculate\_TtT()}: takes the real-time data and calculates the time in hours needed to reach a given threshold value. This threshold can be supplied by calculate\_threshold() or determined separately by the user.
-                \item \textbf{calculate\_MPR()}: accepts raw or normalized data and returns the maximum value obtained during the run. If supplied with raw data, it will make a call to the normalize\_RFU() function.
-                \item \textbf{calculate\_MS()}: computes the approximate derivative of the real-time data and returns the maximum value obtained during the run.
-                \item \textbf{calculate\_metrics()}: makes a call to functions 2--4 above and generates a data frame with the sample-matched metrics. Also computes RAF if TtT is given as an argument.
-            \end{enumerate}
-
-            \begin{figure}[ht]
-                \centering{}
-                \includegraphics[width=\textwidth]{images/metric_example.png}
-                \caption{Example graph highlighting the calculated metrics described herein. The red curve represents a raw data curve that has been normalized against background. The maxpoint ratio is calculated as the maximum fluorescent value achieved in the normalized raw data. Time‐to‐threshold is determined as the time required to cross a given threshold (in this example, the threshold is set at 0.2). The blue curve represents the derivative of the raw data, and max slope is determined as the maximum of the derivative.}
-                \label{fig:metrics}
-            \end{figure}
-
-        \subsubsection{Visualization}
-            The ensuing goal of this package is visualizing RT-QuIC data. While there are many ways to represent these data, \textbf{quicR} includes two functions which provide a rapid assessment of the RT-QuIC results.
-            \begin{enumerate}
-                \item \textbf{plate\_view()}: accepts the output from the get\_real() function and get\_sample\_locations() function. Makes an 8$\times$12 or 16$\times$24 faceted plot depending on if the plate has 96 or 384 wells. Each facet shows the real-time data of each well.
-                \item \textbf{plot\_metrics()}: requires the output of calculate\_metrics() and generates a boxplot of each sample's MPR, MS, RAF, and TtT.
-            \end{enumerate}
-        
     \section{Illustrative examples}
         To demonstrate the utility of \textbf{quicR}, we used a typical RT-QuIC run performed on a 96-well plate. The reaction was performed on a FLUOstar Omega plate reader (BMG Labtech, Ortenberg, Germany). The file was exported as an Excel workbook where the metadata appears on the first sheet and the raw data on the second.
         
         \subsection{Example Code}
-            \# Step 1: Identify the raw file.\\
+            \# Step 1: Install and load the package\\
+            install.packages("quicR")\\
+            library(quicR)\\
+            \# Step 2: Identify the raw file.\\
             file <- "example.xlsx"\\
-            \# Step 2: Extract the raw data.\\
+            \# Step 3: Extract the raw data.\\
             raw <- get\_real(file)[[1]]\\
-            \# Step 3: Normalize the data against the background.\\
+            \# Step 4: Normalize the data against the background.\\
             normal <- normalize\_RFU(raw, transposed = FALSE)\\
-            \# Step 4: Extract the metadata.\\
+            \# Step 5: Extract the metadata.\\
             meta <- organize\_tables(file) |> convert\_tables()\\
-            \# Step 5: Get sample locations.\\
+            \# Step 6: Get sample locations.\\
             locations <- get\_sample\_locations(file)\\
-            \# Step 6: Create the analyzed data frame.\\
+            \# Step 7: Create the analyzed data frame.\\
             analyzed <- calculate\_metrics(normal, meta)\\
-            \# Step 7: Plot the analyzed data frame.\\
+            \# Step 8: Plot the analyzed data frame.\\
             plot\_metrics(analyzed)\\
-            \# Step 8: Plot the plate view.\\
+            \# Step 9: Plot the plate view.\\
             plate\_view(raw, locations)\\
 
             Once the file name is identified, the get\_real() function is used to extract the raw data. This data is imported as a data frame with each sample designated as an individual column and the first column designated as time. Much of the downstream analysis works best with background-normalized data, so the raw data is then passed to the normalize\_RFU() function \cite{Rowden2023}. This function accepts an integer as an argument for the desired cycle to be selected for background measurement. 
