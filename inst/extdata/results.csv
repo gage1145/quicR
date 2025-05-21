@@ -1,0 +1,17 @@
+"","test","elapsed","replications","package","time_per_test"
+"1","BulkReadMARS(path, ""plate"", ""raw"") %>% BulkProcessing(do_analysis = FALSE)",42.4300000000001,50,"QuICSeedR",0.848600000000001
+"3","CleanMeta(read_xlsx(files[2]), read_xlsx(files[1]), replicates)",1.87000000000012,50,"QuICSeedR",0.0374000000000024
+"5","CleanRaw(meta, read_xlsx(files[2]), time, 48)",2.49000000000001,50,"QuICSeedR",0.0498000000000002
+"4","ConvertTime(read_xlsx(files[2]))",2.3599999999999,50,"QuICSeedR",0.047199999999998
+"6","GetCalculation(clean_raw, meta, threshold_method = ""bg_ratio"", binw = 3)",0.919999999999845,50,"QuICSeedR",0.0183999999999969
+"2","GetReplicate(read_xlsx(files[1]))",2.20000000000005,50,"QuICSeedR",0.0440000000000009
+"7","PlotMetric(calcs)",0.259999999999991,50,"QuICSeedR",0.00519999999999982
+"8","PlotPlate(read_xlsx(files[2]), time)",3.07999999999993,50,"QuICSeedR",0.0615999999999985
+"11","bulk_analyze(files)",548.69,50,"quicR",10.9738
+"51","calculate_metrics(norm, meta)",19.5599999999999,50,"quicR",0.391199999999999
+"21","convert_tables(organize_tables(file))",6.88000000000011,50,"quicR",0.137600000000002
+"31","get_real(raw)",3.61000000000013,50,"quicR",0.0722000000000025
+"71","get_sample_locations(file)",53.1100000000001,50,"quicR",1.0622
+"41","normalize_RFU(data)",0.940000000000055,50,"quicR",0.0188000000000011
+"81","plate_view(data, locations)",4.88999999999987,50,"quicR",0.0977999999999975
+"61","plot_metrics(analyzed)",0.539999999999964,50,"quicR",0.0107999999999993
