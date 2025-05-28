@@ -209,31 +209,33 @@
                 \begin{figure}[ht]
                     \centering{}
                     \includegraphics[width=\textwidth]{images/metric_example.png}
-                    \caption{Example graph highlighting the calculated metrics described herein. The red curve represents a raw data curve that has been normalized against background. The maxpoint ratio is calculated as the maximum fluorescent value achieved in the normalized raw data. Time‐to‐threshold is determined as the time required to cross a given threshold (in this example, the threshold is set at 0.2). The blue curve represents the derivative of the raw data, and max slope is determined as the maximum of the derivative.}
-                    \label{fig:metrics}
+                    \caption{Example graph highlighting the calculated metrics described herein. The red curve represents a raw data curve that has been normalized against background. The maxpoint ratio is calculated as the maximum fluorescent value achieved in the normalized raw data. Time‐to‐threshold is determined as the time required to cross a given threshold (in this example, the threshold is set at 0.2). The blue curve represents the derivative of the raw data, and max slope is determined as the maximum of the derivative.}\label{fig:metrics}
                 \end{figure}
 
             \subsubsection{Visualization}
                 The ensuing goal of this package is visualizing RT-QuIC data. While there are many ways to represent these data, \textbf{quicR} includes two functions which provide a rapid assessment of the RT-QuIC results.
                 \begin{enumerate}
-                    \item \textbf{plate\_view()}: accepts the output from the get\_real() function and get\_sample\_locations() function. Makes an 8$\times$12 or 16$\times$24 faceted plot depending on if the plate has 96 or 384 wells. Each facet shows the real-time data of each well.
+                    \item \texttt{plate\_view()}: accepts the output from the get\_real() function and get\_sample\_locations() function. Makes an 8$\times$12 or 16$\times$24 faceted plot depending on if the plate has 96 or 384 wells. Each facet shows the real-time data of each well.
                     \item \textbf{plot\_metrics()}: requires the output of calculate\_metrics() and generates a boxplot of each sample's MPR, MS, RAF, and TtT.
                 \end{enumerate}
         
         \subsection{Comparable Methods}
-            To contextualize the functionality and performance of \textbf{quicR}, we compared it with existing RT-QuIC analysis approaches from the published R packages, \textbf{QuICSeedR} \cite{Li2025} and \textbf{rtquicR} \cite{Slota2023}. While all three offer overlapping core functionalities, their design philosophies, input handling, and computational trade-offs differ substantially.
+            To contextualize the functionality and performance of \textbf{quicR}, we compared it with existing RT-QuIC analysis approaches from the published R package, QuICSeedR\ \cite{Li2025}, and the unpublished rtquicR\ \cite{Slota2023}. While all three offer overlapping core functionalities, their design philosophies, input handling, and computational trade-offs differ substantially.
 
-            Benchmarking was performed using the rbenchmark library \cite{rbenchmark} with 50 replications for each function. Comparisons are approximate as equivalent functions were not necessarily found between the three packages, and results are summarized in Table~\ref{tbl:benchmark}. In general, \textbf{QuICSeedR} out-performs \textbf{quicR} across the board. However, \textbf{quicR} addresses several practical limitations that the authors believe justifies the slower times. Notably, \textbf{QuICSeedR} requires an additional, manually formatted Excel file to input sample metadata, whereas \textbf{quicR} directly parses raw and meta data embedded within a single MARS export file. This design reduces user overhead and minimizes potential for transcription errors.
+            Benchmarking was performed using the rbenchmark library~\cite{rbenchmark} with 50 replications for each function. Comparisons are approximate, as equivalent functions were not necessarily found between the three packages. Results are summarized in Table~\ref{tbl:benchmark}. In general, QuICSeedR\ demonstrates the fastest execution times across most core functions. However, \textbf{quicR} addresses several practical limitations that the authors believe justify the slower performance in some areas. Notably, QuICSeedR requires an additional, manually formatted Excel file to input sample metadata, whereas \textbf{quicR} directly parses both raw and meta data embedded within a single MARS export file. This design reduces user overhead and minimizes the potential for transcription errors.
 
-            \textbf{quicR} also provides more granular control over metric calculations, allowing users to compute MPR, MS, TtT, and RAF independently rather than as a fixed batch. While \textbf{QuICSeedR} includes built-in support for bulk analysis and diagnostic outputs, these features can be approximated in \textbf{quicR} via standard R idioms (e.g., `apply' family of functions), and are planned for future development.
+            The rtquicR\ package introduces support for additional thresholding methods and normalization strategies, and uniquely includes features such as SD50 and area-under-the-curve calculations. However, it does not currently support 384-well plate layouts, automated metadata parsing, or input files with missing data, all of which are supported by \textbf{quicR}. Its functions also require pre-cleaned and pre-structured input data, placing more burden on the user to prepare their dataset prior to analysis.
 
-            Overall, \textbf{quicR} favors flexibility, reproducibility, and usability with raw instrument output at the expense of execution speed—trade-offs that align with the package’s intended use in diagnostic pipelines.
+            \textbf{quicR} further distinguishes itself through its modular design: it allows users to calculate metrics such as MPR, MS, TtT, and RAF independently rather than as a bundled operation. While QuICSeedR includes built-in support for bulk analysis and diagnostic outputs, these workflows can be achieved in \textbf{quicR} using standard R idioms (e.g., the \texttt{apply} family of functions), and are planned for future releases.
+
+            Overall, \textbf{quicR} favors flexibility, reproducibility, and usability with raw instrument output at the expense of execution speed trade-offs that align with the package’s intended use in diagnostic pipelines.
 
             \begin{table}[H]
                 \centering
                 \begin{tblr}{
                     cells     = {font = \fontsize{11pt}{11pt}\selectfont},
                     colspec   = {rccc}, 
+                    rows      = {rowsep = 1pt},
                     row{1}    = {font=\bfseries},
                     rowhead   = 1,
                     width     = \textwidth
@@ -273,8 +275,7 @@
                     Bulk analysis (s/file) & 6.550 & 0.849 & 1.986 \\
                     \hline
                 \end{tblr}
-                \caption{Comparison of core features and execution times between \textbf{quicR} and \textbf{QuICSeedR}. While \textbf{QuICSeedR} demonstrates superior execution speed, \textbf{quicR} offers enhanced metadata handling, metric flexibility, and support for unprocessed instrument output files. All benchmarks were performed using the same dataset and machine (Windows 11, 16GB RAM).}
-                \label{tbl:benchmark}
+                \caption{Comparison of core features and execution times between \textbf{quicR}, QuICSeedR, and rtquicR. While QuICSeedR demonstrated the fastest overall execution times, \textbf{quicR} offered enhanced metadata handling, metric flexibility, and support for unprocessed instrument output files.\ rtquicR introduces additional metrics such as SD50 and area under the curve but requires pre-structured input and lacks support for 384-well microplate formats and automated metadata parsing. All benchmarks were performed using the same dataset and machine (Windows 11, 16GB RAM) in 50 replicates.}\label{tbl:benchmark}
             \end{table}
 
         \subsection{Maintenance and Community Involvement}
