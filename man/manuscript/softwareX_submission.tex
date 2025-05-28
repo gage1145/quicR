@@ -278,6 +278,21 @@
                 \caption{Comparison of core features and execution times between \textbf{quicR}, QuICSeedR, and rtquicR. While QuICSeedR demonstrated the fastest overall execution times, \textbf{quicR} offered enhanced metadata handling, metric flexibility, and support for unprocessed instrument output files.\ rtquicR introduces additional metrics such as SD50 and area under the curve but requires pre-structured input and lacks support for 384-well microplate formats and automated metadata parsing. All benchmarks were performed using the same dataset and machine (Windows 11, 16GB RAM) in 50 replicates.}\label{tbl:benchmark}
             \end{table}
 
+        \subsection{Reproducibility}
+            To promote transparency and reproducibility, we provide a standardized benchmarking and data extraction script alongside the \textbf{quicR} package. This script processes raw RT-QuIC output files in MARS export format, computes key kinetic metrics (MPR, MS, TtT, RAF), and writes all intermediate and final results to CSV files. Users are instructed to run the script locally, generating three files (\texttt{<user>\_meta.csv}, \texttt{<user>\_data.csv}, and \texttt{<user>\_calcs.csv}) which were then compared across systems or submissions to ensure consistent performance.
+
+            To further guard against system-dependent variability, the script includes the following measures:
+
+            \begin{enumerate}
+                % \item Sorting of input and output data by sample ID to enforce deterministic row order;
+                \item Cross-platform user ID resolution to enable standardized filenames
+                \item Fixed random seed initialization to control for any stochastic components
+                \item Output of full session metadata via \texttt{sessionInfo()} to record package versions and platform details
+                \item UTF-8 encoding of all CSV files for consistent parsing across operating systems.
+            \end{enumerate}
+
+            This reproducibility framework ensures that benchmark results, as reported in Table~\ref{tbl:benchmark}, can be independently validated and extended. The script, along with example data, is included in the package repository and supplementary materials.
+
         \subsection{Maintenance and Community Involvement}
             The \textbf{quicR} package is developed with long-term maintainability and community engagement in mind. The source code is hosted on GitHub (\url{https://github.com/gagerowden/quicR}), where users can report issues, request features, and contribute improvements via pull requests. A comprehensive \textbf{CONTRIBUTING.md} file and issue templates are provided to streamline collaboration and lower the barrier for external contributions. In addition to continuous integration testing, we plan to tag releases with semantic versioning and maintain a changelog to track updates and improvements. Feedback from diagnostic users has already led to enhancements in metadata parsing and output plotting, and we anticipate continued improvements through engagement with the broader scientific community. We encourage users to share their use cases, raise issues, and help shape future development directions.
 
