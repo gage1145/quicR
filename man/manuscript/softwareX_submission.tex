@@ -215,7 +215,7 @@
             \subsubsection{Visualization}
                 The ensuing goal of this package is visualizing RT-QuIC data. While there are many ways to represent these data, \textbf{quicR} includes two functions which provide a rapid assessment of the RT-QuIC results.
                 \begin{enumerate}
-                    \item \texttt{plate\_view()}: accepts the output from the get\_real() function and get\_sample\_locations() function. Makes an 8$\times$12 or 16$\times$24 faceted plot depending on if the plate has 96 or 384 wells. Each facet shows the real-time data of each well.
+                    \item \textbf{plate\_view()}: accepts the output from the get\_real() function and get\_sample\_locations() function. Makes an 8$\times$12 or 16$\times$24 faceted plot depending on if the plate has 96 or 384 wells. Each facet shows the real-time data of each well.
                     \item \textbf{plot\_metrics()}: requires the output of calculate\_metrics() and generates a boxplot of each sample's MPR, MS, RAF, and TtT.
                 \end{enumerate}
         
@@ -258,7 +258,7 @@
                     Converts time units & No & Yes & Yes \\
                     Calculates metrics independently & Yes & No & Yes \\
                     Calculates metrics in bulk & Yes & Yes & No \\
-                    Calcualates MPR & Yes & Yes & Yes \\
+                    Calculates MPR & Yes & Yes & Yes \\
                     Calculates MS & Yes & Yes & No \\
                     Calculates TtT & Yes & Yes & Yes \\
                     Calculates RAF & Yes & Yes & No \\
@@ -279,19 +279,30 @@
             \end{table}
 
         \subsection{Reproducibility}
-            To promote transparency and reproducibility, we provide a standardized benchmarking and data extraction script alongside the \textbf{quicR} package. This script processes raw RT-QuIC output files in MARS export format, computes key kinetic metrics (MPR, MS, TtT, RAF), and writes all intermediate and final results to CSV files. Users are instructed to run the script locally, generating three files (\texttt{<user>\_meta.csv}, \texttt{<user>\_data.csv}, and \texttt{<user>\_calcs.csv}) which were then compared across systems or submissions to ensure consistent performance.
+            To evaluate the reproducibility of \textbf{quicR} across systems and users, we developed a standardized script that processes MARS output files and writes three key result CSV files: metadata, normalized fluorescence data, and calculated metrics as well as a plain-text file containing R session information (See Table \ref{tbl:comparisons}). This script was distributed, and users were only expected to source the script in the project folder. The files were compared between each user for inconsistencies. Numerical data were given a floating point tolerance of 1E\textsuperscript{-13}. Additionally, session summaries were parsed to extract R version, environment, and machine information. We did not observe any divergent results between any two users. A copy of the benchmarking script is available in the GitHub repository.
 
-            To further guard against system-dependent variability, the script includes the following measures:
-
-            \begin{enumerate}
-                % \item Sorting of input and output data by sample ID to enforce deterministic row order;
-                \item Cross-platform user ID resolution to enable standardized filenames
-                \item Fixed random seed initialization to control for any stochastic components
-                \item Output of full session metadata via \texttt{sessionInfo()} to record package versions and platform details
-                \item UTF-8 encoding of all CSV files for consistent parsing across operating systems.
-            \end{enumerate}
-
-            This reproducibility framework ensures that benchmark results, as reported in Table~\ref{tbl:benchmark}, can be independently validated and extended. The script, along with example data, is included in the package repository and supplementary materials.
+            \begin{table}[H]
+                \centering
+                \begin{tblr}{
+                    cells     = {font = \fontsize{10pt}{10pt}\selectfont},
+                    colspec   = {c c c c c}, 
+                    rows      = {rowsep = 1pt},
+                    row{1}    = {font=\bfseries\fontsize{10pt}{10pt}\selectfont},
+                    rowhead   = 1,
+                    width     = \textwidth
+                }
+                    \hline
+                    User & {R\\Version} & {quicR\\Version} & Platform & OS\\
+                    \hline
+                    1 & 4.4.3 & 2.1.0 & x86\_64-w64-mingw32/x64 & Windows 11 x64 (build 26100) \\
+                    2 & 4.4.1 & 2.1.0 & aarch64-apple-darwin20  & macOS 15.5 \\
+                    3 & 4.4.3 & 2.1.0 & aarch64-apple-darwin20  & macOS Sequoia 15.5 \\
+                    4 & 4.5.0 & 2.1.0 & aarch64-apple-darwin20  & macOS Sonoma 14.7.5 \\
+                    5 & 4.4.3 & 2.1.0 & x86\_64-w64-mingw32/x64 & Windows 11 x64 (build 26100) \\
+                    \hline
+                \end{tblr}
+                \caption{User session information. The script was run on both Windows and Mac machines with a variety of R versions. The quicR versions were kept identical to ensure reproducibility.}\label{tbl:comparisons}
+            \end{table}
 
         \subsection{Maintenance and Community Involvement}
             The \textbf{quicR} package is developed with long-term maintainability and community engagement in mind. The source code is hosted on GitHub (\url{https://github.com/gagerowden/quicR}), where users can report issues, request features, and contribute improvements via pull requests. A comprehensive \textbf{CONTRIBUTING} file and issue templates are provided to streamline collaboration and lower the barrier for external contributions. In addition to continuous integration testing, we plan to tag releases with semantic versioning and maintain a changelog to track updates and improvements. Feedback from diagnostic users has already led to enhancements in metadata parsing and output plotting, and we anticipate continued improvements through engagement with the broader scientific community. We encourage users to share their use cases, raise issues, and help shape future development directions.
@@ -300,7 +311,7 @@
         To demonstrate the utility of \textbf{quicR}, we used a typical RT-QuIC run performed on a 96-well plate. The reaction was performed on a FLUOstar Omega plate reader (BMG Labtech, Ortenberg, Germany). The file was exported as an Excel workbook where the metadata appears on the first sheet and the raw data on the second sheet.
         
         \subsection{Example Code}
-            \# Step 1: Install and load the package.\\
+            \texttt{\# Step 1: Install and load the package.\\
             install.packages(``quicR'')\\
             library(quicR)\\
             \# Step 2: Identify the raw file.\\
@@ -318,7 +329,7 @@
             \# Step 8: Plot the analyzed data frame.\\
             plot\_metrics(analyzed)\\
             \# Step 9: Plot the plate view.\\
-            plate\_view(raw, locations)\\
+            plate\_view(raw, locations)\\}
 
             Once the file name is identified, get\_real() is used to extract the raw data. This data is imported as a data frame with each sample designated as an individual column and the first column designated as time. Much of the downstream analysis works best with background-normalized data, so the raw data is then passed to normalize\_RFU()~\cite{Rowden2023}. This function accepts an integer as an argument for the desired cycle to be selected for background measurement. 
             
@@ -358,7 +369,7 @@
         Peter A. Larsen is a co-founder and stock owner, and Gage R. Rowden is a stock owner of Priogen Corp., a diagnostic company specializing in the ultra-sensitive detection of pathogenic proteins associated with prion and protein-misfolding diseases. The University of Minnesota licensed patent applications to Priogen.
 
     \section*{Acknowledgements}
-        Special thanks to Beni Altmann at The Comprehensive R Archive Network (CRAN) for help during the submission process to CRAN.\ We thank Tiffany Wolf and Marc Schwabenlander for their support through the Minnesota Center for Prion Research and Outreach. We thank Miranda Huang and Kristin Bondo for testing the code. We would like to acknowledge Suzanne Stone and Sarah Gresch for maintaining lab operations. This work was funded by the Legislative-Citizen Commission on Minnesota Resources.
+        Special thanks to Beni Altmann at The Comprehensive R Archive Network (CRAN) for help during the submission process to CRAN.\ We thank Tiffany Wolf and Marc Schwabenlander for their support through the Minnesota Center for Prion Research and Outreach. We thank Miranda Huang and Kristin Bondo for testing the code. We would like to acknowledge Suzanne Stone and Sarah Gresch for maintaining lab operations. We thank Sarah Gresch, Kendra Phelps, Laramie Lindsey, Miranda Huang, and Kristin Bondo for their participation in the reproducibility study. This work was funded by the Legislative-Citizen Commission on Minnesota Resources.
 
     %% The Appendices part is started with the command \appendix;
     %% appendix sections are then done as normal sections
