@@ -1,0 +1,6 @@
+"user_id","user","r_version","quicR_version","platform","os"
+1,"gresc005","4.4.3","2.1.0","x86_64-w64-mingw32/x64","Windows 11 x64 (build 26100)"
+2,"laramie.lindsey","4.4.1","2.1.0","aarch64-apple-darwin20","macOS 15.5"
+3,"phelps","4.4.3","2.1.0","aarch64-apple-darwin20","macOS Sequoia 15.5"
+4,"plarsen","4.5.0","2.1.0","aarch64-apple-darwin20","macOS Sonoma 14.7.5"
+5,"rowde002","4.4.3","2.1.0","x86_64-w64-mingw32/x64","Windows 11 x64 (build 26100)"
