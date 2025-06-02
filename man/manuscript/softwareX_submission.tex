@@ -220,13 +220,13 @@
                 \end{enumerate}
         
         \subsection{Comparable Methods}
-            To contextualize the functionality and performance of \textbf{quicR}, we compared it with existing RT-QuIC analysis approaches from the published R package, QuICSeedR\ \cite{Li2025}, and the unpublished rtquicR\ \cite{Slota2023}. While all three offer overlapping core functionalities, their design philosophies, input handling, and computational trade-offs differ substantially.
+            To contextualize the functionality and performance of \textbf{quicR}, we compared it with existing RT-QuIC analysis approaches from the published R package, QuICSeedR\ \cite{Li2025}, and the unpublished package, rtquicR\ \cite{Slota2023}. While all three offer overlapping core functionalities, their design philosophies, input handling, and computational trade-offs differ substantially.
 
             Benchmarking was performed using the rbenchmark library~\cite{rbenchmark} with 50 replications for each function. Comparisons are approximate, as equivalent functions were not necessarily found between the three packages. Results are summarized in Table~\ref{tbl:benchmark}. In general, QuICSeedR\ demonstrates the fastest execution times across most core functions. However, \textbf{quicR} addresses several practical limitations that the authors believe justify the slower performance in some areas. Notably, QuICSeedR requires an additional, manually formatted Excel file to input sample metadata, whereas \textbf{quicR} directly parses both raw and meta data embedded within a single MARS export file. This design reduces user overhead and minimizes the potential for transcription errors.
 
             The rtquicR\ package introduces support for additional thresholding methods and normalization strategies, and uniquely includes features such as SD50 and area-under-the-curve calculations. However, it does not currently support 384-well plate layouts, automated metadata parsing, or input files with missing data, all of which are supported by \textbf{quicR}. Its functions also require pre-cleaned and pre-structured input data, placing more burden on the user to prepare their dataset prior to analysis.
 
-            \textbf{quicR} further distinguishes itself through its modular design: it allows users to calculate metrics such as MPR, MS, TtT, and RAF independently rather than as a bundled operation. While QuICSeedR includes built-in support for bulk analysis and diagnostic outputs, these workflows can be achieved in \textbf{quicR} using standard R idioms (e.g., the \texttt{apply} family of functions), and are planned for future releases.
+            \textbf{quicR} further distinguishes itself through its modular design, allowing users to calculate metrics such as MPR, MS, TtT, and RAF independently rather than as a bundled operation. While QuICSeedR includes built-in support for bulk analysis and diagnostic outputs, these workflows can be achieved in \textbf{quicR} using standard R idioms (e.g., the \texttt{apply} family of functions), and are planned for future releases.
 
             Overall, \textbf{quicR} favors flexibility, reproducibility, and usability with raw instrument output at the expense of execution speed trade-offs that align with the package’s intended use in diagnostic pipelines.
 
@@ -243,27 +243,27 @@
                     \hline
                     \SetCell[c=1]{c}Feature / Benchmark & \textbf{quicR} & \textbf{QuICSeedR} & \textbf{rtquicR} \\ 
                     \hline
-                    Available on CRAN & Yes & Yes & No \\
+                    Available on CRAN & \textbf{Yes} & \textbf{Yes} & No \\
                     Number of input files required & 1 & 2 & 2 \\ 
                     Number of threshold methods & 2 & 3 & 4 \\
                     Number of normalization methods & 1 & 1 & 2 \\
-                    Automated metadata entry & Yes & No & No \\
-                    Automated sample locations & Yes & Yes & No \\
-                    Allows empty data & Yes & Yes & No \\
-                    Compatible with 384-well plates & Yes & Yes & No \\
-                    % Actively maintained & Yes & No \\
-                    Built-in bulk analysis support & No & Yes & Yes \\
-                    Diagnostic analysis functionality & No & Yes & No \\
-                    Incorporates dilution factors & Yes & No & Yes \\
-                    Converts time units & No & Yes & Yes \\
-                    Calculates metrics independently & Yes & No & Yes \\
-                    Calculates metrics in bulk & Yes & Yes & No \\
-                    Calculates MPR & Yes & Yes & Yes \\
-                    Calculates MS & Yes & Yes & No \\
-                    Calculates TtT & Yes & Yes & Yes \\
-                    Calculates RAF & Yes & Yes & No \\
-                    Calculates area under the curve & No & No & Yes \\
-                    Calculates SD50 & No & No & Yes \\
+                    Automated metadata entry & \textbf{Yes} & No & No \\
+                    Automated sample locations & \textbf{Yes} & \textbf{Yes} & No \\
+                    Allows empty data & \textbf{Yes} & \textbf{Yes} & No \\
+                    Compatible with 384-well plates & \textbf{Yes} & \textbf{Yes} & No \\
+                    % Actively maintained & \textbf{Yes} & No \\
+                    Built-in bulk analysis support & No & \textbf{Yes} & \textbf{Yes} \\
+                    Diagnostic analysis functionality & No & \textbf{Yes} & No \\
+                    Incorporates dilution factors & \textbf{Yes} & No & \textbf{Yes} \\
+                    Converts time units & No & \textbf{Yes} & \textbf{Yes} \\
+                    Calculates metrics independently & \textbf{Yes} & No & \textbf{Yes} \\
+                    Calculates metrics in bulk & \textbf{Yes} & \textbf{Yes} & No \\
+                    Calculates MPR & \textbf{Yes} & \textbf{Yes} & \textbf{Yes} \\
+                    Calculates MS & \textbf{Yes} & \textbf{Yes} & No \\
+                    Calculates TtT & \textbf{Yes} & \textbf{Yes} & \textbf{Yes} \\
+                    Calculates RAF & \textbf{Yes} & \textbf{Yes} & No \\
+                    Calculates area under the curve & No & No & \textbf{Yes} \\
+                    Calculates SD50 & No & No & \textbf{Yes} \\
                     \hline
                     Plate view plot execution time (s) & 0.082 & 0.062 & NA \\
                     Metric plot execution time (s) & 0.009 & 0.005 & 0.007 \\
@@ -299,6 +299,7 @@
                     3 & 4.4.3 & 2.1.0 & aarch64-apple-darwin20  & macOS Sequoia 15.5 \\
                     4 & 4.5.0 & 2.1.0 & aarch64-apple-darwin20  & macOS Sonoma 14.7.5 \\
                     5 & 4.4.3 & 2.1.0 & x86\_64-w64-mingw32/x64 & Windows 11 x64 (build 26100) \\
+                    6 & 4.4.3 & 2.1.0 & x86\_64-w64-mingw32/x64 & Windows 11 x64 (build 26100) \\
                     \hline
                 \end{tblr}
                 \caption{User session information. The script was run on both Windows and Mac machines with a variety of R versions. The quicR versions were kept identical to ensure reproducibility.}\label{tbl:comparisons}
