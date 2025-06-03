@@ -73,12 +73,12 @@
         \end{abstract}
 
         \begin{keyword}
-            Chronic Wasting Disease \sep{} Creutzfeldt-Jakob Disease \sep{} Nano-QuIC \sep{} RT-QuIC \sep{} prion diagnostics \sep{} Parkinson's Disease \sep{} seed amplification assay
+            Chronic Wasting Disease \sep{} Creutzfeldt-Jakob Disease \sep{} Parkinson's Disease \sep{} RT-QuIC
         \end{keyword}
 
     \end{frontmatter}
 
-    \linenumbers
+    \linenumbers{}
 
     \section*{Metadata}
 
@@ -95,7 +95,7 @@
             C4 & Legal Code License & GPL-3\\
             C5 & Code versioning system used & Git\\
             C6 & Software code languages, tools, and services used & R\\
-            C7 & Compilation requirements, operating environments \& dependencies & R (>=4.1.0)\\
+            C7 & Compilation requirements, operating environments \& dependencies & R ($\geq{4.1.0}$)\\
             C8 & If available Link to developer documentation/manual & \url{https://cran.r-project.org/web/packages/quicR/quicR.pdf}\\
             C9 & Support email for questions & rowde002@umn.edu\\
             \hline
@@ -278,7 +278,7 @@
             \end{table}
 
         \subsection{Reproducibility}
-            To evaluate the reproducibility of \textbf{quicR} across systems and users, we developed a standardized script that processes MARS output files and writes three key result CSV files: metadata, normalized fluorescence data, and calculated metrics as well as a plain-text file containing R session information (See Table \ref{tbl:comparisons}). This script and accompanying raw data files were distributed, and users were instructed to source the script in the project directory. The output files were compared between each user for inconsistencies. Numerical data were given a floating point tolerance of 1E\textsuperscript{-12}. Additionally, session summaries were parsed to extract R version, environment, and machine information. We did not observe any divergent results between any two users. A copy of the benchmarking script is available in the GitHub repository.
+            To evaluate the reproducibility of \textbf{quicR} across systems and users, we developed a standardized script that processes MARS output files and writes three key result CSV files: metadata, normalized fluorescence data, and calculated metrics as well as a plain-text file containing R session information (See Table~\ref{tbl:comparisons}). This script and accompanying raw data files were distributed to eight users who were instructed to source the script in the project directory. The output files were compared programatically between each user for discrepencies. Numerical data were given a floating point tolerance of 1E\textsuperscript{-12}. Additionally, session summaries were parsed to extract R version, environment, and machine information. We did not observe any divergent results between any two users. A copy of the benchmarking script is available in the GitHub repository.
 
             \begin{table}[H]
                 \centering
@@ -299,6 +299,8 @@
                     4 & 4.5.0 & 2.1.0 & aarch64-apple-darwin20  & macOS Sonoma 14.7.5 \\
                     5 & 4.4.3 & 2.1.0 & x86\_64-w64-mingw32/x64 & Windows 11 x64 (build 26100) \\
                     6 & 4.4.3 & 2.1.0 & x86\_64-w64-mingw32/x64 & Windows 11 x64 (build 26100) \\
+                    7 & 4.4.3 & 2.1.0 & x86\_64-apple-darwin20 & macOS Sequoia 15.5 \\
+                    8 & 4.5.0 & 2.1.0 & x86\_64-w64-mingw32/x64 & Windows 11 x64 (build 22621) \\
                     \hline
                 \end{tblr}
                 \caption{User session information. The script was run on both Windows and Mac machines with a variety of R versions. The quicR versions were kept identical to ensure reproducibility.}\label{tbl:comparisons}

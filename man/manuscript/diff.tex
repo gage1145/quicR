@@ -58,6 +58,7 @@
 \usepackage{tabularray}
 \usepackage{float}
 \usepackage[T1]{fontenc}
+\usepackage{xcolor}
 % \usepackage{helvet}
 \renewcommand{\familydefault}{\sfdefault}
 \newcommand{\tab}[1]{\hspace{.2\textwidth}\rlap{#1}}
@@ -127,11 +128,9 @@
         \end{abstract}
 
         \begin{keyword}
-            \DIFdelbegin \DIFdel{R package }\DIFdelend \DIFaddbegin \DIFadd{Chronic Wasting Disease }\DIFaddend \sep{} \DIFdelbegin \DIFdel{RT-QuIC }\DIFdelend \DIFaddbegin \DIFadd{Creutzfeldt-Jakob Disease }\DIFaddend \sep{} Nano-QuIC \sep{} \DIFdelbegin \DIFdel{Micro-QuIC }\DIFdelend \DIFaddbegin \DIFadd{RT-QuIC }\DIFaddend \sep{} prion \DIFdelbegin %DIFDELCMD < \sep{} %%%
-\DIFdelend diagnostics \sep{} \DIFdelbegin \DIFdel{Creutzfeldt-Jakob }%DIFDELCMD < \sep{} %%%
-\DIFdel{Chronic Wasting Disease }%DIFDELCMD < \sep{} %%%
-\DIFdelend Parkinson's \DIFaddbegin \DIFadd{Disease }\sep{} \DIFadd{seed amplification assay
-        }\DIFaddend \end{keyword}
+            \DIFdelbegin\DIFdel{R package \sep{} RT-QuIC \sep{} Nano-QuIC \sep{} Micro-QuIC \sep{} prion \sep{} diagnostics \sep{} Creutzfeldt-Jakob \sep{} Chronic Wasting Disease \sep{} Parkinson's}\DIFdelend %DIFDELCMD < \sep{} %%%
+            \DIFaddbegin\DIFadd{Chronic Wasting Disease \sep{} Creutzfeldt-Jakob Disease \sep{} Parkinson's Disease \sep{} RT-QuIC}\DIFaddend
+        \end{keyword}
 
     \end{frontmatter}
 
@@ -313,7 +312,7 @@ C9 & Support email for questions & rowde002@umn.edu\\
         \begin{tblr}{
             cells     = {font = \fontsize{11pt}{11pt}\selectfont},
             colspec   = {rccc}, 
-            rows      = {rowsep = 1pt},
+            rows      = {rowsep = 1pt, fg = blue},
             row{1}    = {font=\bfseries},
             rowhead   = 1,
             width     = \textwidth
@@ -352,24 +351,24 @@ C9 & Support email for questions & rowde002@umn.edu\\
             Bulk analysis (s/file) & 6.550 & 0.849 & 1.986 \\
             \hline
         \end{tblr}
-        \caption{Comparison of core features and execution times between \textbf{quicR}, QuICSeedR, and rtquicR. All benchmarks were performed using the same dataset and machine (Windows 11, 16GB RAM) in 50 replicates.}\label{tbl:benchmark}
+        \caption{\textcolor{blue}{Comparison of core features and execution times between \textbf{quicR}, QuICSeedR, and rtquicR. All benchmarks were performed using the same dataset and machine (Windows 11, 16GB RAM) in 50 replicates.}}\label{tbl:benchmark}
     \end{table}
 
         \subsection{\DIFaddbegin\DIFadd{Reproducibility}}
-            \DIFadd{To evaluate the reproducibility of \textbf{quicR} across systems and users, we developed a standardized script that processes MARS output files and writes three key result CSV files: metadata, normalized fluorescence data, and calculated metrics as well as a plain-text file containing R session information (See Table~\ref{tbl:comparisons}). This script and accompanying raw data files were distributed, and users were instructed to source the script in the project directory. The output files were compared between each user for inconsistencies. Numerical data were given a floating point tolerance of 1E\textsuperscript{-12}. Additionally, session summaries were parsed to extract R version, environment, and machine information. We did not observe any divergent results between any two users. A copy of the benchmarking script is available in the GitHub repository.}\DIFaddend
+            \DIFadd{To evaluate the reproducibility of \textbf{quicR} across systems and users, we developed a standardized script that processes MARS output files and writes three key result CSV files: metadata, normalized fluorescence data, and calculated metrics as well as a plain-text file containing R session information (See Table~\ref{tbl:comparisons}). This script and accompanying raw data files were distributed to eight users who were instructed to source the script in the project directory. The output files were compared programatically between each user for discrepencies. Numerical data were given a floating point tolerance of 1E\textsuperscript{-12}. Additionally, session summaries were parsed to extract R version, environment, and machine information. We did not observe any divergent results between any two users. A copy of the benchmarking script is available in the GitHub repository.}\DIFaddend
 
             \begin{table}[H]
                 \centering
                 \begin{tblr}{
-                    cells     = {font = \fontsize{10pt}{10pt}\selectfont},
+                    cells     = {font = \fontsize{10pt}{10pt}\selectfont, fg = blue},
                     colspec   = {c c c c c}, 
                     rows      = {rowsep = 1pt},
-                    row{1}    = {font=\bfseries\fontsize{10pt}{10pt}\selectfont},
+                    row{1}    = {font = \bfseries\fontsize{10pt}{10pt}\selectfont},
                     rowhead   = 1,
                     width     = \textwidth
                 }
                     \hline
-                    User & {R\\Version} & {quicR\\Version} & Platform & OS\\
+                    User & {R\\Version} & {quicR\\Version} & Platform & OS \\
                     \hline
                     1 & 4.4.3 & 2.1.0 & x86\_64-w64-mingw32/x64 & Windows 11 x64 (build 26100) \\
                     2 & 4.4.1 & 2.1.0 & aarch64-apple-darwin20  & macOS 15.5 \\
@@ -377,9 +376,11 @@ C9 & Support email for questions & rowde002@umn.edu\\
                     4 & 4.5.0 & 2.1.0 & aarch64-apple-darwin20  & macOS Sonoma 14.7.5 \\
                     5 & 4.4.3 & 2.1.0 & x86\_64-w64-mingw32/x64 & Windows 11 x64 (build 26100) \\
                     6 & 4.4.3 & 2.1.0 & x86\_64-w64-mingw32/x64 & Windows 11 x64 (build 26100) \\
+                    7 & 4.4.3 & 2.1.0 & x86\_64-apple-darwin20  & macOS Sequoia 15.5 \\
+                    8 & 4.5.0 & 2.1.0 & x86\_64-w64-mingw32/x64 & Windows 11 x64 (build 22621) \\
                     \hline
                 \end{tblr}
-                \caption{\DIFadd{User session information. The script was run on both Windows and Mac machines with a variety of R versions. The quicR versions were kept identical to ensure reproducibility.}}\label{tbl:comparisons}
+                \caption{\textcolor{blue}{User session information. The script was run on both Windows and Mac machines with a variety of R versions. The quicR versions were kept identical to ensure reproducibility.}}\label{tbl:comparisons}
             \end{table}
 
         \subsection{\DIFaddbegin\DIFadd{Maintenance and Community Involvement}}
@@ -413,7 +414,7 @@ C9 & Support email for questions & rowde002@umn.edu\\
 
             \DIFaddend Once the file name is identified, \DIFdelbegin \DIFdel{the }\DIFdelend get\_real() \DIFdelbegin \DIFdel{function }\DIFdelend is used to extract the raw data. This data is imported as a data frame with each sample designated as an individual column and the first column designated as time. Much of the downstream analysis works best with background-normalized data, so the raw data is then passed to \DIFdelbegin \DIFdel{the }\DIFdelend normalize\_RFU()\DIFdelbegin \DIFdel{function }\DIFdelend \DIFaddbegin \DIFadd{~}\DIFaddend \cite{Rowden2023}. This function accepts an integer as an argument for the desired cycle to be selected for background measurement. 
 
-            Next, the metadata is extracted using \DIFdelbegin \DIFdel{the }\DIFdelend organize\_tables() and convert\_tables()\DIFdelbegin \DIFdel{functions}\DIFdelend . These take the metadata found on the first sheet of the Excel file and convert them into data frame columns. Finally, metrics are calculated and assigned to their given sample ID using calculate\_metrics(). This generates a data frame with sample IDs, dilution factors (if chosen), MPR's, MS's, RAF's, and TtT's.
+            Next, the metadata is extracted using \DIFdelbegin \DIFdel{the }\DIFdelend organize\_tables() and convert\_tables()\DIFdelbegin\DIFdel{functions}\DIFdelend. These take the metadata found on the first sheet of the Excel file and convert them into data frame columns. Finally, metrics are calculated and assigned to their given sample ID using calculate\_metrics(). This generates a data frame with sample IDs, dilution factors (if chosen), MPR's, MS's, RAF's, and TtT's.
 
             Once the proper variables have been defined, they can be used as input in the visualization functions. The analyzed data frame can be used as an argument in plot\_metrics() to generate a plot such as Figure\DIFaddbegin \DIFadd{~}\DIFaddend \ref{fig:boxplot}. Additionally, the raw data and sample locations are used to plot the plate view as in Figure\DIFaddbegin \DIFadd{~}\DIFaddend \ref{fig:plateview}.
 
