@@ -42,7 +42,7 @@
 %% The lineno packages adds line numbers. Start line numbering with
 %% \begin{linenumbers}, end it with \end{linenumbers}. Or switch it on
 %% for the whole article with \linenumbers.
-% \usepackage{lineno}
+\usepackage{lineno}
 \usepackage{tabularray}
 \usepackage{float}
 \usepackage[T1]{fontenc}
@@ -73,12 +73,12 @@
         \end{abstract}
 
         \begin{keyword}
-            Chronic Wasting Disease \sep{} Creutzfeldt-Jakob Disease \sep{} Nano-QuIC \sep{} RT-QuIC \sep{} prion diagnostics \sep{} Parkinson's Disease \sep{} seed amplification assay
+            Chronic Wasting Disease \sep{} Creutzfeldt-Jakob Disease \sep{} Parkinson's Disease \sep{} RT-QuIC
         \end{keyword}
 
     \end{frontmatter}
 
-    % \linenumbers
+    \linenumbers{}
 
     \section*{Metadata}
 
@@ -95,7 +95,7 @@
             C4 & Legal Code License & GPL-3\\
             C5 & Code versioning system used & Git\\
             C6 & Software code languages, tools, and services used & R\\
-            C7 & Compilation requirements, operating environments \& dependencies & R (>=4.1.0)\\
+            C7 & Compilation requirements, operating environments \& dependencies & R ($\geq{4.1.0}$)\\
             C8 & If available Link to developer documentation/manual & \url{https://cran.r-project.org/web/packages/quicR/quicR.pdf}\\
             C9 & Support email for questions & rowde002@umn.edu\\
             \hline
@@ -220,13 +220,13 @@
                 \end{enumerate}
         
         \subsection{Comparable Methods}
-            To contextualize the functionality and performance of \textbf{quicR}, we compared it with existing RT-QuIC analysis approaches from the published R package, QuICSeedR\ \cite{Li2025}, and the unpublished rtquicR\ \cite{Slota2023}. While all three offer overlapping core functionalities, their design philosophies, input handling, and computational trade-offs differ substantially.
+            To contextualize the functionality and performance of \textbf{quicR}, we compared it with existing RT-QuIC analysis approaches from the published R package, QuICSeedR\ \cite{Li2025}, and the unpublished package, rtquicR\ \cite{Slota2023}. While all three offer overlapping core functionalities, their design philosophies, input handling, and computational trade-offs differ substantially.
 
             Benchmarking was performed using the rbenchmark library~\cite{rbenchmark} with 50 replications for each function. Comparisons are approximate, as equivalent functions were not necessarily found between the three packages. Results are summarized in Table~\ref{tbl:benchmark}. In general, QuICSeedR\ demonstrates the fastest execution times across most core functions. However, \textbf{quicR} addresses several practical limitations that the authors believe justify the slower performance in some areas. Notably, QuICSeedR requires an additional, manually formatted Excel file to input sample metadata, whereas \textbf{quicR} directly parses both raw and meta data embedded within a single MARS export file. This design reduces user overhead and minimizes the potential for transcription errors.
 
             The rtquicR\ package introduces support for additional thresholding methods and normalization strategies, and uniquely includes features such as SD50 and area-under-the-curve calculations. However, it does not currently support 384-well plate layouts, automated metadata parsing, or input files with missing data, all of which are supported by \textbf{quicR}. Its functions also require pre-cleaned and pre-structured input data, placing more burden on the user to prepare their dataset prior to analysis.
 
-            \textbf{quicR} further distinguishes itself through its modular design: it allows users to calculate metrics such as MPR, MS, TtT, and RAF independently rather than as a bundled operation. While QuICSeedR includes built-in support for bulk analysis and diagnostic outputs, these workflows can be achieved in \textbf{quicR} using standard R idioms (e.g., the \texttt{apply} family of functions), and are planned for future releases.
+            \textbf{quicR} further distinguishes itself through its modular design, allowing users to calculate metrics such as MPR, MS, TtT, and RAF independently rather than as a bundled operation. While QuICSeedR includes built-in support for bulk analysis and diagnostic outputs, these workflows can be achieved in \textbf{quicR} using standard R idioms (e.g., the \texttt{apply} family of functions), and are planned for future releases.
 
             Overall, \textbf{quicR} favors flexibility, reproducibility, and usability with raw instrument output at the expense of execution speed trade-offs that align with the package’s intended use in diagnostic pipelines.
 
@@ -243,27 +243,26 @@
                     \hline
                     \SetCell[c=1]{c}Feature / Benchmark & \textbf{quicR} & \textbf{QuICSeedR} & \textbf{rtquicR} \\ 
                     \hline
-                    Available on CRAN & Yes & Yes & No \\
+                    Available on CRAN & \textbf{Yes} & \textbf{Yes} & No \\
                     Number of input files required & 1 & 2 & 2 \\ 
                     Number of threshold methods & 2 & 3 & 4 \\
                     Number of normalization methods & 1 & 1 & 2 \\
-                    Automated metadata entry & Yes & No & No \\
-                    Automated sample locations & Yes & Yes & No \\
-                    Allows empty data & Yes & Yes & No \\
-                    Compatible with 384-well plates & Yes & Yes & No \\
-                    % Actively maintained & Yes & No \\
-                    Built-in bulk analysis support & No & Yes & Yes \\
-                    Diagnostic analysis functionality & No & Yes & No \\
-                    Incorporates dilution factors & Yes & No & Yes \\
-                    Converts time units & No & Yes & Yes \\
-                    Calculates metrics independently & Yes & No & Yes \\
-                    Calculates metrics in bulk & Yes & Yes & No \\
-                    Calculates MPR & Yes & Yes & Yes \\
-                    Calculates MS & Yes & Yes & No \\
-                    Calculates TtT & Yes & Yes & Yes \\
-                    Calculates RAF & Yes & Yes & No \\
-                    Calculates area under the curve & No & No & Yes \\
-                    Calculates SD50 & No & No & Yes \\
+                    Automated metadata entry & \textbf{Yes} & No & No \\
+                    Automated sample locations & \textbf{Yes} & \textbf{Yes} & No \\
+                    Allows empty data & \textbf{Yes} & \textbf{Yes} & No \\
+                    Compatible with 384-well plates & \textbf{Yes} & \textbf{Yes} & No \\
+                    Built-in bulk analysis support & No & \textbf{Yes} & \textbf{Yes} \\
+                    Diagnostic analysis functionality & No & \textbf{Yes} & No \\
+                    Incorporates dilution factors & \textbf{Yes} & No & \textbf{Yes} \\
+                    Converts time units & No & \textbf{Yes} & \textbf{Yes} \\
+                    Calculates metrics independently & \textbf{Yes} & No & \textbf{Yes} \\
+                    Calculates metrics in bulk & \textbf{Yes} & \textbf{Yes} & No \\
+                    Calculates MPR & \textbf{Yes} & \textbf{Yes} & \textbf{Yes} \\
+                    Calculates MS & \textbf{Yes} & \textbf{Yes} & No \\
+                    Calculates TtT & \textbf{Yes} & \textbf{Yes} & \textbf{Yes} \\
+                    Calculates RAF & \textbf{Yes} & \textbf{Yes} & No \\
+                    Calculates area under the curve & No & No & \textbf{Yes} \\
+                    Calculates SD50 & No & No & \textbf{Yes} \\
                     \hline
                     Plate view plot execution time (s) & 0.082 & 0.062 & NA \\
                     Metric plot execution time (s) & 0.009 & 0.005 & 0.007 \\
@@ -275,11 +274,11 @@
                     Bulk analysis (s/file) & 6.550 & 0.849 & 1.986 \\
                     \hline
                 \end{tblr}
-                \caption{Comparison of core features and execution times between \textbf{quicR}, QuICSeedR, and rtquicR. While QuICSeedR demonstrated the fastest overall execution times, \textbf{quicR} offered enhanced metadata handling, metric flexibility, and support for unprocessed instrument output files.\ rtquicR introduces additional metrics such as SD50 and area under the curve but requires pre-structured input and lacks support for 384-well microplate formats and automated metadata parsing. All benchmarks were performed using the same dataset and machine (Windows 11, 16GB RAM) in 50 replicates.}\label{tbl:benchmark}
+                \caption{Comparison of core features and execution times between \textbf{quicR}, QuICSeedR, and rtquicR. All benchmarks were performed using the same dataset and machine (Windows 11, 16GB RAM) in 50 replicates.}\label{tbl:benchmark}
             \end{table}
 
         \subsection{Reproducibility}
-            To evaluate the reproducibility of \textbf{quicR} across systems and users, we developed a standardized script that processes MARS output files and writes three key result CSV files: metadata, normalized fluorescence data, and calculated metrics as well as a plain-text file containing R session information (See Table \ref{tbl:comparisons}). This script was distributed, and users were only expected to source the script in the project folder. The files were compared between each user for inconsistencies. Numerical data were given a floating point tolerance of 1E\textsuperscript{-13}. Additionally, session summaries were parsed to extract R version, environment, and machine information. We did not observe any divergent results between any two users. A copy of the benchmarking script is available in the GitHub repository.
+            To evaluate the reproducibility of \textbf{quicR} across systems and users, we developed a standardized script that processes MARS output files and writes three key result CSV files: metadata, normalized fluorescence data, and calculated metrics as well as a plain-text file containing R session information (See Table~\ref{tbl:comparisons}). This script and accompanying raw data files were distributed to eight users who were instructed to source the script in the project directory. The output files were compared programatically between each user for discrepencies. Numerical data were given a floating point tolerance of 1E\textsuperscript{-12}. Additionally, session summaries were parsed to extract R version, environment, and machine information. We did not observe any divergent results between any two users. A copy of the benchmarking script is available in the GitHub repository.
 
             \begin{table}[H]
                 \centering
@@ -299,13 +298,16 @@
                     3 & 4.4.3 & 2.1.0 & aarch64-apple-darwin20  & macOS Sequoia 15.5 \\
                     4 & 4.5.0 & 2.1.0 & aarch64-apple-darwin20  & macOS Sonoma 14.7.5 \\
                     5 & 4.4.3 & 2.1.0 & x86\_64-w64-mingw32/x64 & Windows 11 x64 (build 26100) \\
+                    6 & 4.4.3 & 2.1.0 & x86\_64-w64-mingw32/x64 & Windows 11 x64 (build 26100) \\
+                    7 & 4.4.3 & 2.1.0 & x86\_64-apple-darwin20 & macOS Sequoia 15.5 \\
+                    8 & 4.5.0 & 2.1.0 & x86\_64-w64-mingw32/x64 & Windows 11 x64 (build 22621) \\
                     \hline
                 \end{tblr}
                 \caption{User session information. The script was run on both Windows and Mac machines with a variety of R versions. The quicR versions were kept identical to ensure reproducibility.}\label{tbl:comparisons}
             \end{table}
 
         \subsection{Maintenance and Community Involvement}
-            The \textbf{quicR} package is developed with long-term maintainability and community engagement in mind. The source code is hosted on GitHub (\url{https://github.com/gagerowden/quicR}), where users can report issues, request features, and contribute improvements via pull requests. A comprehensive \textbf{CONTRIBUTING} file and issue templates are provided to streamline collaboration and lower the barrier for external contributions. In addition to continuous integration testing, we plan to tag releases with semantic versioning and maintain a changelog to track updates and improvements. Feedback from diagnostic users has already led to enhancements in metadata parsing and output plotting, and we anticipate continued improvements through engagement with the broader scientific community. We encourage users to share their use cases, raise issues, and help shape future development directions.
+            The \textbf{quicR} package is developed with long-term maintainability and community engagement in mind. The source code is hosted on GitHub (\url{https://github.com/gagerowden/quicR}), where users can report issues, request features, and contribute improvements via pull requests. A comprehensive \textbf{CONTRIBUTING} file and issue templates are provided to streamline collaboration and to facilitate external contributions. In addition to continuous integration testing, we plan to tag releases with semantic versioning and maintain a changelog to track updates and improvements. We encourage users to share their use cases, raise issues, and help shape future development directions.
 
     \section{Illustrative examples}
         To demonstrate the utility of \textbf{quicR}, we used a typical RT-QuIC run performed on a 96-well plate. The reaction was performed on a FLUOstar Omega plate reader (BMG Labtech, Ortenberg, Germany). The file was exported as an Excel workbook where the metadata appears on the first sheet and the raw data on the second sheet.
