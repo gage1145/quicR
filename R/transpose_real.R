@@ -16,6 +16,7 @@
 
 # Still in the works
 transpose_real <- function(data) {
+  .Deprecated("get_real", "quicR", "This function has been integrated into the `get_real` function as a logical argument.")
   colnames(data) %>%
     rbind(data) %>%
     unname() %>%
