@@ -31,7 +31,7 @@ organize_tables <- function(file, plate = 96) {
   # Block allows input of an excel file string or a dataframe.
   if (is.character(file)) {
     # Read the Excel file into R.
-    data <- read_excel(
+    data <- read_xlsx(
       file,
       sheet = 1,
       col_names = FALSE,
@@ -52,6 +52,18 @@ organize_tables <- function(file, plate = 96) {
     df_dic[[name]] <- data[(i + 2): (i + step - 2), ]
     i <- i + step
   }
+
+  df_dic$Wells <- (
+    expand.grid(
+      ifelse(plate == 96, LETTERS[1:8], LETTERS[1:16]),
+      ifelse(plate == 96, 1:12, 1:24)
+    ) %>%
+      unite(wells, 1,2, sep="")
+  )[[1]] %>%
+    matrix(
+      nrow=ifelse(plate == 96, 8, 16),
+      ncol=ifelse(plate == 96, 12, 24)
+    )
 
   return(df_dic)
 }
