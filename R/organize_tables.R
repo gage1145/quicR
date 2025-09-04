@@ -9,6 +9,7 @@
 #' @return A list containing tibbles.
 #'
 #' @importFrom readxl cell_cols
+#' @importFrom readxl read_xlsx
 #'
 #' @examples
 #' file <- system.file(
@@ -55,10 +56,10 @@ organize_tables <- function(file, plate = 96) {
 
   df_dic$Wells <- (
     expand.grid(
-      ifelse(plate == 96, LETTERS[1:8], LETTERS[1:16]),
-      ifelse(plate == 96, 1:12, 1:24)
+      {if (plate == 96) LETTERS[1:8] else LETTERS[1:16]},
+      {if (plate == 96) 1:12 else 1:24}
     ) %>%
-      unite(wells, 1,2, sep="")
+      unite(Wells, 1,2, sep="")
   )[[1]] %>%
     matrix(
       nrow=ifelse(plate == 96, 8, 16),
