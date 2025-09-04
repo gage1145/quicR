@@ -3,14 +3,15 @@
 #' Accepts an Excel file or a dataframe of real-time RT-QuIC data.
 #'
 #' @param data Either an Excel file or a dataframe.
-#' @param ordered Logical, if true, will organize the columns by sample ID rather than by well.
+#' @param order_by_sample Logical, if true, will organize the columns by sample ID rather than by well.
+#' @param transpose_table Logical, if true, will transpose the table(s).
 #'
 #' @return A list of dataframes containing the formatted real-time data.
 #'
 #' @importFrom dplyr select
 #' @importFrom dplyr %>%
 #' @importFrom dplyr rename
-#' @importFrom readxl read_excel
+#' @importFrom readxl read_xlsx
 #' @importFrom janitor row_to_names
 #' @importFrom janitor clean_names
 #'
@@ -23,14 +24,14 @@
 #' get_real(file)
 #'
 #' @export
-get_real <- function(data, ordered = FALSE) {
+get_real <- function(data, order_by_sample = FALSE, transpose_table = TRUE) {
   check_format <- function(x) {
     if (is.character(x)) {
-      return(suppressMessages(read_excel(x, sheet = 2, col_names = FALSE)))
+      return(suppressMessages(read_xlsx(x, sheet = 2, col_names = FALSE)))
     } else if (is.data.frame(x)) {
       return(x)
     } else {
-      stop("Please enter either .xlsx string or dataframe. ")
+      stop("Please enter either .xlsx file path or data frame. ")
     }
   }
 
@@ -42,7 +43,7 @@ get_real <- function(data, ordered = FALSE) {
       clean_names() %>%
       rename("Time" = 1) %>%
       {
-        if (ordered) {
+        if (order_by_sample) {
           select(., "Time", order(colnames(.[colnames(.) != "Time"])))
         } else {
           .
@@ -70,5 +71,23 @@ get_real <- function(data, ordered = FALSE) {
     return(df_list)
   }
 
-  return(split_real_time(curate(check_format(data))))
+  transpose_real <- function(data) {
+    colnames(data) %>%
+      rbind(data) %>%
+      unname() %>%
+      t() %>%
+      as.data.frame() %>%
+      row_to_names(1) %>%
+      rename("Sample IDs" = "Time") %>%
+      mutate_at(-c(1), function(y) as.numeric(as.character(y)))
+  }
+
+  return(
+    data %>%
+      check_format() %>%
+      curate() %>%
+      split_real_time() %>%
+      {if (isTRUE(transpose_table)) lapply(., transpose_real) else .}
+  )
+  # return(split_real_time(curate(check_format(data))))
 }

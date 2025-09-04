@@ -4,12 +4,14 @@
 \alias{get_real}
 \title{Get Real-Time RT-QuIC Fluorescence Data}
 \usage{
-get_real(data, ordered = FALSE)
+get_real(data, order_by_sample = FALSE, transpose_table = TRUE)
 }
 \arguments{
 \item{data}{Either an Excel file or a dataframe.}
 
-\item{ordered}{Logical, if true, will organize the columns by sample ID rather than by well.}
+\item{order_by_sample}{Logical, if true, will organize the columns by sample ID rather than by well.}
+
+\item{transpose_table}{Logical, if true, will transpose the table(s).}
 }
 \value{
 A list of dataframes containing the formatted real-time data.
