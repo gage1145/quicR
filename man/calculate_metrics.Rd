@@ -38,19 +38,3 @@ A dataframe of calculated metrics.
 \description{
 Uses functions from the "calculate" family of quicR functions to generate an analyzed dataframe.
 }
-\examples{
-file <- system.file(
-  "extdata/input_files",
-  file = "test4.xlsx",
-  package = "quicR"
-)
-
-data <- quicR::get_real(file)[[1]] |>
-  quicR::normalize_RFU()
-
-meta <- quicR::organize_tables(file) |>
-  quicR::convert_tables()
-
-calculate_metrics(data, meta)
-
-}

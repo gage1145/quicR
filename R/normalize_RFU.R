@@ -10,20 +10,6 @@
 #'
 #' @return A dataframe containing real-time normalized fluorescence values.
 #'
-#' @examples
-#' # This test takes >5 sec
-#' \donttest{
-#' file <- system.file(
-#'   "extdata/input_files",
-#'   file = "test2.xlsx",
-#'   package = "quicR"
-#' )
-#' df_ <- get_real(file)[[1]]
-#'
-#' # Normalize the raw data against the background reading.
-#' normalize_RFU(df_)
-#' }
-#'
 #' @export
 normalize_RFU <- function(data, bg_cycle = 4, transposed = FALSE) {
 
