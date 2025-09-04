@@ -3,33 +3,23 @@
 #' Maxpoint ratio is defined as the maximum relative fluorescence divided by the
 #' background fluorescence.
 #'
-#' @param data A dataframe containing the real-time fluorescence data.
-#' @param start_col Integer, the column at which the background fluorescence should be read.
-#' @param data_is_norm Logical, if the data has not been normalized, will make a call to normalize_RFU.
-#' @return A vector containing MPR values.
+#' @param data A data frame output from 'get_quic()'.
+#' @param col The column containing the normalized fluorescence data.
+#' @param .by Grouping factor. Should typically be by individual wells.
+#' @return A data frame containing well-matched MPR values.
 #'
-#' @importFrom dplyr select
-#' @importFrom dplyr %>%
+#' @importFrom dplyr summarize
 #'
 #' @examples
-#' # This test takes >5 sec
-#' \donttest{
 #' file <- system.file(
 #'   "extdata/input_files",
 #'   file = "test.xlsx",
 #'   package = "quicR"
 #' )
-#' df_ <- quicR::get_real(file)[[1]]
-#' print(calculate_MPR(df_))
-#' }
+#' get_quic(file) |>
+#'   calculate_MPR()
 #'
 #' @export
-calculate_MPR <- function(data, start_col = 3, data_is_norm = TRUE) {
-  data %>%
-    {
-      if (data_is_norm) . else quicR::normalize_RFU(.)
-    } %>%
-    select(start_col:ncol(.)) %>%
-    apply(1, max) %>%
-    return()
+calculate_MPR <- function(data, col="Norm", .by="Wells") {
+  summarize(data, MPR = max(!!sym(col)), .by=.by)
 }
