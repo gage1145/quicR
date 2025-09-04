@@ -15,6 +15,7 @@ Imports:
   dplyr, 
   ggplot2,
   janitor,
+  magrittr,
   openxlsx,
   purrr,
   readxl,
