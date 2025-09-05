@@ -16,3 +16,4 @@ nul
 *.out
 *.spl
 *.synctex.gz
+/renv/
