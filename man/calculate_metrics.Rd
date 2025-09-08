@@ -2,19 +2,19 @@
 % Please edit documentation in R/calculate_metrics.R
 \name{calculate_metrics}
 \alias{calculate_metrics}
-\title{Generate a dataframe with calculated metrics.}
+\title{Generate a data frame with calculated metrics.}
 \usage{
 calculate_metrics(data, ..., threshold = 2)
 }
 \arguments{
-\item{data}{A dataframe containing the raw RT-QuIC data.}
+\item{data}{A data frame containing the raw RT-QuIC data.}
 
 \item{...}{A list of grouping factors.}
 
 \item{threshold}{Float; the threshold applied to the calculation of time-to-threshold.}
 }
 \value{
-A dataframe of calculated metrics.
+A data frame of calculated metrics.
 
 #' @examples
 file <- system.file(

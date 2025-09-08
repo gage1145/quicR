@@ -1,8 +1,8 @@
-#' Generate a dataframe with calculated metrics.
+#' Generate a data frame with calculated metrics.
 #'
 #' Uses functions from the "calculate" family of quicR functions to generate an analyzed dataframe.
 #'
-#' @param data A dataframe containing the raw RT-QuIC data.
+#' @param data A data frame containing the raw RT-QuIC data.
 #' @param ... A list of grouping factors.
 #' @param threshold Float; the threshold applied to the calculation of time-to-threshold.
 #'
@@ -10,8 +10,11 @@
 #' @importFrom dplyr group_by
 #' @importFrom dplyr left_join
 #' @importFrom dplyr reframe
+#' @importFrom dplyr syms
+#' @importFrom dplyr %>%
+#' @importFrom purrr reduce
 #'
-#' @return A dataframe of calculated metrics.
+#' @return A data frame of calculated metrics.
 #'
 #' #' @examples
 #' file <- system.file(
@@ -24,12 +27,15 @@
 #'
 #' @export
 calculate_metrics <- function(data, ..., threshold = 2) {
-  data %>%
-    group_by(...) %>%
-    reframe() %>%
-    left_join(calculate_MPR(raw)) %>%
-    left_join(calculate_TtT(raw, threshold)) %>%
-    left_join(calculate_MS(raw)) %>%
-    mutate(RAF = 1/.data$TtT) %>%
+  groupings <- syms(c(...))
+  data <- group_by(data, !!!groupings)
+  list(
+    reframe(data),
+    calculate_MPR(data),
+    calculate_MS(data),
+    calculate_TtT(data, threshold=threshold, calc_raf=TRUE)
+  ) %>%
+    reduce(left_join) %>%
     suppressMessages()
 }
+
