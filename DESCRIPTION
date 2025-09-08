@@ -15,12 +15,10 @@ Imports:
   dplyr, 
   ggplot2,
   janitor,
-  magrittr,
   openxlsx,
   purrr,
   readxl,
   reshape2,
-  slider,
   stats,
   stringr,
   tidyr
