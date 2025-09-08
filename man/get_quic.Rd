@@ -10,7 +10,8 @@ get_quic(
   norm_point = 2,
   which_table = 1,
   window_size = 2,
-  .by = "Wells"
+  .by = "Wells",
+  plate = 96
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ get_quic(
 \item{window_size}{Integer, defines the window size for estimating the derivative.}
 
 \item{.by}{Grouping factor. Should typically be by individual wells.}
+
+\item{plate}{Integer; either 96 or 384 to denote the type of well plate being used.}
 }
 \value{
 A data frame containing all time-series data and sample/plate metadata.

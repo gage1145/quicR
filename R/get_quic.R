@@ -8,6 +8,7 @@
 #' @param which_table Integer, defines which table in the Excel sheet contains the real-time data. Should usually be set to 1.
 #' @param window_size Integer, defines the window size for estimating the derivative.
 #' @param .by Grouping factor. Should typically be by individual wells.
+#' @param plate Integer; either 96 or 384 to denote the type of well plate being used.
 #'
 #' @return A data frame containing all time-series data and sample/plate metadata.
 #'
@@ -17,7 +18,7 @@
 #' @importFrom dplyr lag
 #' @importFrom dplyr lead
 #' @importFrom tidyr pivot_longer
-#' @importFrom magrittr %>%
+#' @importFrom dplyr %>%
 #'
 #' @examples
 #' file <- system.file(
@@ -29,11 +30,11 @@
 #'
 #' @export
 get_quic <- function(file, transpose_table=TRUE, norm_point=2, which_table=1,
-                     window_size=2, .by="Wells") {
+                     window_size=2, .by="Wells", plate=96) {
 
   sheets <- lapply(1:2, function(x) suppressMessages(read_xlsx(file, sheet=x)))
 
-  meta <- organize_tables(sheets[[1]]) %>%
+  meta <- organize_tables(sheets[[1]], plate=plate) %>%
     convert_tables()
 
   get_real(sheets[[2]], transpose_table=transpose_table)[[which_table]] %>%
