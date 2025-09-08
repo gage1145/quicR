@@ -10,7 +10,7 @@
 #' @param nrow Integer; number of rows to output in the plot.
 #' @param ncol Integer; number of columns to output in the plot.
 #'
-#' @importFrom magrittr %>%
+#' @importFrom dplyr %>%
 #' @importFrom tidyr pivot_longer
 #' @import ggplot2
 #'
