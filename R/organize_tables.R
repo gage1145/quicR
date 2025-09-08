@@ -10,6 +10,7 @@
 #'
 #' @importFrom readxl cell_cols
 #' @importFrom readxl read_xlsx
+#' @importFrom tidyr unite
 #'
 #' @examples
 #' file <- system.file(
