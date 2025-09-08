@@ -13,7 +13,6 @@
 #' @importFrom tidyr replace_na
 #' @importFrom tidyr separate
 #' @importFrom stringr str_length
-#' @importFrom reshape2 melt
 #'
 #' @examples
 #' file <- system.file(
@@ -34,17 +33,38 @@ plate_view <- function(data, plate = 96) {
     return("Invalid plate layout. Format should be either 96 or 384. ")
   }
 
-  unique_cols <- data %>%
-    select(1:2) %>%
-    unique()
+  reads <- length(unique(data$Time))
 
-  # Create the labeller function for the facet plot.
-  id_labeller <- function(variable, value) {
-    i <- unique_cols["Sample IDs"][unique_cols["Wells"] == value]
-    ifelse(is.na(i), " ", i)
-  }
+  wells <- (
+    expand.grid(
+      {if (plate == 96) LETTERS[1:8] else LETTERS[1:16]},
+      {if (plate == 96) sprintf("%02d", 1:12) else sprintf("%02d", 1:24)}
+    ) %>%
+      unite("Wells", 1,2, sep="")
+  )$Wells %>%
+    rep(each=reads)
+  wells <- data.frame(Wells = wells)
+  # rep(wells, reads)
+  # left_join(
+  #   data %>%
+  #     select(1:2) %>%
+  #     unique()
+  # )
+  # wells
+
+  # unique_cols <- data %>%
+  #   select(1:2) %>%
+  #   unique() %>%
+  #   right_join(wells)
+  #
+  # # Create the labeller function for the facet plot.
+  # id_labeller <- function(variable, value) {
+  #   i <- wells["Sample IDs"][wells["Wells"] == value]
+  #   ifelse(is.na(i), " ", i)
+  # }
 
   data %>%
+    right_join(wells) %>%
     ggplot(aes(.data$Time)) +
     geom_line(aes(y=.data$Norm), color="black") +
     geom_line(aes(y=.data$Deriv), color="blue") +
@@ -52,7 +72,7 @@ plate_view <- function(data, plate = 96) {
       vars(.data$Wells),
       nrow = ifelse(plate == 96, 8, 16),
       ncol = ifelse(plate == 96, 12, 24),
-      labeller = id_labeller
+      # labeller = id_labeller
     ) +
     labs(
       y = "RFU",
@@ -65,5 +85,6 @@ plate_view <- function(data, plate = 96) {
       axis.text.x = element_blank(),
       axis.text.y = element_blank()
     ) %>%
-    suppressWarnings()
+    suppressWarnings() %>%
+    suppressMessages()
 }
