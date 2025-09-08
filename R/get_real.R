@@ -89,5 +89,4 @@ get_real <- function(data, order_by_sample = FALSE, transpose_table = TRUE) {
       split_real_time() %>%
       {if (isTRUE(transpose_table)) lapply(., transpose_real) else .}
   )
-  # return(split_real_time(curate(check_format(data))))
 }
