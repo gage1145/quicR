@@ -23,6 +23,7 @@ Converts the real-time data into a ggplot figure. The layout is either 8x12
 or 16x24 for 96- and 384-well plates, respectively.
 }
 \examples{
+\donttest{
 file <- system.file(
   "extdata/input_files",
   file = "raw.csv",
@@ -33,5 +34,6 @@ file <- system.file(
 df_ <- read.csv(file, check.names=FALSE)
 
 plate_view(df_)
+}
 
 }
