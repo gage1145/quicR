@@ -15,16 +15,17 @@ calculate_metrics(data, ..., threshold = 2)
 }
 \value{
 A data frame of calculated metrics.
-
-#' @examples
-file <- system.file(
-"extdata/input_files",
-file = "test.xlsx",
-package = "quicR"
-)
-get_quic(file) |>
-calculate_metrics(\verb{Sample IDs}, Dilutions, Wells)
 }
 \description{
 Uses functions from the "calculate" family of quicR functions to generate an analyzed dataframe.
+}
+\examples{
+file <- system.file(
+  "extdata/input_files",
+  file = "test.xlsx",
+  package = "quicR"
+)
+get_quic(file) |>
+ calculate_metrics("Sample IDs", "Dilutions", "Wells")
+
 }

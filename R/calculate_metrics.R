@@ -16,14 +16,14 @@
 #'
 #' @return A data frame of calculated metrics.
 #'
-#' #' @examples
+#' @examples
 #' file <- system.file(
 #'   "extdata/input_files",
 #'   file = "test.xlsx",
 #'   package = "quicR"
 #' )
 #' get_quic(file) |>
-#'  calculate_metrics(`Sample IDs`, Dilutions, Wells)
+#'  calculate_metrics("Sample IDs", "Dilutions", "Wells")
 #'
 #' @export
 calculate_metrics <- function(data, ..., threshold = 2) {
