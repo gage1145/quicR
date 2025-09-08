@@ -18,6 +18,7 @@
 #' @importFrom stats setNames
 #'
 #' @examples
+#' \donttest{
 #' file <- system.file(
 #'   "extdata/input_files",
 #'   file = "raw.csv",
@@ -28,6 +29,7 @@
 #' df_ <- read.csv(file, check.names=FALSE)
 #'
 #' plate_view(df_)
+#' }
 #'
 #' @export
 plate_view <- function(data, plate=96, sep="\n", plot_deriv=TRUE) {

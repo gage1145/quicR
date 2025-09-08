@@ -35,3 +35,18 @@ A ggplot object
 \description{
 Generates a faceted figure of boxplots.
 }
+\examples{
+\donttest{
+file <- system.file(
+  "extdata/input_files",
+  file = "raw.csv",
+  package = "quicR"
+)
+
+df <- read.csv(file, check.names=FALSE)
+
+calculate_metrics(df, "Sample IDs", "Dilutions", "Wells") |>
+  plot_metrics("MPR", "MS", "TtT", "RAF")
+}
+
+}
