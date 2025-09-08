@@ -1,13 +1,16 @@
 library(quicR)
-
-# source("../../R/calculate_MPR.R")
-# source("../../R/calculate_TtT.R")
-# source("../../R/calculate_MS.R")
-# source("../../R/calculate_metrics.R")
+library(dplyr)
+library(tidyr)
 
 
-
-file <- "input_files/test384.xlsx"
+file <- "input_files/test3.xlsx"
 raw <- get_quic(file, plate=96)
 analyzed <- calculate_metrics(raw, "Sample IDs", "Dilutions", "Wells")
-plate_view(raw)
+
+file <- "input_files/raw.csv"
+df <- read.csv(file, check.names = FALSE)
+  # mutate_at(c("Sample IDs", "Dilutions", "Wells"), as.factor)
+
+
+
+plate_view(df, plot_deriv = F)
