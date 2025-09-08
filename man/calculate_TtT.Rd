@@ -4,7 +4,14 @@
 \alias{calculate_TtT}
 \title{Calculate Time to Threshold}
 \usage{
-calculate_TtT(data, threshold, time = "Time", values = "Norm", .by = "Wells")
+calculate_TtT(
+  data,
+  threshold,
+  time = "Time",
+  values = "Norm",
+  .by = "Wells",
+  calc_raf = TRUE
+)
 }
 \arguments{
 \item{data}{A dataframe containing real-time RT-QuIC data.}
@@ -16,6 +23,8 @@ calculate_TtT(data, threshold, time = "Time", values = "Norm", .by = "Wells")
 \item{values}{Column containing your fluorescence values.}
 
 \item{.by}{Grouping factor. Should typically be by individual wells.}
+
+\item{calc_raf}{Logical; Should rate of amyloid formation be calculated?}
 }
 \value{
 A vector containing the times to threshold
