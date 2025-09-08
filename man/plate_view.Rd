@@ -4,12 +4,16 @@
 \alias{plate_view}
 \title{Real-Time Plate View}
 \usage{
-plate_view(data, plate = 96)
+plate_view(data, plate = 96, sep = "\\n", plot_deriv = TRUE)
 }
 \arguments{
 \item{data}{Real-time dataframe}
 
 \item{plate}{Integer either 96 or 384 to denote microplate type.}
+
+\item{sep}{A string defining how sample IDs and dilutions should be separated.}
+
+\item{plot_deriv}{Logical; should the derivative be plotted?}
 }
 \value{
 A ggplot object
@@ -21,12 +25,12 @@ or 16x24 for 96- and 384-well plates, respectively.
 \examples{
 file <- system.file(
   "extdata/input_files",
-  file = "test2.xlsx",
+  file = "raw.csv",
   package = "quicR"
 )
 
 # Get the real-time data.
-df_ <- get_quic(file)
+df_ <- read.csv(file, check.names=FALSE)
 
 plate_view(df_)
 

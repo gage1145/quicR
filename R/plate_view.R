@@ -5,6 +5,8 @@
 #'
 #' @param data Real-time dataframe
 #' @param plate Integer either 96 or 384 to denote microplate type.
+#' @param sep A string defining how sample IDs and dilutions should be separated.
+#' @param plot_deriv Logical; should the derivative be plotted?
 #'
 #' @return A ggplot object
 #'
@@ -13,66 +15,59 @@
 #' @importFrom tidyr replace_na
 #' @importFrom tidyr separate
 #' @importFrom stringr str_length
+#' @importFrom stats setNames
 #'
 #' @examples
 #' file <- system.file(
 #'   "extdata/input_files",
-#'   file = "test2.xlsx",
+#'   file = "raw.csv",
 #'   package = "quicR"
 #' )
 #'
 #' # Get the real-time data.
-#' df_ <- get_quic(file)
+#' df_ <- read.csv(file, check.names=FALSE)
 #'
 #' plate_view(df_)
 #'
 #' @export
-plate_view <- function(data, plate = 96) {
+plate_view <- function(data, plate=96, sep="\n", plot_deriv=TRUE) {
 
   if (plate != 96 & plate != 384) {
     return("Invalid plate layout. Format should be either 96 or 384. ")
   }
 
-  reads <- length(unique(data$Time))
-
-  wells <- (
-    expand.grid(
-      {if (plate == 96) LETTERS[1:8] else LETTERS[1:16]},
-      {if (plate == 96) sprintf("%02d", 1:12) else sprintf("%02d", 1:24)}
+  wells <- data %>%
+    select("Sample IDs", "Dilutions", "Wells") %>%
+    mutate_at("Dilutions", as.character) %>%
+    group_by_at(1:3) %>%
+    reframe() %>%
+    full_join(
+      expand.grid(
+        {if (plate == 96) LETTERS[1:8] else LETTERS[1:16]},
+        {if (plate == 96) sprintf("%02d", 1:12) else sprintf("%02d", 1:24)}
+      ) %>%
+        unite("Wells", 1,2, sep="")
     ) %>%
-      unite("Wells", 1,2, sep="")
-  )$Wells %>%
-    rep(each=reads)
-  wells <- data.frame(Wells = wells)
-  # rep(wells, reads)
-  # left_join(
-  #   data %>%
-  #     select(1:2) %>%
-  #     unique()
-  # )
-  # wells
+    mutate_all(function(x) replace_na(x, " ")) %>%
+    suppressMessages()
 
-  # unique_cols <- data %>%
-  #   select(1:2) %>%
-  #   unique() %>%
-  #   right_join(wells)
-  #
-  # # Create the labeller function for the facet plot.
-  # id_labeller <- function(variable, value) {
-  #   i <- wells["Sample IDs"][wells["Wells"] == value]
-  #   ifelse(is.na(i), " ", i)
-  # }
+  labels_lookup <- setNames(
+    paste(wells$`Sample IDs`, wells$Dilutions, sep=sep),
+    wells$Wells
+  )
 
-  data %>%
-    right_join(wells) %>%
+  p <- data %>%
+    mutate_at("Dilutions", as.character) %>%
+    full_join(wells) %>%
+    suppressMessages() %>%
     ggplot(aes(.data$Time)) +
     geom_line(aes(y=.data$Norm), color="black") +
-    geom_line(aes(y=.data$Deriv), color="blue") +
+    {if (plot_deriv) geom_line(aes(y=.data$Deriv), color="blue")} +
     facet_wrap(
       vars(.data$Wells),
       nrow = ifelse(plate == 96, 8, 16),
       ncol = ifelse(plate == 96, 12, 24),
-      # labeller = id_labeller
+      labeller = as_labeller(labels_lookup)
     ) +
     labs(
       y = "RFU",
@@ -84,7 +79,9 @@ plate_view <- function(data, plate = 96) {
       strip.background = element_blank(),
       axis.text.x = element_blank(),
       axis.text.y = element_blank()
-    ) %>%
+    )
+
+  print(p) %>%
     suppressWarnings() %>%
     suppressMessages()
 }
