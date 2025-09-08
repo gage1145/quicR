@@ -9,6 +9,10 @@
 #' @return A data frame containing well-matched MPR values.
 #'
 #' @importFrom dplyr summarize
+#' @importFrom dplyr sym
+#' @importFrom dplyr group_by
+#' @importFrom dplyr is_grouped_df
+#' @importFrom dplyr %>%
 #'
 #' @examples
 #' file <- system.file(
@@ -21,5 +25,7 @@
 #'
 #' @export
 calculate_MPR <- function(data, col="Norm", .by="Wells") {
-  summarize(data, MPR = max(!!sym(col)), .by=.by)
+  data %>%
+    {if (is_grouped_df(.)) . else group_by(., !!.by)} %>%
+    summarize(MPR = max(!!sym(col), na.rm=TRUE))
 }
