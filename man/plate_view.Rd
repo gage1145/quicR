@@ -4,14 +4,16 @@
 \alias{plate_view}
 \title{Real-Time Plate View}
 \usage{
-plate_view(df, meta, plate = 96)
+plate_view(data, plate = 96, sep = "\\n", plot_deriv = TRUE)
 }
 \arguments{
-\item{df}{Real-time dataframe}
-
-\item{meta}{Dataframe containing well IDs and Sample IDs to title each facet.}
+\item{data}{Real-time dataframe}
 
 \item{plate}{Integer either 96 or 384 to denote microplate type.}
+
+\item{sep}{A string defining how sample IDs and dilutions should be separated.}
+
+\item{plot_deriv}{Logical; should the derivative be plotted?}
 }
 \value{
 A ggplot object
@@ -21,25 +23,17 @@ Converts the real-time data into a ggplot figure. The layout is either 8x12
 or 16x24 for 96- and 384-well plates, respectively.
 }
 \examples{
-# This test takes >5 sec
 \donttest{
 file <- system.file(
   "extdata/input_files",
-  file = "test2.xlsx",
+  file = "raw.csv",
   package = "quicR"
 )
 
 # Get the real-time data.
-df_ <- get_real(file, ordered = FALSE)[[1]] |>
-  as.data.frame()
+df_ <- read.csv(file, check.names=FALSE)
 
-sample_locations <- get_sample_locations(
-  file,
-  dilution_bool = TRUE,
-  dilution_fun = function(x) -log10(x)
-)
-
-plate_view(df_, sample_locations)
+plate_view(df_)
 }
 
 }

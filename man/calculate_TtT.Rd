@@ -4,14 +4,27 @@
 \alias{calculate_TtT}
 \title{Calculate Time to Threshold}
 \usage{
-calculate_TtT(data, threshold, start_col = 3)
+calculate_TtT(
+  data,
+  threshold,
+  time = "Time",
+  values = "Norm",
+  .by = "Wells",
+  calc_raf = TRUE
+)
 }
 \arguments{
 \item{data}{A dataframe containing real-time RT-QuIC data.}
 
 \item{threshold}{A numeric value defining the threshold.}
 
-\item{start_col}{The column containing the starting position of the real-time data.}
+\item{time}{Column containing your time values.}
+
+\item{values}{Column containing your fluorescence values.}
+
+\item{.by}{Grouping factor. Should typically be by individual wells.}
+
+\item{calc_raf}{Logical; Should rate of amyloid formation be calculated?}
 }
 \value{
 A vector containing the times to threshold
@@ -20,16 +33,12 @@ A vector containing the times to threshold
 Calculates the time required to reach a defined threshold.
 }
 \examples{
-# This test takes >5 sec
-\donttest{
 file <- system.file(
   "extdata/input_files",
   file = "test2.xlsx",
   package = "quicR"
 )
-get_real(file)[[1]] |>
-  quicR::normalize_RFU() |>
+get_quic(file) |>
   calculate_TtT(threshold = 2)
-}
 
 }

@@ -9,6 +9,8 @@
 #' @return A list containing tibbles.
 #'
 #' @importFrom readxl cell_cols
+#' @importFrom readxl read_xlsx
+#' @importFrom tidyr unite
 #'
 #' @examples
 #' file <- system.file(
@@ -31,7 +33,7 @@ organize_tables <- function(file, plate = 96) {
   # Block allows input of an excel file string or a dataframe.
   if (is.character(file)) {
     # Read the Excel file into R.
-    data <- read_excel(
+    data <- read_xlsx(
       file,
       sheet = 1,
       col_names = FALSE,
@@ -39,7 +41,18 @@ organize_tables <- function(file, plate = 96) {
     ) |>
       suppressMessages()
   } else {
-    data <- ifelse(plate == 96, file[2:13], file[2:25])
+    if (plate == 96) data <- file[2:13] else data <- file[2:25]
+    # data <- ifelse(plate == 96, file[2:13], file[2:25])
+  }
+
+  # Remove leading NA rows.
+  for (i in 1:nrow(data)) {
+    if (!is.na(data[i,1])) {
+      if (i != 1){
+        data <- data[-(1:i-1),]
+        break
+      } else {break}
+    }
   }
 
   # Create a vector with named tibbles for each table.
@@ -52,6 +65,18 @@ organize_tables <- function(file, plate = 96) {
     df_dic[[name]] <- data[(i + 2): (i + step - 2), ]
     i <- i + step
   }
+
+  df_dic$Wells <- (
+    expand.grid(
+      {if (plate == 96) LETTERS[1:8] else LETTERS[1:16]},
+      {if (plate == 96) sprintf("%02d", 1:12) else sprintf("%02d", 1:24)}
+    ) %>%
+      unite("Wells", 1,2, sep="")
+  )[[1]] %>%
+    matrix(
+      nrow=ifelse(plate == 96, 8, 16),
+      ncol=ifelse(plate == 96, 12, 24)
+    )
 
   return(df_dic)
 }

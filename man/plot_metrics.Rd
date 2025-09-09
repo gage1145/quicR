@@ -6,6 +6,7 @@
 \usage{
 plot_metrics(
   data,
+  ...,
   sample_col = "Sample IDs",
   fill = "Dilutions",
   dilution_bool = TRUE,
@@ -15,6 +16,8 @@ plot_metrics(
 }
 \arguments{
 \item{data}{A dataframe containing the calculated metrics from the "calculate" family of quicR functions.}
+
+\item{...}{A list of faceting columns.}
 
 \item{sample_col}{The name of the column containing the sample IDs.}
 
@@ -33,22 +36,17 @@ A ggplot object
 Generates a faceted figure of boxplots.
 }
 \examples{
-# This test takes >5 sec
 \donttest{
 file <- system.file(
   "extdata/input_files",
-  file = "test4.xlsx",
+  file = "raw.csv",
   package = "quicR"
 )
 
-data <- quicR::get_real(file)[[1]] |>
-  quicR::normalize_RFU()
+df <- read.csv(file, check.names=FALSE)
 
-meta <- quicR::organize_tables(file) |>
-  quicR::convert_tables()
-
-calculate_metrics(data, meta) |>
-  plot_metrics()
+calculate_metrics(df, "Sample IDs", "Dilutions", "Wells") |>
+  plot_metrics("MPR", "MS", "TtT", "RAF")
 }
 
 }

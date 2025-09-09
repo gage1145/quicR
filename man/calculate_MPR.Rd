@@ -4,32 +4,29 @@
 \alias{calculate_MPR}
 \title{Calculate the Maxpoint Ratio}
 \usage{
-calculate_MPR(data, start_col = 3, data_is_norm = TRUE)
+calculate_MPR(data, col = "Norm", .by = "Wells")
 }
 \arguments{
-\item{data}{A dataframe containing the real-time fluorescence data.}
+\item{data}{A data frame output from 'get_quic()'.}
 
-\item{start_col}{Integer, the column at which the background fluorescence should be read.}
+\item{col}{The column containing the normalized fluorescence data.}
 
-\item{data_is_norm}{Logical, if the data has not been normalized, will make a call to normalize_RFU.}
+\item{.by}{Grouping factor. Should typically be by individual wells.}
 }
 \value{
-A vector containing MPR values.
+A data frame containing well-matched MPR values.
 }
 \description{
 Maxpoint ratio is defined as the maximum relative fluorescence divided by the
 background fluorescence.
 }
 \examples{
-# This test takes >5 sec
-\donttest{
 file <- system.file(
   "extdata/input_files",
   file = "test.xlsx",
   package = "quicR"
 )
-df_ <- quicR::get_real(file)[[1]]
-print(calculate_MPR(df_))
-}
+get_quic(file) |>
+  calculate_MPR()
 
 }

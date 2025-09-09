@@ -4,31 +4,18 @@
 \alias{calculate_MS}
 \title{Calculate Maximum Slope}
 \usage{
-calculate_MS(data, window = 3, data_is_norm = TRUE)
+calculate_MS(data, col = "Deriv", .by = "Wells")
 }
 \arguments{
 \item{data}{A dataframe containing real-time reads. It is recommended to use a dataframe made from normalize_RFU.}
 
-\item{window}{Integer designating how wide you want the sliding window to be for calculating the moving average slope.}
+\item{col}{Character, defines the column containing the derivative curve.}
 
-\item{data_is_norm}{Logical; if FALSE, will make a call to normalize_RFU.}
+\item{.by}{Grouping factor. Should typically be by individual wells.}
 }
 \value{
 A dataframe containing the real-time slope values as change in RFU/sec.
 }
 \description{
 Uses a sliding window to calculate the slope of real-time reads.
-}
-\examples{
-# This test takes >5 sec
-\donttest{
-file <- system.file(
-  "extdata/input_files",
-  file = "rt_data.csv",
-  package = "quicR"
-)
-df_ <- read.csv(file, check.names = FALSE)
-calculate_MS(df_)
-}
-
 }

@@ -6,7 +6,9 @@
 \usage{
 calculate_threshold(
   data,
-  background_cycle = 2,
+  values = "RFU",
+  time = "Time",
+  background_time = 0,
   method = list("stdev", "none"),
   multiplier = 1
 )
@@ -14,7 +16,11 @@ calculate_threshold(
 \arguments{
 \item{data}{A dataframe output from get_real.}
 
-\item{background_cycle}{Integer; the cycle used for background fluorescence.}
+\item{values}{Column containing fluorescent values.}
+
+\item{time}{Column containing time values.}
+
+\item{background_time}{Float; the time point used for background fluorescence.}
 
 \item{method}{Method for determining threshold; default is "stdev".}
 
@@ -32,7 +38,7 @@ file <- system.file(
   file = "test2.xlsx",
   package = "quicR"
 )
-threshold <- get_real(file)[[1]] |>
-  calculate_threshold(multiplier = 10)
+threshold <- get_quic(file) |>
+  calculate_threshold(multiplier=10)
 
 }

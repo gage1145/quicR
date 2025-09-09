@@ -3,9 +3,10 @@
 #' Converts the real-time data into a ggplot figure. The layout is either 8x12
 #' or 16x24 for 96- and 384-well plates, respectively.
 #'
-#' @param df Real-time dataframe
-#' @param meta Dataframe containing well IDs and Sample IDs to title each facet.
+#' @param data Real-time dataframe
 #' @param plate Integer either 96 or 384 to denote microplate type.
+#' @param sep A string defining how sample IDs and dilutions should be separated.
+#' @param plot_deriv Logical; should the derivative be plotted?
 #'
 #' @return A ggplot object
 #'
@@ -14,100 +15,62 @@
 #' @importFrom tidyr replace_na
 #' @importFrom tidyr separate
 #' @importFrom stringr str_length
-#' @importFrom reshape2 melt
+#' @importFrom stats setNames
 #'
 #' @examples
-#' # This test takes >5 sec
 #' \donttest{
 #' file <- system.file(
 #'   "extdata/input_files",
-#'   file = "test2.xlsx",
+#'   file = "raw.csv",
 #'   package = "quicR"
 #' )
 #'
 #' # Get the real-time data.
-#' df_ <- get_real(file, ordered = FALSE)[[1]] |>
-#'   as.data.frame()
+#' df_ <- read.csv(file, check.names=FALSE)
 #'
-#' sample_locations <- get_sample_locations(
-#'   file,
-#'   dilution_bool = TRUE,
-#'   dilution_fun = function(x) -log10(x)
-#' )
-#'
-#' plate_view(df_, sample_locations)
+#' plate_view(df_)
 #' }
 #'
 #' @export
-plate_view <- function(df, meta, plate = 96) {
+plate_view <- function(data, plate=96, sep="\n", plot_deriv=TRUE) {
 
   if (plate != 96 & plate != 384) {
     return("Invalid plate layout. Format should be either 96 or 384. ")
   }
 
-  # Ensures that the input is a dataframe.
-  df <- data.frame(df)
-
-  colnames(df) <- c("Time", paste(meta[[1]], meta[[2]], sep = "."))
-
-  # Create a template of all possible columns
-  template_columns <- expand.grid(
-    if (plate == 96) {
-      Var1 <- LETTERS[1:8]
-    } else {
-      Var1 <- LETTERS[1:16]
-    },
-    if (plate == 96) {
-      Var2 <- sprintf("%02d", 1:12)
-    } else {
-      Var2 <- sprintf("%02d", 1:24)
-    }
-  )
-  template_columns <- sort(paste0(template_columns$Var1, template_columns$Var2))
-  rm(Var1, Var2)
-
-  # Add columns with NAs if they do not exist.
-  for (col in template_columns) {
-    if (!(col %in% meta[[1]])) {
-      df[col] <- NA
-    }
-  }
-
-  # Add a "Time" column. This is important for the melt function.
-  # df <- cbind("Time" = rownames(df), df)
-
-  # Combine the template_columns and sample_locations.
-  template_columns <- as.data.frame(template_columns)
-  colnames(template_columns) <- colnames(meta[1])
-
-  # Create a data.frame with all the wells and IDs, even if some are missing.
-  full <- meta |>
-    full_join(as.data.frame(template_columns)) |>
-    arrange_at(1) %>%
+  wells <- data %>%
+    select("Sample IDs", "Dilutions", "Wells") %>%
+    mutate_at("Dilutions", as.character) %>%
+    group_by_at(1:3) %>%
+    reframe() %>%
+    full_join(
+      expand.grid(
+        {if (plate == 96) LETTERS[1:8] else LETTERS[1:16]},
+        {if (plate == 96) sprintf("%02d", 1:12) else sprintf("%02d", 1:24)}
+      ) %>%
+        unite("Wells", 1,2, sep="")
+    ) %>%
+    mutate_all(function(x) replace_na(x, " ")) %>%
     suppressMessages()
 
-  # Create the labeller function for the facet plot.
-  ID_labeller <- function(variable, value) {
-    i <- full[, 2][full[, 1] == value]
-    ifelse(is.na(i), " ", i)
-  }
+  labels_lookup <- setNames(
+    paste(wells$`Sample IDs`, wells$Dilutions, sep=sep),
+    wells$Wells
+  )
 
-  df |>
-    # Melt the data to help with the faceting.
-    reshape2::melt(id.vars = "Time") |>
-    # Separate the wells from the IDs.
-    separate("variable", c("Well", "ID"), "\\.", fill = "right") |>
-    # Ensures that Time and observations are numeric.
-    mutate(
-      Time  = as.numeric  (.data$Time),
-      value = as.numeric  (.data$value),
-      ID    = as.character(.data$ID),
-      Well  = as.factor   (.data$Well)
-    ) |>
-    mutate(ID = replace_na(.data$ID, "none")) |>
-    # Create the facet plot.
-    ggplot(aes(x = .data$Time, y = .data$value)) +
-    geom_line() +
+  p <- data %>%
+    mutate_at("Dilutions", as.character) %>%
+    full_join(wells) %>%
+    suppressMessages() %>%
+    ggplot(aes(.data$Time)) +
+    geom_line(aes(y=.data$Norm), color="black") +
+    {if (plot_deriv) geom_line(aes(y=.data$Deriv), color="blue")} +
+    facet_wrap(
+      vars(.data$Wells),
+      nrow = ifelse(plate == 96, 8, 16),
+      ncol = ifelse(plate == 96, 12, 24),
+      labeller = as_labeller(labels_lookup)
+    ) +
     labs(
       y = "RFU",
       x = "Time (h)"
@@ -118,11 +81,9 @@ plate_view <- function(df, meta, plate = 96) {
       strip.background = element_blank(),
       axis.text.x = element_blank(),
       axis.text.y = element_blank()
-    ) +
-    facet_wrap(vars(.data$Well),
-      nrow = ifelse(plate == 96, 8, 16),
-      ncol = ifelse(plate == 96, 12, 24),
-      labeller = ID_labeller
-    ) |>
-    suppressWarnings()
+    )
+
+  print(p) %>%
+    suppressWarnings() %>%
+    suppressMessages()
 }
