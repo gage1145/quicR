@@ -33,7 +33,7 @@ calculate_metrics <- function(data, ..., threshold = 2) {
     reframe(data),
     calculate_MPR(data),
     calculate_MS(data),
-    calculate_TtT(data, threshold=threshold, calc_raf=TRUE)
+    calculate_TtT(data, threshold)
   ) %>%
     reduce(left_join) %>%
     suppressMessages()

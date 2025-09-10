@@ -7,7 +7,6 @@
 #' @param time Column containing your time values.
 #' @param values Column containing your fluorescence values.
 #' @param .by Grouping factor. Should typically be by individual wells.
-#' @param calc_raf Logical; Should rate of amyloid formation be calculated?
 #'
 #' @return A vector containing the times to threshold
 #'
@@ -30,30 +29,36 @@
 #'   calculate_TtT(threshold = 2)
 #'
 #' @export
-calculate_TtT <- function(data, threshold, time="Time", values="Norm", .by="Wells", calc_raf=TRUE) {
+calculate_TtT <- function(data, threshold, time="Time", values="Norm", .by="Wells") {
 
   dt <- data$Time[2] - data$Time[1]
   grouping <- sym(.by)
+
+  crossings <- data %>%
+    {if (is_grouped_df(.)) . else group_by(., !!grouping)} %>%
+    filter(.data[[values]] > threshold) %>%
+    reframe()
 
   data %>%
     {if (is_grouped_df(.)) . else group_by(., !!grouping)} %>%
     rename("y" = !!sym(values), "x" = !!sym(time)) %>%
     mutate_at(c("x", "y"), as.numeric) %>%
     summarize(
-      "x2" = ifelse(
-        !is_empty(.data$x[.data$y > 2]),
-        min(.data$x[.data$y > 2]),
+      crossed = max(.data$y) > threshold,
+      x2 = ifelse(
+        .data$crossed,
+        min(.data$x[.data$y>threshold]),
         max(.data$x)
       ),
-      "x1" = .data$x2 - dt,
-      "y2" = .data$y[.data$x == .data$x2],
-      "y1" = .data$y[.data$x == .data$x1],
-      "TtT" = ifelse(
-        .data$x2 == max(.data$x),
-        .data$x2,
-        .data$x1 + (threshold - .data$y1) * (.data$x2 - .data$x1) / (.data$y2 - .data$y1)
+      x1 = .data$x2 - dt,
+      y2 = .data$y[.data$x == .data$x2],
+      y1 = .data$y[.data$x == .data$x1],
+      TtT = ifelse(
+        .data$crossed,
+        .data$x1 + (threshold - .data$y1) * (.data$x2 - .data$x1) / (.data$y2 - .data$y1),
+        .data$x2
       )
     ) %>%
-    mutate(RAF = ifelse(calc_raf, 1/.data$TtT, NA)) %>%
+    mutate(RAF = 1/.data$TtT) %>%
     select(!!sym(.by), "TtT", "RAF")
 }
