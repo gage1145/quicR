@@ -1,13 +1,48 @@
+# quicR 3.0.2
+
+## Breaking Changes
+
+### Deprecated functions
+
+The following functions are now obsolete and are not included in the **quicR** package.
+
+-   `transpose_real`
+
+-   `normalize_RFU`
+
+-   `get_sample_locations`
+
+The following functions are now deprecated but are still used within the **quicR** environment.
+
+-   `get_real`: The primary function for the initial export of data from the BMG XLSX file. Used by the new function, `get_quic`.
+
+### New Functions
+
+-   `get_quic`: This function automatically pulls out the raw data from the BMG XLSX file and formats it into a long table. It also calculates the normalized real-time data as well as the approximate derivative. This function has also assimilated the role of `get_sample_locations`, and now each sample is associated with its individual well on the micro-plate.
+
+### Updated Functions
+
+-   `calculate_MPR`, `calculate_MS`, `calculate_TtT`: These functions now output their values matched with a micro-plate well. This allows for better assurance that values are being correctly associated with a sample. These functions have also received a speed boost thanks to dealing with long data rather than the wide format I was using before.
+
+-   `plate_view`: This function now only requires the output of `get_quic`.
+
+## Bug Fixes
+
+-   Fixed a bug where `get_quic` would only output a single dilution factor rather than matched dilutions.
+
+-   Fixed a bug where `calculate_TtT` would return NAs instead of actual values.
+
 # quicR 2.1.3
 
 ## Updated README
-- Removed the mermaid diagram and replaced it with a workflow diagram image and a screenshot of the window where export selections are made.
-- Added a plate view section with example figure.
-- Added a section explaining key calculated metrics such as maxpoint ratio, max slope, time-to-threshold, and rate of amyloid formation.
-- Included examples with newly created functions that were not present in previous versions such as `calculate_metrics` and `plot_metrics`.
-- Added a funding section.
-- Added a dependency section with hyperlinks to all dependencies.
-- Updated the author section.
+
+-   Removed the mermaid diagram and replaced it with a workflow diagram image and a screenshot of the window where export selections are made.
+-   Added a plate view section with example figure.
+-   Added a section explaining key calculated metrics such as maxpoint ratio, max slope, time-to-threshold, and rate of amyloid formation.
+-   Included examples with newly created functions that were not present in previous versions such as `calculate_metrics` and `plot_metrics`.
+-   Added a funding section.
+-   Added a dependency section with hyperlinks to all dependencies.
+-   Updated the author section.
 
 # quicR 2.1.2
 
