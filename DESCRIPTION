@@ -1,6 +1,6 @@
 Package: quicR
 Title: RT-QuIC Data Formatting and Analysis
-Version: 3.0.1
+Version: 3.0.2
 Authors@R: 
     person(
       given = "Gage",
