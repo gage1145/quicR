@@ -41,7 +41,7 @@ get_quic <- function(file, transpose_table=TRUE, norm_point=2, which_table=1,
     mutate(
       "Sample IDs" = meta[["Sample IDs"]],
       "Wells" = meta[["Wells"]],
-      "Dilutions" = ifelse("Dilutions" %in% colnames(meta), meta[["Dilutions"]], NA),
+      "Dilutions" = {if ("Dilutions" %in% colnames(meta)) meta[["Dilutions"]] else NA},
       .after = "Sample IDs"
     ) %>%
     pivot_longer(4:ncol(.), names_to="Time", values_to="RFU") %>%
