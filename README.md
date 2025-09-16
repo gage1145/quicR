@@ -70,13 +70,8 @@ get_meta("file.xlsx")
 The function, `plate_view`, is used in to generate plate-level overviews of an RT-QuIC assay. Together, they plot every sample in an 8x12 or 16x24 faceted grid for 96-well and 384-well micro-plates, respectively.
 
 ``` r
-sample_locations <- get_sample_locations(
-  "file.xlsx", 
-  dilution_bool = TRUE,
-  dilution_fun = function(x) -log10(x)
-)
-
-plate_view(df_, sample_locations)
+df_ <- get_quic("file.xlsx")
+plate_view(df_)
 ```
 
 ![](man/manuscript/images/plate_view.png) *Plate‐view analog of a 96‐well microplate. Each facet in the 8x12 grid shows the real‐time curves of an RT‐QuIC reaction. The numbers underneath the sample IDs are the dilution factors.*
