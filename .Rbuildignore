@@ -5,3 +5,5 @@
 ^\.vscode$
 manuscript
 CONTRIBUTING.md
+^CRAN-SUBMISSION$
+^cran-comments\.md$
