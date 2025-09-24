@@ -4,7 +4,14 @@
 \alias{plate_view}
 \title{Real-Time Plate View}
 \usage{
-plate_view(data, plate = 96, sep = "\\n", plot_deriv = TRUE)
+plate_view(
+  data,
+  plate = 96,
+  sep = "\\n",
+  plot_deriv = TRUE,
+  flu_color = "black",
+  der_color = "blue"
+)
 }
 \arguments{
 \item{data}{Real-time dataframe}
@@ -14,6 +21,10 @@ plate_view(data, plate = 96, sep = "\\n", plot_deriv = TRUE)
 \item{sep}{A string defining how sample IDs and dilutions should be separated.}
 
 \item{plot_deriv}{Logical; should the derivative be plotted?}
+
+\item{flu_color}{Line color of the fluorescent data.}
+
+\item{der_color}{Line color of the derivative data.}
 }
 \value{
 A ggplot object

@@ -8,6 +8,7 @@ plot_metrics(
   data,
   ...,
   sample_col = "Sample IDs",
+  color = "black",
   fill = "Dilutions",
   dilution_bool = TRUE,
   nrow = 2,
@@ -20,6 +21,8 @@ plot_metrics(
 \item{...}{A list of faceting columns.}
 
 \item{sample_col}{The name of the column containing the sample IDs.}
+
+\item{color}{The color used for the boxplot outline.}
 
 \item{fill}{The column containing the fill aesthetic. Usually the dilutions column.}
 
