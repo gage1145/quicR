@@ -7,6 +7,8 @@
 #' @param plate Integer either 96 or 384 to denote microplate type.
 #' @param sep A string defining how sample IDs and dilutions should be separated.
 #' @param plot_deriv Logical; should the derivative be plotted?
+#' @param flu_color Line color of the fluorescent data.
+#' @param der_color Line color of the derivative data.
 #'
 #' @return A ggplot object
 #'
@@ -32,7 +34,8 @@
 #' }
 #'
 #' @export
-plate_view <- function(data, plate=96, sep="\n", plot_deriv=TRUE) {
+plate_view <- function(data, plate=96, sep="\n", plot_deriv=TRUE,
+                       flu_color="black", der_color="blue") {
 
   if (plate != 96 & plate != 384) {
     return("Invalid plate layout. Format should be either 96 or 384. ")
@@ -63,8 +66,8 @@ plate_view <- function(data, plate=96, sep="\n", plot_deriv=TRUE) {
     full_join(wells) %>%
     suppressMessages() %>%
     ggplot(aes(.data$Time)) +
-    geom_line(aes(y=.data$Norm), color="black") +
-    {if (plot_deriv) geom_line(aes(y=.data$Deriv), color="blue")} +
+    geom_line(aes(y=.data$Norm), color=flu_color) +
+    {if (plot_deriv) geom_line(aes(y=.data$Deriv), color=der_color)} +
     facet_wrap(
       vars(.data$Wells),
       nrow = ifelse(plate == 96, 8, 16),
