@@ -39,15 +39,19 @@ mpr_time <- df_[which(df_$raw == max(df_$raw)), "x"]
 ms <- max(df_$der)
 ms_time <- df_[which(df_$der == max(df_$der)), "x"]
 
+blue_color <- "lightblue"
+red_color <- "red"
+
+
 ggplot(df_, aes(x)) +
-  geom_line(aes(y = raw), color = "darkred", linewidth = 1.2) +
-  geom_line(aes(y = der), color = "darkblue", linewidth = 1.2) +
+  geom_line(aes(y = raw), color = red_color, linewidth = 1.2) +
+  geom_line(aes(y = der), color = blue_color, linewidth = 1.2) +
   geom_segment(
     x = 0,
     xend = mpr_time,
     y = mpr,
     yend = mpr,
-    color = "darkred",
+    color = red_color,
     linewidth = 1.2,
     linetype = "dashed"
   ) +
@@ -56,7 +60,7 @@ ggplot(df_, aes(x)) +
     xend = mpr_time,
     y = -0.15,
     yend = mpr,
-    color = "darkred",
+    color = red_color,
     linewidth = 1.2,
     linetype = "dashed"
   ) +
@@ -65,7 +69,7 @@ ggplot(df_, aes(x)) +
     xend = ms_time,
     y = ms,
     yend = ms,
-    color = "darkblue",
+    color = blue_color,
     linewidth = 1.2,
     linetype = "dashed"
   ) +
@@ -74,7 +78,7 @@ ggplot(df_, aes(x)) +
     xend = ms_time,
     y = -0.15,
     yend = ms,
-    color = "darkblue",
+    color = blue_color,
     linewidth = 1.2,
     linetype = "dashed"
   ) +
@@ -83,7 +87,7 @@ ggplot(df_, aes(x)) +
     xend = ttt,
     y = threshold,
     yend = threshold,
-    color = "darkred",
+    color = red_color,
     linewidth = 1.2,
     linetype = "dashed"
   ) +
@@ -92,7 +96,7 @@ ggplot(df_, aes(x)) +
     xend = ttt,
     y = -0.15,
     yend = threshold,
-    color = "darkred",
+    color = red_color,
     linewidth = 1.2,
     linetype = "dashed"
   ) +
@@ -103,7 +107,8 @@ ggplot(df_, aes(x)) +
     hjust = "inward",
     data = subset(df_, raw == mpr),
     force_pull = -200,
-    color = "darkred",
+    color = red_color,
+    fill = "transparent",
     size = 5,
     segment.size = 1.2
   ) +
@@ -115,7 +120,8 @@ ggplot(df_, aes(x)) +
     vjust = "outward",
     data = subset(df_, der == ms),
     force_pull = -100,
-    color = "darkblue",
+    color = blue_color,
+    fill = "transparent",
     size = 5,
     segment.size = 1.2
   ) +
@@ -126,7 +132,8 @@ ggplot(df_, aes(x)) +
     vjust = "outward",
     data = subset(df_, x == 0),
     force_pull = -50,
-    color = "darkred",
+    color = red_color,
+    fill = "transparent",
     size = 5,
     segment.size = 1.5
   ) +
@@ -138,7 +145,8 @@ ggplot(df_, aes(x)) +
     vjust = "outward",
     data = subset(df_, x == ttt),
     force_pull = -250,
-    color = "darkred",
+    color = red_color,
+    fill = "transparent",
     size = 5,
     segment.size = 1.2
   ) +
@@ -148,7 +156,7 @@ ggplot(df_, aes(x)) +
     y = 4,
     hjust = 0,
     vjust = 0,
-    color = "darkred",
+    color = red_color,
     size = 5
   ) +
   geom_text(
@@ -157,7 +165,7 @@ ggplot(df_, aes(x)) +
     y = 3.5,
     hjust = 0,
     vjust = 0,
-    color = "darkblue",
+    color = "lightblue",
     size = 5
   ) +
   labs(x = "Time (h)") +
@@ -165,10 +173,19 @@ ggplot(df_, aes(x)) +
   scale_x_continuous(breaks = seq(0, 48, 2)) +
   coord_cartesian(xlim = c(0, 21), ylim = c(-0.15, 4.8), expand = FALSE) +
   theme(
-    axis.title.y = element_blank(),
-    axis.title.x = element_text(size = 20),
-    axis.text = element_text(size = 16),
-    panel.border = element_rect(colour = "black", fill=NA, linewidth=1)
+    line=element_line(color="white"),
+    plot.background = element_rect(fill="#1D1D1D"),
+    panel.background = element_rect(fill="#1D1D1D"),
+    panel.border = element_rect(color="white"),
+    panel.grid = element_blank(),
+    strip.text = element_text(color="white"),
+    axis.title = element_blank(),
+    axis.text = element_text(color="white"),
+    axis.text.x = element_text(angle=0, hjust=0.5),
+    strip.background = element_blank(),
+    legend.background = element_blank(),
+    legend.text = element_text(color="white"),
+    legend.title = element_text(color="white")
   )
 ggsave("images/metric_example.png", width = 12, height = 6)
 
