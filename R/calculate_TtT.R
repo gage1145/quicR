@@ -44,10 +44,9 @@ calculate_TtT <- function(data, threshold, time="Time", values="Norm", .by="Well
     rename("y" = !!sym(values), "x" = !!sym(time)) %>%
     mutate_at(c("x", "y"), as.numeric) %>%
     summarize(
-      crossed = max(.data$y) > threshold,
-      x2 = ifelse(
-        .data$crossed,
-        min(.data$x[.data$y>threshold]),
+      "x2" = ifelse(
+        !is_empty(.data$x[.data$y > threshold]),
+        min(.data$x[.data$y > threshold]),
         max(.data$x)
       ),
       x1 = .data$x2 - dt,
