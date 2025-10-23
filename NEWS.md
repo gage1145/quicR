@@ -1,3 +1,15 @@
+# quicR 3.0.3
+
+## Bug Fixes
+
+-   Fixed some typos in the 384 plate test file.
+
+-   Fixed a bug that caused organize_tables to throw an error if the file had no leading metadata in the header.
+
+## New Features
+
+-   For functions that use the '...' argument, users can now leave that argument blank. See documentation for functions that use this argument to view default values.
+
 # quicR 3.0.2
 
 ## Breaking Changes

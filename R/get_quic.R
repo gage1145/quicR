@@ -32,7 +32,9 @@
 get_quic <- function(file, transpose_table=TRUE, norm_point=2, which_table=1,
                      window_size=2, .by="Wells", plate=96) {
 
-  sheets <- lapply(1:2, function(x) suppressMessages(read_xlsx(file, sheet=x)))
+  .by <- syms(c(.by))
+
+  sheets <- lapply(1:2, function(x) suppressMessages(read_xlsx(file, sheet=x, col_names=FALSE)))
 
   meta <- organize_tables(sheets[[1]], plate=plate) %>%
     convert_tables()
@@ -46,10 +48,10 @@ get_quic <- function(file, transpose_table=TRUE, norm_point=2, which_table=1,
     ) %>%
     pivot_longer(4:ncol(.), names_to="Time", values_to="RFU") %>%
     mutate_at(c("Time", "RFU"), as.numeric) %>%
-    group_by(., !!sym(.by)) %>%
-      mutate(
-        Norm = .data$RFU/.data$RFU[norm_point],
-        Deriv = (lead(.data$Norm, window_size) - lag(.data$Norm, window_size)) / (lead(.data$Time, window_size) - lag(.data$Time, window_size))
-      ) %>%
-      ungroup()
+    group_by(!!!.by) %>%
+    mutate(
+      Norm = RFU/RFU[norm_point],
+      Deriv = (lead(Norm, window_size) - lag(Norm, window_size)) / (lead(Time, window_size) - lag(Time, window_size))
+    ) %>%
+    ungroup()
 }

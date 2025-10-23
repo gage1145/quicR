@@ -31,19 +31,20 @@ calculate_threshold <- function(data, values="RFU", time="Time",
                                 background_time=0, method=list("stdev", "none"),
                                 multiplier=1) {
 
+  time <- sym(time)
+  values <- sym(values)
   if (is.list(method)) method <- "stdev"
   if (method == "none") return(NA)
 
   if (method == "stdev") {
     (
       data %>%
-       filter(!!sym(time) == background_time) %>%
+       filter(!!time == background_time) %>%
        summarize(
-         avg = mean(!!sym(values)),
-         std = sd(!!sym(values)),
-         thr = .data$avg + .data$std * multiplier
+         avg = mean(!!values),
+         std = sd(!!values),
+         thr = avg + std * multiplier
        )
     )$thr
   }
-
 }

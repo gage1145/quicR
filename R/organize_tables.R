@@ -32,7 +32,6 @@ organize_tables <- function(file, plate = 96) {
 
   # Block allows input of an excel file string or a dataframe.
   if (is.character(file)) {
-    # Read the Excel file into R.
     data <- read_xlsx(
       file,
       sheet = 1,
@@ -42,16 +41,14 @@ organize_tables <- function(file, plate = 96) {
       suppressMessages()
   } else {
     if (plate == 96) data <- file[2:13] else data <- file[2:25]
-    # data <- ifelse(plate == 96, file[2:13], file[2:25])
   }
 
   # Remove leading NA rows.
   for (i in 1:nrow(data)) {
     if (!is.na(data[i,1])) {
-      if (i != 1){
-        data <- data[-(1:i-1),]
-        break
-      } else {break}
+      if (i == 1) break
+      data <- data[-(1:i-1),]
+      break
     }
   }
 

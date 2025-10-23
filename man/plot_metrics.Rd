@@ -18,7 +18,7 @@ plot_metrics(
 \arguments{
 \item{data}{A dataframe containing the calculated metrics from the "calculate" family of quicR functions.}
 
-\item{...}{A list of faceting columns.}
+\item{...}{A list of faceting columns. If empty, groups are set to "MPR", "MS", "TtT", and "RAF".}
 
 \item{sample_col}{The name of the column containing the sample IDs.}
 
@@ -48,8 +48,8 @@ file <- system.file(
 
 df <- read.csv(file, check.names=FALSE)
 
-calculate_metrics(df, "Sample IDs", "Dilutions", "Wells") |>
-  plot_metrics("MPR", "MS", "TtT", "RAF")
+calculate_metrics(df) |>
+  plot_metrics()
 }
 
 }

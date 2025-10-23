@@ -15,7 +15,7 @@ calculate_TtT(data, threshold, time = "Time", values = "Norm", .by = "Wells")
 
 \item{values}{Column containing your fluorescence values.}
 
-\item{.by}{Grouping factor. Should typically be by individual wells.}
+\item{.by}{Grouping factor(s). Should typically be by individual wells. Can be supplied a vector as an argument.}
 }
 \value{
 A vector containing the times to threshold

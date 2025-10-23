@@ -25,7 +25,9 @@
 #'
 #' @export
 calculate_MPR <- function(data, col="Norm", .by="Wells") {
+  col <- sym(col)
+  .by <- syms(c(.by))
   data %>%
-    {if (is_grouped_df(.)) . else group_by(., !!.by)} %>%
-    summarize(MPR = max(!!sym(col), na.rm=TRUE))
+    {if (is_grouped_df(.)) . else group_by(., !!!.by)} %>%
+    summarize(MPR = max(!!col, na.rm=TRUE))
 }
