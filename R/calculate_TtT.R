@@ -6,7 +6,7 @@
 #' @param threshold A numeric value defining the threshold.
 #' @param time Column containing your time values.
 #' @param values Column containing your fluorescence values.
-#' @param .by Grouping factor. Should typically be by individual wells.
+#' @param .by Grouping factor(s). Should typically be by individual wells. Can be supplied a vector as an argument.
 #'
 #' @return A vector containing the times to threshold
 #'
@@ -32,33 +32,32 @@
 calculate_TtT <- function(data, threshold, time="Time", values="Norm", .by="Wells") {
 
   dt <- data$Time[2] - data$Time[1]
-  grouping <- sym(.by)
 
-  crossings <- data %>%
-    {if (is_grouped_df(.)) . else group_by(., !!grouping)} %>%
-    filter(.data[[values]] > threshold) %>%
-    reframe()
+  .by <- syms(c(.by))
+  values <- sym(values)
+  time <- sym(time)
+
+  data <- if (is_grouped_df(data)) data else group_by(data, !!!.by)
 
   data %>%
-    {if (is_grouped_df(.)) . else group_by(., !!grouping)} %>%
-    rename("y" = !!sym(values), "x" = !!sym(time)) %>%
+    rename(y = !!values, x = !!time) %>%
     mutate_at(c("x", "y"), as.numeric) %>%
     summarize(
-      crossed = max(.data$y) > threshold,
-      "x2" = ifelse(
-        !is_empty(.data$x[.data$y > threshold]),
-        min(.data$x[.data$y > threshold]),
-        max(.data$x)
+      crossed = max(y) > threshold,
+      x2 = ifelse(
+        !is_empty(x[y > threshold]),
+        min(x[y > threshold]),
+        max(x)
       ),
-      x1 = .data$x2 - dt,
-      y2 = .data$y[.data$x == .data$x2],
-      y1 = .data$y[.data$x == .data$x1],
+      x1  = x2 - dt,
+      y2  = y[x == x2],
+      y1  = y[x == x1],
       TtT = ifelse(
-        .data$crossed,
-        .data$x1 + (threshold - .data$y1) * (.data$x2 - .data$x1) / (.data$y2 - .data$y1),
-        .data$x2
+        crossed,
+        x1 + (threshold - y1) * (x2 - x1) / (y2 - y1),
+        x2
       )
     ) %>%
-    mutate(RAF = 1/.data$TtT) %>%
-    select(!!sym(.by), "TtT", "RAF")
+    mutate(RAF = 1/TtT) %>%
+    select(!!!.by, "TtT", "RAF", "crossed")
 }
