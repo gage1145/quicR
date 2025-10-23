@@ -86,7 +86,8 @@ plate_view <- function(data, plate=96, sep="\n", plot_deriv=TRUE,
       axis.text.y = element_blank()
     )
 
-  print(p) %>%
+  p %>%
     suppressWarnings() %>%
-    suppressMessages()
+    suppressMessages() %>%
+    print()
 }
