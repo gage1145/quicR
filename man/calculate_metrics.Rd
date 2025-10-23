@@ -9,7 +9,7 @@ calculate_metrics(data, ..., threshold = 2)
 \arguments{
 \item{data}{A data frame containing the raw RT-QuIC data.}
 
-\item{...}{A list of grouping factors.}
+\item{...}{A list of grouping factors. If left empty, function groups by "Sample IDs", "Dilutions", and "Wells".}
 
 \item{threshold}{Float; the threshold applied to the calculation of time-to-threshold.}
 }
@@ -26,6 +26,6 @@ file <- system.file(
   package = "quicR"
 )
 get_quic(file) |>
- calculate_metrics("Sample IDs", "Dilutions", "Wells")
+ calculate_metrics()
 
 }
