@@ -36,9 +36,9 @@ calculate_metrics <- function(data, ..., threshold = 2) {
   data <- group_by(data, !!!groupings)
   list(
     reframe(data),
-    calculate_MPR(data),
-    calculate_MS(data),
-    calculate_TtT(data, threshold)
+    calculate_MPR(data, .by=groupings),
+    calculate_MS(data, .by=groupings),
+    calculate_TtT(data, threshold, .by=groupings)
   ) %>%
     reduce(left_join) %>%
     suppressMessages()
