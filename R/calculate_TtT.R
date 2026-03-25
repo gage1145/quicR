@@ -31,7 +31,7 @@
 #' @export
 calculate_TtT <- function(data, threshold, time="Time", values="Norm", .by="Wells") {
 
-  dt <- data$Time[2] - data$Time[1]
+  dt <- data[[time]][2] - data[[time]][1]
 
   .by <- syms(c(.by))
   values <- sym(values)
