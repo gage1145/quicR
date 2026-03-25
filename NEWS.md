@@ -1,4 +1,12 @@
+# quicR 3.0.5
+
+# quicR 3.0.4
+
+- Added functionality to `calculate_metrics()`. It now accepts parameters that are passed to its nested calculation functions.
+
 # quicR 3.0.3
+
+- Added a function for calculating area under the curve.
 
 ## Bug Fixes
 

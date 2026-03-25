@@ -4,7 +4,16 @@
 \alias{calculate_metrics}
 \title{Generate a data frame with calculated metrics.}
 \usage{
-calculate_metrics(data, ..., threshold = 2)
+calculate_metrics(
+  data,
+  ...,
+  threshold = 2,
+  time_col = "Time",
+  ttt_values = "Norm",
+  auc_values = "Norm",
+  norm_col = "Norm",
+  deriv_col = "Deriv"
+)
 }
 \arguments{
 \item{data}{A data frame containing the raw RT-QuIC data.}
@@ -12,6 +21,16 @@ calculate_metrics(data, ..., threshold = 2)
 \item{...}{A list of grouping factors. If left empty, function groups by "Sample IDs", "Dilutions", and "Wells".}
 
 \item{threshold}{Float; the threshold applied to the calculation of time-to-threshold.}
+
+\item{time_col}{String; column name containing the time values.}
+
+\item{ttt_values}{String; column name containing values to use for calculating time-to-threshold.}
+
+\item{auc_values}{String; column name containing values to use for calculating the area under the curve.}
+
+\item{norm_col}{String; column name containing the normalized fluorescent values.}
+
+\item{deriv_col}{String; column name containing the estimated derivative values.}
 }
 \value{
 A data frame of calculated metrics.

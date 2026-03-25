@@ -5,6 +5,11 @@
 #' @param data A data frame containing the raw RT-QuIC data.
 #' @param ... A list of grouping factors. If left empty, function groups by "Sample IDs", "Dilutions", and "Wells".
 #' @param threshold Float; the threshold applied to the calculation of time-to-threshold.
+#' @param time_col String; column name containing the time values.
+#' @param ttt_values String; column name containing values to use for calculating time-to-threshold.
+#' @param auc_values String; column name containing values to use for calculating the area under the curve.
+#' @param norm_col String; column name containing the normalized fluorescent values.
+#' @param deriv_col String; column name containing the estimated derivative values.
 #'
 #' @importFrom dplyr mutate
 #' @importFrom dplyr group_by
@@ -27,7 +32,9 @@
 #'  calculate_metrics()
 #'
 #' @export
-calculate_metrics <- function(data, ..., threshold = 2) {
+calculate_metrics <- function(data, ..., threshold = 2, time_col = "Time", ttt_values = "Norm", 
+                              auc_values = "Norm", norm_col = "Norm", deriv_col = "Deriv") 
+{
   groupings <- c(...)
   if (is_empty(groupings)) {
     groupings <- c("Sample IDs", "Dilutions", "Wells")
@@ -36,12 +43,11 @@ calculate_metrics <- function(data, ..., threshold = 2) {
   data <- group_by(data, !!!groupings)
   list(
     reframe(data),
-    calculate_MPR(data, .by=groupings),
-    calculate_MS(data, .by=groupings),
-    calculate_TtT(data, threshold, .by=groupings),
-    calculate_AUC(data, .by=groupings)
+    calculate_MPR(data, col=norm_col, .by=groupings),
+    calculate_MS(data, col=deriv_col, .by=groupings),
+    calculate_TtT(data, threshold, time=time_col, values=ttt_values, .by=groupings),
+    calculate_AUC(data, x=time_col, .by=groupings)
   ) %>%
     reduce(left_join) %>%
     suppressMessages()
 }
-
