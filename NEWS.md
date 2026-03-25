@@ -1,3 +1,5 @@
+# quicR 3.0.6
+- Fixed a bug preventing custom column name for the "time" argument in `calculate_TtT()` and `caculate_metrics()`.
 # quicR 3.0.5
 
 # quicR 3.0.4
