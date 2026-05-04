@@ -8,11 +8,7 @@
 #' @param .by Grouping factor. Should typically be by individual wells.
 #' @return A data frame containing well-matched MPR values.
 #'
-#' @importFrom dplyr summarize
-#' @importFrom dplyr sym
-#' @importFrom dplyr group_by
-#' @importFrom dplyr is_grouped_df
-#' @importFrom dplyr %>%
+#' @import dplyr
 #'
 #' @examples
 #' file <- system.file(

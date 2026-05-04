@@ -11,14 +11,8 @@
 #' @param norm_col String; column name containing the normalized fluorescent values.
 #' @param deriv_col String; column name containing the estimated derivative values.
 #'
-#' @importFrom dplyr mutate
-#' @importFrom dplyr group_by
-#' @importFrom dplyr left_join
-#' @importFrom dplyr reframe
-#' @importFrom dplyr syms
-#' @importFrom dplyr %>%
-#' @importFrom purrr reduce
-#' @importFrom purrr is_empty
+#' @import dplyr
+#' @import purrr 
 #'
 #' @return A data frame of calculated metrics.
 #'

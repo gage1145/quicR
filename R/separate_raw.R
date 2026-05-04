@@ -7,6 +7,9 @@
 #' @param file An Excel file exported from MARS.
 #' @param num_rows Number of rows in the header to ignore.
 #' @param export_name The name of the original file or an orignal name.
+#' 
+#' @importFrom readxl read_xlsx
+#' @importFrom stats na.omit
 #'
 #' @return An Excel file with separated raw real-time data.
 #'
@@ -14,7 +17,7 @@
 # Separates the raw run files in the .xlsx file.
 separate_raw <- function(file, num_rows, export_name) {
   if (is.character(file)) { # Read the Excel file into R.
-    data <- read_excel(file, sheet = 2)
+    data <- read_xlsx(file, sheet = 2)
   } else if (is.data.frame(file)) {
     data <- file
   } else {

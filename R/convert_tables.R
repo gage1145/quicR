@@ -8,9 +8,6 @@
 #'
 #' @return A dataframe column.
 #'
-#' @importFrom tidyr gather
-#' @importFrom dplyr select
-#'
 #' @examples
 #' file <- system.file(
 #'   "extdata/input_files",
