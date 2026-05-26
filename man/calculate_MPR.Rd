@@ -17,7 +17,7 @@ calculate_MPR(data, col = "Norm", .by = "Wells")
 A data frame containing well-matched MPR values.
 }
 \description{
-Maxpoint ratio is defined as the maximum relative fluorescence divided by the
+Maxpoint ratio (MPR) is defined as the maximum relative fluorescence divided by the
 background fluorescence.
 }
 \examples{

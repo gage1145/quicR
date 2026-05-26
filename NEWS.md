@@ -1,7 +1,19 @@
+# quicR 3.1.0
+
+## New Features
+- Added a function for calculating the quenching ratio, `calculate_QR()`. This is the ratio between the last measurement and the max fluorescent value.
+
+## Minor changes
+- `calculate_metrics()` uses `calculate_QR()` for getting both MPR and QR since `calculate_QR()` must also calculate MPR to get the quenching ratio.
+- Cleaned up `BMG_format()` code.
+- No longer importing the `reshape2` library.
+
 # quicR 3.0.7
 - Added in a missing argument in `calculate_metrics()`.
+
 # quicR 3.0.6
 - Fixed a bug preventing custom column name for the "time" argument in `calculate_TtT()` and `caculate_metrics()`.
+
 # quicR 3.0.5
 
 # quicR 3.0.4
