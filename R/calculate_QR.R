@@ -34,7 +34,7 @@ calculate_QR <- function(data, col="Norm", time_col="Time", .by="Wells") {
   
   data %>%
     {if (is_grouped_df(.)) . else group_by(., !!!.by)} %>%
-    reframe(
+    summarize(
       MPR = max(!!col, na.rm=TRUE),
       QR = last(!!col, !!!time_col) / MPR
     ) 
