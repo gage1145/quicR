@@ -30,8 +30,12 @@ get_meta <- function(file) {
     stop("Please enter either .xlsx string or dataframe. ")
   }
 
-  data[1:which(is.na(data[[1]]))[1], 1] |>
-    as.data.frame() |>
+  na_rows <- which(is.na(data[1]))
+  na_rows <- na_rows[na_rows > 2]
+  na_cutoff <- min(na_rows)
+  data |>
+    select(1) |>
+    slice(1:na_cutoff) |>
     na.omit() |>
     separate_wider_delim(
       1,
