@@ -13,6 +13,7 @@
 #' @importFrom dplyr group_by
 #' @importFrom dplyr is_grouped_df
 #' @importFrom dplyr sym
+#' @importFrom dplyr syms
 #'
 #' @export
 calculate_MS <- function(data, col="Deriv", .by="Wells") {

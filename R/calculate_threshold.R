@@ -11,6 +11,8 @@
 #'
 #' @importFrom dplyr select
 #' @importFrom dplyr %>%
+#' @importFrom dplyr sym
+#' @importFrom dplyr syms
 #' @importFrom dplyr filter
 #' @importFrom dplyr summarize
 #' @importFrom stats sd

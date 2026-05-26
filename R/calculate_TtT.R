@@ -16,6 +16,7 @@
 #' @importFrom dplyr summarize
 #' @importFrom dplyr select
 #' @importFrom dplyr sym
+#' @importFrom dplyr syms
 #' @importFrom dplyr %>%
 #' @importFrom purrr is_empty
 #'

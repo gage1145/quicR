@@ -11,6 +11,7 @@
 #'
 #' @importFrom dplyr summarize
 #' @importFrom dplyr sym
+#' @importFrom dplyr syms
 #' @importFrom dplyr group_by
 #' @importFrom dplyr is_grouped_df
 #' @importFrom dplyr %>%

@@ -1,6 +1,6 @@
 #' Calculate the Maxpoint Ratio
 #'
-#' Maxpoint ratio is defined as the maximum relative fluorescence divided by the
+#' Maxpoint ratio (MPR) is defined as the maximum relative fluorescence divided by the
 #' background fluorescence.
 #'
 #' @param data A data frame output from 'get_quic()'.
@@ -10,6 +10,7 @@
 #'
 #' @importFrom dplyr summarize
 #' @importFrom dplyr sym
+#' @importFrom dplyr syms
 #' @importFrom dplyr group_by
 #' @importFrom dplyr is_grouped_df
 #' @importFrom dplyr %>%
