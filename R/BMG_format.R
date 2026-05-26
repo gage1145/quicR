@@ -11,12 +11,9 @@
 #' @return A text file containing information for import into the BMG control software.
 #'
 #' @importFrom utils read.csv
-#' @importFrom dplyr mutate
-#' @importFrom dplyr select
-#' @importFrom dplyr left_join
-#' @importFrom tidyr unite
 #' @importFrom stats na.omit
-#' @importFrom reshape2 melt
+#' @import dplyr
+#' @import tidyr
 #'
 #' @examples
 #' layout_file <- system.file(
@@ -32,51 +29,35 @@ BMG_format <- function(file, save_path = "", save_name = "formatted.txt", write_
   colnames(df_) <- c("col", df_[1, -1])
   df_ <- df_[-1, ]
 
-  locations <- c()
-  samples <- c()
-  for (i in 1:(ncol(df_) - 1)) {
-    for (j in 1:nrow(df_)) {
-      locations <- rbind(locations, paste0(LETTERS[j], i))
-      samples <- rbind(samples, df_[j, (i + 1)])
-    }
-  }
-
-  locations <- locations |>
-    cbind(samples) |>
-    as.data.frame()
-
-  colnames(locations) <- c("Wells", "Samples")
+  wells <- expand.grid(LETTERS[1:nrow(df_)], 1:(ncol(df_) - 1)) |>
+    unite("Wells", 1:2, sep="") |>
+    mutate(Wells = as.factor(Wells))
 
   dic <- df_ |>
-    melt(id.vars = 1) |>
+    pivot_longer(2:ncol(df_), values_to="Samples") |>
     unique() |>
     mutate(Plate_ID = "X") |>
     na.omit() |>
-    unite("Wells", c("col", "variable"), sep = "")
+    unite("Wells", c("col", "name"), sep = "") |>
+    mutate(Wells = factor(Wells, levels = wells$Wells)) |>
+    arrange(Wells)
 
   x <- 0
-  previous <- dic[["value"]][1]
+  previous <- dic[["Samples"]][1]
   current <- ""
   for (i in 1:nrow(dic)) {
-    current <- dic[["value"]][i]
-    if (tolower(current) == "n") {
-      dic[i, "Plate_ID"] <- "N"
-    } else if (tolower(current) == "p") {
-      dic[i, "Plate_ID"] <- "P"
-    } else if (tolower(current) == "b") {
-      dic[i, "Plate_ID"] <- "B"
-    } else {
-      if (previous != current) {
-        x <- x + 1
-      }
-      dic[i, "Plate_ID"] <- paste0(dic[[i, "Plate_ID"]], x)
+    current <- dic[["Samples"]][i]
+
+    if (tolower(current) %in% c("n", "p", "b")) {
+      dic[i, "Plate_ID"] <- toupper(current)
+      next
     }
+
+    if (previous != current) x <- x + 1
+
+    dic[i, "Plate_ID"] <- paste0(dic[[i, "Plate_ID"]], x)
     previous <- current
   }
-
-  dic <- select(dic, -"value")
-
-  locations <- left_join(locations, dic)
 
   # Function to format each row
   format_row <- function(row) {
@@ -84,12 +65,12 @@ BMG_format <- function(file, save_path = "", save_name = "formatted.txt", write_
   }
 
   # Apply the function to each row of the data frame
-  formatted <- locations |>
+  formatted <- dic |>
     apply(1, format_row) |>
     na.omit()
   if (write_file == TRUE) {
     writeLines(formatted, paste0(save_path, save_name))
 
   }
-  return(formatted)
+  return(data.frame(formatted))
 }

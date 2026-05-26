@@ -9,12 +9,7 @@
 #' @param method Method for determining threshold; default is "stdev".
 #' @param multiplier For some methods, will add a multiplier for more conservative thresholds.
 #'
-#' @importFrom dplyr select
-#' @importFrom dplyr %>%
-#' @importFrom dplyr sym
-#' @importFrom dplyr syms
-#' @importFrom dplyr filter
-#' @importFrom dplyr summarize
+#' @import dplyr
 #' @importFrom stats sd
 #'
 #' @return A float value.

@@ -12,13 +12,8 @@
 #'
 #' @return A data frame containing all time-series data and sample/plate metadata.
 #'
-#' @importFrom dplyr mutate
-#' @importFrom dplyr mutate_at
-#' @importFrom dplyr group_by
-#' @importFrom dplyr lag
-#' @importFrom dplyr lead
+#' @import dplyr
 #' @importFrom tidyr pivot_longer
-#' @importFrom dplyr %>%
 #'
 #' @examples
 #' file <- system.file(

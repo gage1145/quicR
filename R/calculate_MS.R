@@ -8,12 +8,7 @@
 #'
 #' @return A dataframe containing the real-time slope values as change in RFU/sec.
 #'
-#' @importFrom dplyr %>%
-#' @importFrom dplyr summarize
-#' @importFrom dplyr group_by
-#' @importFrom dplyr is_grouped_df
-#' @importFrom dplyr sym
-#' @importFrom dplyr syms
+#' @import dplyr
 #'
 #' @export
 calculate_MS <- function(data, col="Deriv", .by="Wells") {

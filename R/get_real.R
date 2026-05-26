@@ -8,12 +8,9 @@
 #'
 #' @return A list of dataframes containing the formatted real-time data.
 #'
-#' @importFrom dplyr select
-#' @importFrom dplyr %>%
-#' @importFrom dplyr rename
+#' @import dplyr
+#' @import janitor
 #' @importFrom readxl read_xlsx
-#' @importFrom janitor row_to_names
-#' @importFrom janitor clean_names
 #'
 #' @examples
 #' file <- system.file(

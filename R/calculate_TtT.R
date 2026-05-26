@@ -10,14 +10,7 @@
 #'
 #' @return A vector containing the times to threshold
 #'
-#' @importFrom dplyr group_by
-#' @importFrom dplyr rename
-#' @importFrom dplyr mutate_at
-#' @importFrom dplyr summarize
-#' @importFrom dplyr select
-#' @importFrom dplyr sym
-#' @importFrom dplyr syms
-#' @importFrom dplyr %>%
+#' @import dplyr
 #' @importFrom purrr is_empty
 #'
 #' @examples

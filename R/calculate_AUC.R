@@ -9,12 +9,7 @@
 #' @param .by Grouping factor. Should typically be by individual wells.
 #' @return A data frame containing well-matched AUC values.
 #'
-#' @importFrom dplyr summarize
-#' @importFrom dplyr sym
-#' @importFrom dplyr syms
-#' @importFrom dplyr group_by
-#' @importFrom dplyr is_grouped_df
-#' @importFrom dplyr %>%
+#' @import dplyr 
 #' @importFrom pracma trapz
 #'
 #' @examples
