@@ -1,3 +1,6 @@
+# quicR 3.1.1
+## Bug Fixes
+- Fixed a bug in `calculate_metrics()` where the time column name wasn't passed to `calculate_QR()`.
 # quicR 3.1.0
 
 ## New Features
