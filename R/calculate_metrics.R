@@ -37,7 +37,7 @@ calculate_metrics <- function(data, ..., threshold = 2, time_col = "Time", ttt_v
   data <- group_by(data, !!!groupings)
   list(
     reframe(data),
-    calculate_QR(data, col=norm_col, .by=groupings), # does both MPR and QR
+    calculate_QR(data, col=norm_col, time_col=time_col, .by=groupings), # does both MPR and QR
     calculate_MS(data, col=deriv_col, .by=groupings),
     calculate_TtT(data, threshold, time=time_col, values=ttt_values, .by=groupings),
     calculate_AUC(data, x=time_col, y=auc_values, .by=groupings)
