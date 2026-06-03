@@ -4,7 +4,13 @@
 \alias{calculate_QR}
 \title{Calculate the Quenching Ratio}
 \usage{
-calculate_QR(data, col = "Norm", time_col = "Time", .by = "Wells")
+calculate_QR(
+  data,
+  col = "Norm",
+  time_col = "Time",
+  .by = "Wells",
+  flip_ratio = FALSE
+)
 }
 \arguments{
 \item{data}{A data frame output from 'get_quic()'.}
@@ -14,6 +20,8 @@ calculate_QR(data, col = "Norm", time_col = "Time", .by = "Wells")
 \item{time_col}{The column containing the time points.}
 
 \item{.by}{Grouping factor. Should typically be by individual wells.}
+
+\item{flip_ratio}{Logical; Should the ratio be calculated as max / last (default), or last / max?}
 }
 \value{
 A data frame containing well-matched quenching ratio values.
