@@ -6,6 +6,7 @@
 #' @param data A data frame output from 'get_quic()'.
 #' @param col The column containing the normalized fluorescence data.
 #' @param time_col The column containing the time points.
+#' @param flip_ratio Logical; Should the ratio be calculated as max / last (default), or last / max?
 #' @param .by Grouping factor. Should typically be by individual wells.
 #' @return A data frame containing well-matched quenching ratio values.
 #'
@@ -27,7 +28,7 @@
 #'   calculate_QR()
 #'
 #' @export
-calculate_QR <- function(data, col="Norm", time_col="Time", .by="Wells") {
+calculate_QR <- function(data, col="Norm", time_col="Time", .by="Wells", flip_ratio=FALSE) {
   col <- sym(col)
   time_col <- sym(time_col)
   .by <- syms(c(.by))
@@ -36,6 +37,10 @@ calculate_QR <- function(data, col="Norm", time_col="Time", .by="Wells") {
     {if (is_grouped_df(.)) . else group_by(., !!!.by)} %>%
     summarize(
       MPR = max(!!col, na.rm=TRUE),
-      QR = last(!!col, !!!time_col) / MPR
-    ) 
+      QR = ifelse(
+        flip_ratio,
+        MPR / last(!!col, !!!time_col),
+        last(!!col, !!!time_col) / MPR
+      ) 
+    )
 }
