@@ -10,6 +10,7 @@
 #' @param auc_values String; column name containing values to use for calculating the area under the curve.
 #' @param norm_col String; column name containing the normalized fluorescent values.
 #' @param deriv_col String; column name containing the estimated derivative values.
+#' @param flip_ratio Logical; should the quenching ratio be calculated as max / last (default) or last / max?
 #'
 #' @import dplyr
 #' @import purrr 
@@ -27,7 +28,7 @@
 #'
 #' @export
 calculate_metrics <- function(data, ..., threshold = 2, time_col = "Time", ttt_values = "Norm", 
-                              auc_values = "Norm", norm_col = "Norm", deriv_col = "Deriv") 
+                              auc_values = "Norm", norm_col = "Norm", deriv_col = "Deriv", flip_ratio = FALSE) 
 {
   groupings <- c(...)
   if (is_empty(groupings)) {
@@ -37,7 +38,7 @@ calculate_metrics <- function(data, ..., threshold = 2, time_col = "Time", ttt_v
   data <- group_by(data, !!!groupings)
   list(
     reframe(data),
-    calculate_QR(data, col=norm_col, time_col=time_col, .by=groupings), # does both MPR and QR
+    calculate_QR(data, col=norm_col, time_col=time_col, .by=groupings, flip_ratio = flip_ratio), # does both MPR and QR
     calculate_MS(data, col=deriv_col, .by=groupings),
     calculate_TtT(data, threshold, time=time_col, values=ttt_values, .by=groupings),
     calculate_AUC(data, x=time_col, y=auc_values, .by=groupings)
