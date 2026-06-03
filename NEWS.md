@@ -1,3 +1,7 @@
+# quicR 3.1.3
+## Bug Fixes
+- `calculate_metrics()` now accepts the `flip_ratio` parameter which is passed to `calculate_QR()`.
+
 # quicR 3.1.2
 ## New Features
 - Added the 'flip_ratio' parameter to `calculate_QR()` for how the quenching ratio should be calculated. `TRUE = max / last`, `FALSE = last / max`.
