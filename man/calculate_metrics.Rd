@@ -12,7 +12,8 @@ calculate_metrics(
   ttt_values = "Norm",
   auc_values = "Norm",
   norm_col = "Norm",
-  deriv_col = "Deriv"
+  deriv_col = "Deriv",
+  flip_ratio = FALSE
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ calculate_metrics(
 \item{norm_col}{String; column name containing the normalized fluorescent values.}
 
 \item{deriv_col}{String; column name containing the estimated derivative values.}
+
+\item{flip_ratio}{Logical; should the quenching ratio be calculated as max / last (default) or last / max?}
 }
 \value{
 A data frame of calculated metrics.
