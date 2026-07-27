@@ -1,3 +1,6 @@
+# quicR 3.0.8
+- Added more tests to ensure that the package is working as expected.
+- Fixed a bug where '!!!' would give a deprecation warning. Now using `across(all_of(.by))` or `all_of(.by)` instead.
 # quicR 3.0.7
 - Added in a missing argument in `calculate_metrics()`.
 # quicR 3.0.6

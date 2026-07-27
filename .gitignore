@@ -17,3 +17,5 @@ nul
 *.spl
 *.synctex.gz
 /renv/
+CLAUDE.md
+.claude
