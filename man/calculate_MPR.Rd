@@ -4,7 +4,7 @@
 \alias{calculate_MPR}
 \title{Calculate the Maxpoint Ratio}
 \usage{
-calculate_MPR(data, col = "Norm", .by = "Wells")
+calculate_MPR(data, col = "Norm", .by = "Well")
 }
 \arguments{
 \item{data}{A data frame output from 'get_quic()'.}

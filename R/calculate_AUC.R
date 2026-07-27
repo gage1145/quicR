@@ -22,7 +22,7 @@
 #'   calculate_AUC()
 #'
 #' @export
-calculate_AUC <- function(data, x="Time", y="Norm", .by="Wells") {
+calculate_AUC <- function(data, x="Time", y="Norm", .by="Well") {
   x <- sym(x)
   y <- sym(y)
   data %>%

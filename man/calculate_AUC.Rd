@@ -4,7 +4,7 @@
 \alias{calculate_AUC}
 \title{Calculate the Area Under the Curve}
 \usage{
-calculate_AUC(data, x = "Time", y = "Norm", .by = "Wells")
+calculate_AUC(data, x = "Time", y = "Norm", .by = "Well")
 }
 \arguments{
 \item{data}{A data frame output from 'get_quic()'.}

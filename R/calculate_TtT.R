@@ -23,7 +23,7 @@
 #'   calculate_TtT(threshold = 2)
 #'
 #' @export
-calculate_TtT <- function(data, threshold, time="Time", values="Norm", .by="Wells") {
+calculate_TtT <- function(data, threshold, time="Time", values="Norm", .by="Well") {
 
   dt <- data[[time]][2] - data[[time]][1]
 

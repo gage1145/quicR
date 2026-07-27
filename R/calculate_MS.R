@@ -11,7 +11,7 @@
 #' @import dplyr
 #'
 #' @export
-calculate_MS <- function(data, col="Deriv", .by="Wells") {
+calculate_MS <- function(data, col="Deriv", .by="Well") {
   col <- sym(col)
   data %>%
     {if (is_grouped_df(.)) . else group_by(., across(all_of(.by)))} %>%

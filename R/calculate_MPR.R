@@ -20,7 +20,7 @@
 #'   calculate_MPR()
 #'
 #' @export
-calculate_MPR <- function(data, col="Norm", .by="Wells") {
+calculate_MPR <- function(data, col="Norm", .by="Well") {
   col <- sym(col)
   data %>%
     {if (is_grouped_df(.)) . else group_by(., across(all_of(.by)))} %>%

@@ -19,7 +19,7 @@
 #' @examples
 #' file <- system.file(
 #'   "extdata/input_files",
-#'   file = "test.xlsx",
+#'   file = "test2.xlsx",
 #'   package = "quicR"
 #' )
 #' get_quic(file) |>
@@ -31,7 +31,7 @@ calculate_metrics <- function(data, ..., threshold = 2, time_col = "Time", ttt_v
 {
   groupings <- c(...)
   if (is_empty(groupings)) {
-    groupings <- c("Sample IDs", "Dilutions", "Wells")
+    groupings <- c("Sample IDs", "Dilutions", "Well")
   }
   data <- group_by(data, across(all_of(groupings)))
   list(

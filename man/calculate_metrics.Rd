@@ -41,7 +41,7 @@ Uses functions from the "calculate" family of quicR functions to generate an ana
 \examples{
 file <- system.file(
   "extdata/input_files",
-  file = "test.xlsx",
+  file = "test2.xlsx",
   package = "quicR"
 )
 get_quic(file) |>
