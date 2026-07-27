@@ -10,11 +10,16 @@
 #' @param .by `r lifecycle::badge("deprecated")` Use "by" instead.
 #' @param by Grouping factor. Should typically be by individual wells.
 #' @param plate Integer; either 96 or 384 to denote the type of well plate being used.
+#' @param smooth Logical; if true, will smooth the data using a rolling mean.
+#' @param smooth_factor Integer; the window size for smoothing.
+#' @param zero Logical; if true, will zero out the background fluorescence.
+#' @param sheet Integer; the sheet number to read from.
 #'
 #' @return A data frame containing all time-series data and sample/plate metadata.
 #'
 #' @import dplyr
 #' @importFrom tidyr pivot_longer
+#' @importFrom zoo rollmean
 #'
 #' @examples
 #' file <- system.file(
@@ -47,19 +52,11 @@ get_quic <- function(file, transpose_table=lifecycle::deprecated(), norm_point=2
   data <- read_xlsx(file, sheet=sheet, col_names=FALSE) %>%
     suppressMessages()
 
-  get_real(sheets[[2]], transpose_table=transpose_table)[[which_table]] %>%
+  get_real(data)[[which_table]] %>%
     mutate(
-      "Sample IDs" = meta[["Sample IDs"]],
-      "Wells" = meta[["Wells"]],
-      "Dilutions" = {if ("Dilutions" %in% colnames(meta)) meta[["Dilutions"]] else NA},
-      .after = "Sample IDs"
-    ) %>%
-    pivot_longer(4:ncol(.), names_to="Time", values_to="RFU") %>%
-    mutate_at(c("Time", "RFU"), as.numeric) %>%
-    group_by(across(all_of(.by))) %>%
-    mutate(
-      Norm = RFU/RFU[norm_point],
-      Deriv = (lead(Norm, window_size) - lag(Norm, window_size)) / (lead(Time, window_size) - lag(Time, window_size))
-    ) %>%
-    ungroup()
+      Norm = rollmean(RFU, smooth_factor, na.pad=TRUE),
+      Norm = RFU/RFU[norm_point] - zero,
+      Deriv = (lead(Norm, window_size) - lag(Norm, window_size)) / (lead(Time, window_size) - lag(Time, window_size)),
+      .by = all_of(by)
+    )    
 }
