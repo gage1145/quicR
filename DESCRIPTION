@@ -1,6 +1,6 @@
 Package: quicR
 Title: RT-QuIC Data Formatting and Analysis
-Version: 3.1.3
+Version: 3.2.0
 Authors@R: 
     person(
       given = "Gage",
@@ -15,14 +15,16 @@ Imports:
   dplyr, 
   ggplot2,
   janitor,
+  lifecycle,
   openxlsx,
   pracma,
   purrr,
   readxl,
   stats,
   stringr,
-  tidyr
-Depends: R (>= 4.1.0)
+  tidyr,
+  zoo
+Depends: R (>= 4.6.0)
 License: GPL-3 + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -30,4 +32,4 @@ Suggests:
     testthat (>= 3.1.0)
 Config/testthat/edition: 3
 Config/roxygen2/version: 8.0.0
-RoxygenNote: 7.3.2
+RoxygenNote: 8.0.0

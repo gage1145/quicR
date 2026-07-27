@@ -4,14 +4,16 @@
 \alias{calculate_MS}
 \title{Calculate Maximum Slope}
 \usage{
-calculate_MS(data, col = "Deriv", .by = "Wells")
+calculate_MS(data, col = "Deriv", .by = lifecycle::deprecated(), by = "Well")
 }
 \arguments{
 \item{data}{A dataframe containing real-time reads. It is recommended to use a dataframe made from normalize_RFU.}
 
 \item{col}{Character, defines the column containing the derivative curve.}
 
-\item{.by}{Grouping factor. Should typically be by individual wells.}
+\item{.by}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use "by" instead.}
+
+\item{by}{Grouping factor. Should typically be by individual wells.}
 }
 \value{
 A dataframe containing the real-time slope values as change in RFU/sec.

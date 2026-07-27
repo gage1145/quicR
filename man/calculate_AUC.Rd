@@ -4,7 +4,13 @@
 \alias{calculate_AUC}
 \title{Calculate the Area Under the Curve}
 \usage{
-calculate_AUC(data, x = "Time", y = "Norm", .by = "Wells")
+calculate_AUC(
+  data,
+  x = "Time",
+  y = "Norm",
+  .by = lifecycle::deprecated(),
+  by = "Well"
+)
 }
 \arguments{
 \item{data}{A data frame output from 'get_quic()'.}
@@ -13,7 +19,9 @@ calculate_AUC(data, x = "Time", y = "Norm", .by = "Wells")
 
 \item{y}{The column containing the normalized fluorescence data.}
 
-\item{.by}{Grouping factor. Should typically be by individual wells.}
+\item{.by}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use "by" instead.}
+
+\item{by}{Grouping factor. Should typically be by individual wells.}
 }
 \value{
 A data frame containing well-matched AUC values.

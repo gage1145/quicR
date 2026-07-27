@@ -5,7 +5,7 @@
 #'
 #' @param tab A table/matrix or a list of tables/matrices.
 #' @param na_omit Logical; if true, will remove rows with NA.
-#'
+#' 
 #' @return A dataframe column.
 #'
 #' @examples
@@ -19,6 +19,13 @@
 #'
 #' @export
 convert_tables <- function(tab, na_omit = TRUE) {
+
+  lifecycle::deprecate_warn(
+    when = "3.2.0", 
+    what = "convert_tables()",
+    details = "This function has become deprecated given that get_real() and get_quic() can pull the metadata all at once."
+  )
+
   if (!is.vector(tab)) stop("Input should be of type vector.")
 
   df_ <- lapply(

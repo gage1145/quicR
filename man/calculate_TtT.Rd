@@ -4,7 +4,14 @@
 \alias{calculate_TtT}
 \title{Calculate Time to Threshold}
 \usage{
-calculate_TtT(data, threshold, time = "Time", values = "Norm", .by = "Wells")
+calculate_TtT(
+  data,
+  threshold,
+  time = "Time",
+  values = "Norm",
+  .by = lifecycle::deprecated(),
+  by = "Well"
+)
 }
 \arguments{
 \item{data}{A dataframe containing real-time RT-QuIC data.}
@@ -15,7 +22,9 @@ calculate_TtT(data, threshold, time = "Time", values = "Norm", .by = "Wells")
 
 \item{values}{Column containing your fluorescence values.}
 
-\item{.by}{Grouping factor(s). Should typically be by individual wells. Can be supplied a vector as an argument.}
+\item{.by}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use "by" instead.}
+
+\item{by}{Grouping factor(s). Should typically be by individual wells. Can be supplied a vector as an argument.}
 }
 \value{
 A vector containing the times to threshold
@@ -30,6 +39,6 @@ file <- system.file(
   package = "quicR"
 )
 get_quic(file) |>
-  calculate_TtT(threshold = 2)
+  calculate_TtT(threshold = 3)
 
 }

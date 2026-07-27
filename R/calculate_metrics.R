@@ -20,7 +20,7 @@
 #' @examples
 #' file <- system.file(
 #'   "extdata/input_files",
-#'   file = "test.xlsx",
+#'   file = "test2.xlsx",
 #'   package = "quicR"
 #' )
 #' get_quic(file) |>
@@ -32,16 +32,15 @@ calculate_metrics <- function(data, ..., threshold = 2, time_col = "Time", ttt_v
 {
   groupings <- c(...)
   if (is_empty(groupings)) {
-    groupings <- c("Sample IDs", "Dilutions", "Wells")
+    groupings <- c("Sample IDs", "Dilutions", "Well")
   }
-  groupings <- syms(groupings)
-  data <- group_by(data, !!!groupings)
+  data <- group_by(data, across(all_of(groupings)))
   list(
     reframe(data),
-    calculate_QR(data, col=norm_col, time_col=time_col, .by=groupings, flip_ratio = flip_ratio), # does both MPR and QR
-    calculate_MS(data, col=deriv_col, .by=groupings),
-    calculate_TtT(data, threshold, time=time_col, values=ttt_values, .by=groupings),
-    calculate_AUC(data, x=time_col, y=auc_values, .by=groupings)
+    calculate_QR(data, col=norm_col, time_col=time_col, by=groupings, flip_ratio = flip_ratio), # does both MPR and QR
+    calculate_MS(data, col=deriv_col, by=groupings),
+    calculate_TtT(data, threshold, time=time_col, values=ttt_values, by=groupings),
+    calculate_AUC(data, x=time_col, y=auc_values, by=groupings)
   ) %>%
     reduce(left_join) %>%
     suppressMessages()
