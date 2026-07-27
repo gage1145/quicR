@@ -15,4 +15,9 @@ See the README on \href{https://github.com/gage1145/quicR}{Github}
 \author{
 \strong{Maintainer}: Gage Rowden \email{gage.rowden1145@gmail.com} (\href{https://orcid.org/0000-0002-7517-0480}{ORCID})
 
+Authors:
+\itemize{
+  \item Gage Rowden \email{gage.rowden1145@gmail.com} (\href{https://orcid.org/0000-0002-7517-0480}{ORCID})
+}
+
 }
