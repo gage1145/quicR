@@ -3,8 +3,8 @@
 #' Accepts an Excel file or a dataframe of real-time RT-QuIC data.
 #'
 #' @param data Either an Excel file or a dataframe.
-#' @param order_by_sample Logical, if true, will organize the columns by sample ID rather than by well.
-#' @param transpose_table Logical, if true, will transpose the table(s).
+#' @param order_by_sample `r lifecycle::badge("deprecated")` This argument no longer has any effect.
+#' @param transpose_table `r lifecycle::badge("deprecated")` This argument no longer has any effect.
 #'
 #' @return A list of dataframes containing the formatted real-time data.
 #'
@@ -21,7 +21,22 @@
 #' get_real(file)
 #'
 #' @export
-get_real <- function(data, order_by_sample = FALSE, transpose_table = TRUE) {
+get_real <- function(data, order_by_sample = lifecycle::deprecated(), transpose_table = lifecycle::deprecated()) {
+  
+  if (lifecycle::is_present(order_by_sample)) {
+    lifecycle::deprecate_warn(
+      when = "3.0.8", 
+      what = "get_real(order_by_sample)"
+    )
+  }
+
+  if (lifecycle::is_present(transpose_table)) {
+    lifecycle::deprecate_warn(
+      when = "3.0.8", 
+      what = "get_real(transpose_table)"
+    )
+  }
+  
   check_format <- function(x) {
     if (is.character(x)) {
       return(suppressMessages(read_xlsx(x, sheet = 2, col_names = FALSE)))
