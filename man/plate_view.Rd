@@ -44,7 +44,7 @@ file <- system.file(
 # Get the real-time data.
 df_ <- read.csv(file, check.names=FALSE)
 
-plate_view(df_)
+plate_view(df_, plot_deriv = FALSE)
 }
 
 }
