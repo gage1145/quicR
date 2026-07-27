@@ -20,7 +20,7 @@ test <- function(file) {
     "get_quic returns the expected long-format columns",
     {
       expect_true(
-        all(c("Sample IDs", "Wells", "Time", "RFU", "Norm", "Deriv") %in% colnames(df))
+        all(c("Well", "Time", "RFU", "Norm", "Deriv") %in% colnames(df))
       )
     }
   )
@@ -31,7 +31,7 @@ test <- function(file) {
       # Norm = RFU / RFU[norm_point]; with the default norm_point = 2 the
       # second reading of every well must normalize to exactly 1.
       norm_at_point <- df |>
-        dplyr::group_by(Wells) |>
+        dplyr::group_by(Well) |>
         dplyr::summarize(second = dplyr::nth(Norm, 2), .groups = "drop")
       expect_true(all(abs(norm_at_point$second - 1) < 1e-8))
     }

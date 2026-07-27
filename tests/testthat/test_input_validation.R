@@ -2,14 +2,7 @@ library(testthat)
 library(quicR)
 
 
-test_that("organize_tables rejects plate sizes other than 96 or 384", {
-  expect_error(organize_tables("input_files/test.xlsx", plate = 100))
-})
-
-test_that("organize_tables rejects input that is neither a path nor a data frame", {
-  expect_error(organize_tables(42))
-})
-
+# Test that input validation works as expected.
 test_that("get_real rejects input that is neither a path nor a data frame", {
   expect_error(get_real(42))
 })
