@@ -23,15 +23,14 @@
 #'   calculate_TtT(threshold = 2)
 #'
 #' @export
-calculate_TtT <- function(data, threshold, time="Time", values="Norm", .by="Wells") {
+calculate_TtT <- function(data, threshold, time="Time", values="Norm", .by="Well") {
 
   dt <- data[[time]][2] - data[[time]][1]
 
-  .by <- syms(c(.by))
   values <- sym(values)
   time <- sym(time)
 
-  data <- if (is_grouped_df(data)) data else group_by(data, !!!.by)
+  data <- if (is_grouped_df(data)) data else group_by(data, across(all_of(.by)))
 
   data %>%
     rename(y = !!values, x = !!time) %>%
@@ -53,5 +52,5 @@ calculate_TtT <- function(data, threshold, time="Time", values="Norm", .by="Well
       )
     ) %>%
     mutate(RAF = 1/TtT) %>%
-    select(!!!.by, "TtT", "RAF", "crossed")
+    select(all_of(.by), "TtT", "RAF", "crossed")
 }

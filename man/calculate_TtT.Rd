@@ -4,7 +4,7 @@
 \alias{calculate_TtT}
 \title{Calculate Time to Threshold}
 \usage{
-calculate_TtT(data, threshold, time = "Time", values = "Norm", .by = "Wells")
+calculate_TtT(data, threshold, time = "Time", values = "Norm", .by = "Well")
 }
 \arguments{
 \item{data}{A dataframe containing real-time RT-QuIC data.}

@@ -4,7 +4,7 @@
 \alias{calculate_MS}
 \title{Calculate Maximum Slope}
 \usage{
-calculate_MS(data, col = "Deriv", .by = "Wells")
+calculate_MS(data, col = "Deriv", .by = "Well")
 }
 \arguments{
 \item{data}{A dataframe containing real-time reads. It is recommended to use a dataframe made from normalize_RFU.}

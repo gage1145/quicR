@@ -6,18 +6,23 @@
 \usage{
 get_quic(
   file,
-  transpose_table = TRUE,
+  transpose_table = lifecycle::deprecated(),
   norm_point = 2,
   which_table = 1,
   window_size = 2,
-  .by = "Wells",
-  plate = 96
+  smooth = FALSE,
+  smooth_factor = 10,
+  zero = FALSE,
+  .by = lifecycle::deprecated(),
+  by = c("Well"),
+  plate = 96,
+  sheet = 2
 )
 }
 \arguments{
 \item{file}{An Excel file exported by BMG.}
 
-\item{transpose_table}{Logical, if true, will transpose the table(s). This should almost always be true.}
+\item{transpose_table}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} This argument no longer has any effect.}
 
 \item{norm_point}{Integer, defines the cycle to use as background fluorescence.}
 
@@ -25,9 +30,19 @@ get_quic(
 
 \item{window_size}{Integer, defines the window size for estimating the derivative.}
 
-\item{.by}{Grouping factor. Should typically be by individual wells.}
+\item{smooth}{Logical; if true, will smooth the data using a rolling mean.}
+
+\item{smooth_factor}{Integer; the window size for smoothing.}
+
+\item{zero}{Logical; if true, will zero out the background fluorescence.}
+
+\item{.by}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use "by" instead.}
+
+\item{by}{Grouping factor. Should typically be by individual wells.}
 
 \item{plate}{Integer; either 96 or 384 to denote the type of well plate being used.}
+
+\item{sheet}{Integer; the sheet number to read from.}
 }
 \value{
 A data frame containing all time-series data and sample/plate metadata.

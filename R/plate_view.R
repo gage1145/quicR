@@ -30,7 +30,7 @@
 #' # Get the real-time data.
 #' df_ <- read.csv(file, check.names=FALSE)
 #'
-#' plate_view(df_)
+#' plate_view(df_, plot_deriv = FALSE)
 #' }
 #'
 #' @export
@@ -41,35 +41,34 @@ plate_view <- function(data, plate=96, sep="\n", plot_deriv=TRUE,
     return("Invalid plate layout. Format should be either 96 or 384. ")
   }
 
-  wells <- data %>%
-    select("Sample IDs", "Dilutions", "Wells") %>%
-    mutate_at("Dilutions", as.character) %>%
-    group_by_at(1:3) %>%
-    reframe() %>%
-    full_join(
-      expand.grid(
-        {if (plate == 96) LETTERS[1:8] else LETTERS[1:16]},
-        {if (plate == 96) sprintf("%02d", 1:12) else sprintf("%02d", 1:24)}
-      ) %>%
-        unite("Wells", 1,2, sep="")
-    ) %>%
-    mutate_all(function(x) replace_na(x, " ")) %>%
-    suppressMessages()
+  wells <- expand.grid(
+    {if (plate == 96) LETTERS[1:8] else LETTERS[1:16]},
+    {if (plate == 96) sprintf("%02d", 1:12) else sprintf("%02d", 1:24)}
+  ) %>%
+    unite("Well", 1, 2, sep="") %>%
+    arrange(Well)
 
-  labels_lookup <- setNames(
-    paste(wells$`Sample IDs`, wells$Dilutions, sep=sep),
-    wells$Wells
-  )
+  labels_lookup <- data %>%
+    reframe(.by = c("Well", "Sample IDs", "Dilutions")) %>%
+    right_join(wells, by = "Well") %>%
+    mutate(
+      across(everything(), ~ replace_na(as.character(.x), " ")),
+      Well = setNames(paste(`Sample IDs`, Dilutions, sep=sep), Well)
+    ) %>%
+    pull(Well) 
 
   p <- data %>%
-    mutate_at("Dilutions", as.character) %>%
-    full_join(wells) %>%
-    suppressMessages() %>%
-    ggplot(aes(.data$Time)) +
-    geom_line(aes(y=.data$Norm), color=flu_color) +
-    {if (plot_deriv) geom_line(aes(y=.data$Deriv), color=der_color)} +
+    right_join(wells, by = "Well") %>%
+    mutate(
+      Dilutions = as.factor(Dilutions),
+      Well = factor(Well, levels = wells$Well)
+    ) %>%
+    arrange(Well, Time) %>%
+    ggplot(aes(Time)) +
+    geom_line(aes(y=Norm), color=flu_color) +
+    {if (plot_deriv) geom_line(aes(y=Deriv), color=der_color)} +
     facet_wrap(
-      vars(.data$Wells),
+      vars(Well),
       nrow = ifelse(plate == 96, 8, 16),
       ncol = ifelse(plate == 96, 12, 24),
       labeller = as_labeller(labels_lookup)

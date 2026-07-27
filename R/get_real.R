@@ -3,8 +3,8 @@
 #' Accepts an Excel file or a dataframe of real-time RT-QuIC data.
 #'
 #' @param data Either an Excel file or a dataframe.
-#' @param order_by_sample Logical, if true, will organize the columns by sample ID rather than by well.
-#' @param transpose_table Logical, if true, will transpose the table(s).
+#' @param order_by_sample `r lifecycle::badge("deprecated")` This argument no longer has any effect.
+#' @param transpose_table `r lifecycle::badge("deprecated")` This argument no longer has any effect.
 #'
 #' @return A list of dataframes containing the formatted real-time data.
 #'
@@ -21,7 +21,22 @@
 #' get_real(file)
 #'
 #' @export
-get_real <- function(data, order_by_sample = FALSE, transpose_table = TRUE) {
+get_real <- function(data, order_by_sample = lifecycle::deprecated(), transpose_table = lifecycle::deprecated()) {
+  
+  if (lifecycle::is_present(order_by_sample)) {
+    lifecycle::deprecate_warn(
+      when = "3.0.8", 
+      what = "get_real(order_by_sample)"
+    )
+  }
+
+  if (lifecycle::is_present(transpose_table)) {
+    lifecycle::deprecate_warn(
+      when = "3.0.8", 
+      what = "get_real(transpose_table)"
+    )
+  }
+  
   check_format <- function(x) {
     if (is.character(x)) {
       return(suppressMessages(read_xlsx(x, sheet = 2, col_names = FALSE)))
@@ -32,20 +47,23 @@ get_real <- function(data, order_by_sample = FALSE, transpose_table = TRUE) {
     }
   }
 
+  get_locs <- function(x) {
+    x %>% 
+      filter(!is.na(`...3`) & is.na(`...2`)) %>%
+      select(where(~ any(!is.na(.)))) %>% 
+      t() %>%
+      as.data.frame() %>%
+      row_to_names(1) 
+  }
+
   curate <- function(x) {
     x %>%
-      na.omit() %>%
       select(-1) %>%
+      filter(!is.na(`...3`)) %>%
       row_to_names(1) %>%
-      clean_names() %>%
       rename("Time" = 1) %>%
-      {
-        if (order_by_sample) {
-          select(., "Time", order(colnames(.[colnames(.) != "Time"])))
-        } else {
-          .
-        }
-      } %>%
+      mutate(Time = as.numeric(Time)) %>%
+      filter(!is.na(Time)) %>%
       suppressWarnings()
   }
 
@@ -68,22 +86,21 @@ get_real <- function(data, order_by_sample = FALSE, transpose_table = TRUE) {
     return(df_list)
   }
 
-  transpose_real <- function(data) {
-    colnames(data) %>%
-      rbind(data) %>%
-      unname() %>%
-      t() %>%
-      as.data.frame() %>%
-      row_to_names(1) %>%
-      rename("Sample IDs" = "Time") %>%
-      mutate_at(-c(1), function(y) as.numeric(as.character(y)))
+  make_long <- function(x, locs) {
+    x %>%
+      pivot_longer(-Time, names_to = "Well", values_to = "RFU") %>%
+      right_join(locs, by = "Well") %>%
+      relocate(Time, RFU, .after = last_col()) %>%
+      mutate(across(c(Time, RFU), as.numeric)) %>%
+      arrange(Well, Time)
   }
 
-  return(
-    data %>%
-      check_format() %>%
-      curate() %>%
-      split_real_time() %>%
-      {if (isTRUE(transpose_table)) lapply(., transpose_real) else .}
-  )
+  data <- check_format(data)
+
+  locs <- get_locs(data)
+
+  data %>%
+    curate() %>%
+    split_real_time() %>%
+    map(~ make_long(.x, locs)) 
 }

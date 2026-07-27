@@ -5,7 +5,7 @@
 #'
 #' @param file An Excel file exported from MARS.
 #' @param plate Integer either 96 or 384 to denote microplate type.
-#'
+#' 
 #' @return A list containing tibbles.
 #'
 #' @importFrom readxl cell_cols
@@ -22,6 +22,12 @@
 #'
 #' @export
 organize_tables <- function(file, plate = 96) {
+
+  lifecycle::deprecate_warn(
+    when = "3.0.8", 
+    what = "organize_tables()",
+    details = "This function has become deprecated given that get_real() and get_quic() can pull the metadata all at once."
+  )
 
   if (plate != 96 & plate != 384) {
     stop("Please enter either 96 or 384 for the plate argument. ")

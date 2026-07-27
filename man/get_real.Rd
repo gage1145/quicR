@@ -4,14 +4,18 @@
 \alias{get_real}
 \title{Get Real-Time RT-QuIC Fluorescence Data}
 \usage{
-get_real(data, order_by_sample = FALSE, transpose_table = TRUE)
+get_real(
+  data,
+  order_by_sample = lifecycle::deprecated(),
+  transpose_table = lifecycle::deprecated()
+)
 }
 \arguments{
 \item{data}{Either an Excel file or a dataframe.}
 
-\item{order_by_sample}{Logical, if true, will organize the columns by sample ID rather than by well.}
+\item{order_by_sample}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} This argument no longer has any effect.}
 
-\item{transpose_table}{Logical, if true, will transpose the table(s).}
+\item{transpose_table}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} This argument no longer has any effect.}
 }
 \value{
 A list of dataframes containing the formatted real-time data.
