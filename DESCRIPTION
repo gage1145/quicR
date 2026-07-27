@@ -15,13 +15,15 @@ Imports:
   dplyr, 
   ggplot2,
   janitor,
+  lifecycle,
   openxlsx,
   pracma,
   purrr,
   readxl,
   stats,
   stringr,
-  tidyr
+  tidyr,
+  zoo
 Depends: R (>= 4.6.0)
 License: GPL-3 + file LICENSE
 Encoding: UTF-8
