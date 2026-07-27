@@ -1,3 +1,11 @@
+# quicR 3.1.0
+## New features
+- `get_quic()` now has an option to smooth the data using a rolling mean; useful for reducing noise in the data.
+- `get_quic()` now has an option to zero out the background fluorescence; useful for fitting nls models.
+- `organize_tables()` and `convert_tables()` have been deprecated in favor of `get_real()` and `get_quic()`. Previously, `get_quic()` relied on these two functions to pull metadata from the Excel file. This was slow because it had to read two separate sheets in the Excel file. Now, only one sheet is read when calling `get_real()`.
+## Breaking changes
+- The `.by` argument in `get_quic()` has been deprecated in favor of `by`.
+- Previously, data frames had a "Wells" column. This has been deprecated in favor of "Well".
 # quicR 3.0.8
 - Added more tests to ensure that the package is working as expected.
 - Fixed a bug where '!!!' would give a deprecation warning. Now using `across(all_of(.by))` or `all_of(.by)` instead.
