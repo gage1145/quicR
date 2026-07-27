@@ -24,7 +24,7 @@
 organize_tables <- function(file, plate = 96) {
 
   lifecycle::deprecate_warn(
-    when = "3.0.8", 
+    when = "3.2.0", 
     what = "organize_tables()",
     details = "This function has become deprecated given that get_real() and get_quic() can pull the metadata all at once."
   )

@@ -25,14 +25,14 @@ get_real <- function(data, order_by_sample = lifecycle::deprecated(), transpose_
   
   if (lifecycle::is_present(order_by_sample)) {
     lifecycle::deprecate_warn(
-      when = "3.0.8", 
+      when = "3.2.0", 
       what = "get_real(order_by_sample)"
     )
   }
 
   if (lifecycle::is_present(transpose_table)) {
     lifecycle::deprecate_warn(
-      when = "3.0.8", 
+      when = "3.2.0", 
       what = "get_real(transpose_table)"
     )
   }

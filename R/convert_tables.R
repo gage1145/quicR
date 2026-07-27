@@ -21,7 +21,7 @@
 convert_tables <- function(tab, na_omit = TRUE) {
 
   lifecycle::deprecate_warn(
-    when = "3.0.8", 
+    when = "3.2.0", 
     what = "convert_tables()",
     details = "This function has become deprecated given that get_real() and get_quic() can pull the metadata all at once."
   )

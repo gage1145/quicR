@@ -8,7 +8,8 @@ calculate_QR(
   data,
   col = "Norm",
   time_col = "Time",
-  .by = "Wells",
+  .by = lifecycle::deprecated(),
+  by = "Well",
   flip_ratio = FALSE
 )
 }
@@ -19,7 +20,9 @@ calculate_QR(
 
 \item{time_col}{The column containing the time points.}
 
-\item{.by}{Grouping factor. Should typically be by individual wells.}
+\item{.by}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use "by" instead.}
+
+\item{by}{Grouping factor. Should typically be by individual wells.}
 
 \item{flip_ratio}{Logical; Should the ratio be calculated as max / last (default), or last / max?}
 }

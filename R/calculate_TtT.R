@@ -6,7 +6,8 @@
 #' @param threshold A numeric value defining the threshold.
 #' @param time Column containing your time values.
 #' @param values Column containing your fluorescence values.
-#' @param .by Grouping factor(s). Should typically be by individual wells. Can be supplied a vector as an argument.
+#' @param .by `r lifecycle::badge("deprecated")` Use "by" instead.
+#' @param by Grouping factor(s). Should typically be by individual wells. Can be supplied a vector as an argument.
 #'
 #' @return A vector containing the times to threshold
 #'
@@ -20,17 +21,25 @@
 #'   package = "quicR"
 #' )
 #' get_quic(file) |>
-#'   calculate_TtT(threshold = 2)
+#'   calculate_TtT(threshold = 3)
 #'
 #' @export
-calculate_TtT <- function(data, threshold, time="Time", values="Norm", .by="Well") {
+calculate_TtT <- function(data, threshold, time="Time", values="Norm", .by=lifecycle::deprecated(), by="Well") {
+
+  if (lifecycle::is_present(.by)) {
+    lifecycle::deprecate_warn(
+      when = "3.2.0", 
+      what = "get_quic(smooth)"
+    )
+    by <- .by
+  }
 
   dt <- data[[time]][2] - data[[time]][1]
 
   values <- sym(values)
   time <- sym(time)
 
-  data <- if (is_grouped_df(data)) data else group_by(data, across(all_of(.by)))
+  data <- if (is_grouped_df(data)) data else group_by(data, across(all_of(by)))
 
   data %>%
     rename(y = !!values, x = !!time) %>%
@@ -52,5 +61,5 @@ calculate_TtT <- function(data, threshold, time="Time", values="Norm", .by="Well
       )
     ) %>%
     mutate(RAF = 1/TtT) %>%
-    select(all_of(.by), "TtT", "RAF", "crossed")
+    select(all_of(by), "TtT", "RAF", "crossed")
 }

@@ -5,7 +5,8 @@
 #'
 #' @param data A data frame output from 'get_quic()'.
 #' @param col The column containing the normalized fluorescence data.
-#' @param .by Grouping factor. Should typically be by individual wells.
+#' @param .by `r lifecycle::badge("deprecated")` Use "by" instead.
+#' @param by Grouping factor. Should typically be by individual wells.
 #' @return A data frame containing well-matched MPR values.
 #'
 #' @import dplyr
@@ -20,9 +21,17 @@
 #'   calculate_MPR()
 #'
 #' @export
-calculate_MPR <- function(data, col="Norm", .by="Well") {
-  col <- sym(col)
+calculate_MPR <- function(data, col="Norm", .by=lifecycle::deprecated(), by="Well") {
+
+  if (lifecycle::is_present(.by)) {
+    lifecycle::deprecate_warn(
+      when = "3.2.0", 
+      what = "get_quic(smooth)"
+    )
+    by <- .by
+  }
+
   data %>%
-    {if (is_grouped_df(.)) . else group_by(., across(all_of(.by)))} %>%
-    summarize(MPR = max(!!col, na.rm=TRUE))
+    {if (is_grouped_df(.)) . else group_by(., across(all_of(by)))} %>%
+    summarize(MPR = max(!!sym(col), na.rm=TRUE))
 }

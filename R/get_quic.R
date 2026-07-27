@@ -36,14 +36,14 @@ get_quic <- function(file, transpose_table=lifecycle::deprecated(), norm_point=2
 
   if (lifecycle::is_present(transpose_table)) {
     lifecycle::deprecate_warn(
-      when = "3.0.8", 
+      when = "3.2.0", 
       what = "get_quic(transpose_table)"
     )
   }
 
   if (lifecycle::is_present(.by)) {
     lifecycle::deprecate_warn(
-      when = "3.0.8", 
+      when = "3.2.0", 
       what = "get_quic(smooth)"
     )
     by <- .by
