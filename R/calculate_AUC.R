@@ -25,9 +25,8 @@
 calculate_AUC <- function(data, x="Time", y="Norm", .by="Wells") {
   x <- sym(x)
   y <- sym(y)
-  .by <- syms(c(.by))
   data %>%
-    {if (is_grouped_df(.)) . else group_by(., !!!.by)} %>%
+    {if (is_grouped_df(.)) . else group_by(., across(all_of(.by)))} %>%
     summarize(AUC = trapz(!!x, !!y))
 }
 

@@ -33,8 +33,7 @@ calculate_metrics <- function(data, ..., threshold = 2, time_col = "Time", ttt_v
   if (is_empty(groupings)) {
     groupings <- c("Sample IDs", "Dilutions", "Wells")
   }
-  groupings <- syms(groupings)
-  data <- group_by(data, !!!groupings)
+  data <- group_by(data, across(all_of(groupings)))
   list(
     reframe(data),
     calculate_MPR(data, col=norm_col, .by=groupings),

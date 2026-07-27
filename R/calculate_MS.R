@@ -13,8 +13,7 @@
 #' @export
 calculate_MS <- function(data, col="Deriv", .by="Wells") {
   col <- sym(col)
-  .by <- syms(c(.by))
   data %>%
-    {if (is_grouped_df(.)) . else group_by(., !!!.by)} %>%
+    {if (is_grouped_df(.)) . else group_by(., across(all_of(.by)))} %>%
     summarize(MS = max(!!col, na.rm=TRUE))
 }
