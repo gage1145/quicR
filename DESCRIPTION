@@ -24,7 +24,7 @@ Imports:
   stringr,
   tidyr,
   zoo
-Depends: R (>= 4.6.0)
+Depends: R (>= 4.1.0)
 License: GPL-3 + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
