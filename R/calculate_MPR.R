@@ -31,6 +31,9 @@ calculate_MPR <- function(data, col="Norm", .by=lifecycle::deprecated(), by="Wel
     by <- .by
   }
 
+  zeroed = min(data[[col]]) < 1
+  if (zeroed) data[[col]] <- data[[col]] + 1
+
   data %>%
     {if (is_grouped_df(.)) . else group_by(., across(all_of(by)))} %>%
     summarize(MPR = max(!!sym(col), na.rm=TRUE))
