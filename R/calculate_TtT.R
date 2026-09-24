@@ -8,7 +8,6 @@
 #' @param values Column containing your fluorescence values.
 #' @param .by `r lifecycle::badge("deprecated")` Use "by" instead.
 #' @param by Grouping factor(s). Should typically be by individual wells. Can be supplied a vector as an argument.
-#' @param zero Logical; has the data been zeroed by `get_quic()`? Translates the background fluorescence back to 1.
 #'
 #' @return A vector containing the times to threshold
 #'
@@ -25,7 +24,7 @@
 #'   calculate_TtT(threshold = 3)
 #'
 #' @export
-calculate_TtT <- function(data, threshold, time="Time", values="Norm", .by=lifecycle::deprecated(), by="Well", zero=FALSE) {
+calculate_TtT <- function(data, threshold, time="Time", values="Norm", .by=lifecycle::deprecated(), by="Well") {
 
   if (lifecycle::is_present(.by)) {
     lifecycle::deprecate_warn(
@@ -46,10 +45,11 @@ calculate_TtT <- function(data, threshold, time="Time", values="Norm", .by=lifec
 
   check_positive(threshold, min_y)
   
-  if (zero) threshold <- threshold - 1
+  zeroed = min_y < 1
+  if (zeroed) threshold <- threshold - 1
 
   data %>%
-    ungroup() %>%
+    {if (is_grouped_df(.)) . else group_by(., across(all_of(by)))} %>%
     rename(y = !!values, x = !!time) %>%
     mutate(across(c("x", "y"), as.numeric)) %>%
     summarize(
@@ -60,8 +60,7 @@ calculate_TtT <- function(data, threshold, time="Time", values="Norm", .by=lifec
       x1       = x[x2_index - 1],
       y2       = y[x2_index],
       y1       = y[x2_index - 1],
-      TtT      = ifelse(crossed, x1 + (threshold - y1) * (x2 - x1) / (y2 - y1), x2),
-      .by = all_of(by)
+      TtT      = ifelse(crossed, x1 + (threshold - y1) * (x2 - x1) / (y2 - y1), x2)
     ) %>%
     mutate(RAF = 1/TtT) %>%
     select(all_of(by), "TtT", "RAF", "crossed")
