@@ -24,7 +24,7 @@
 #'   package = "quicR"
 #' )
 #' get_quic(file) |>
-#'  calculate_metrics()
+#'  calculate_metrics(threshold = 3)
 #'
 #' @export
 calculate_metrics <- function(data, ..., threshold = 2, time_col = "Time", ttt_values = "Norm", 

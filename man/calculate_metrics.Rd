@@ -48,6 +48,6 @@ file <- system.file(
   package = "quicR"
 )
 get_quic(file) |>
- calculate_metrics()
+ calculate_metrics(threshold = 3)
 
 }

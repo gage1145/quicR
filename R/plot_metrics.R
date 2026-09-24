@@ -27,7 +27,7 @@
 #'
 #' df <- read.csv(file, check.names=FALSE)
 #'
-#' calculate_metrics(df) |>
+#' calculate_metrics(df, threshold = 3) |>
 #'   plot_metrics()
 #' }
 #'
