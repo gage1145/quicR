@@ -31,3 +31,7 @@ test_that("calculate_TtT returns RAF as the inverse of TtT", {
   res <- calculate_TtT(df, threshold = 2)
   expect_equal(res$RAF, 1 / res$TtT)
 })
+
+test_that("calculate_TtT errors when the threshold is not higher than the background signal.", {
+  expect_error(calculate_TtT(df, threshold = 1))
+})
