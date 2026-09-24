@@ -21,26 +21,34 @@ import(ggplot2)
 import(janitor)
 import(purrr)
 import(tidyr)
-importFrom(dplyr,"%>%")
-importFrom(dplyr,group_by)
-importFrom(dplyr,is_grouped_df)
-importFrom(dplyr,last)
-importFrom(dplyr,summarize)
-importFrom(dplyr,sym)
-importFrom(dplyr,syms)
+importFrom(dplyr,
+  "%>%",
+  group_by,
+  is_grouped_df,
+  last,
+  summarize,
+  sym,
+  syms
+)
 importFrom(pracma,trapz)
 importFrom(purrr,is_empty)
-importFrom(readxl,cell_cols)
-importFrom(readxl,read_excel)
-importFrom(readxl,read_xlsx)
-importFrom(stats,na.omit)
-importFrom(stats,sd)
-importFrom(stats,setNames)
+importFrom(readxl,
+  cell_cols,
+  read_excel,
+  read_xlsx
+)
+importFrom(stats,
+  na.omit,
+  sd,
+  setNames
+)
 importFrom(stringr,str_length)
-importFrom(tidyr,pivot_longer)
-importFrom(tidyr,replace_na)
-importFrom(tidyr,separate)
-importFrom(tidyr,separate_wider_delim)
-importFrom(tidyr,unite)
+importFrom(tidyr,
+  pivot_longer,
+  replace_na,
+  separate,
+  separate_wider_delim,
+  unite
+)
 importFrom(utils,read.csv)
 importFrom(zoo,rollmean)

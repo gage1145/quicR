@@ -17,7 +17,7 @@ calculate_MS <- function(data, col="Deriv", .by=lifecycle::deprecated(), by="Wel
   if (lifecycle::is_present(.by)) {
     lifecycle::deprecate_warn(
       when = "3.2.0", 
-      what = "get_quic(smooth)"
+      what = "calculate_MS(.by)"
     )
     by <- .by
   }

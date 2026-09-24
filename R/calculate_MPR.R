@@ -26,7 +26,7 @@ calculate_MPR <- function(data, col="Norm", .by=lifecycle::deprecated(), by="Wel
   if (lifecycle::is_present(.by)) {
     lifecycle::deprecate_warn(
       when = "3.2.0", 
-      what = "get_quic(smooth)"
+      what = "calculate_MPR(.by)"
     )
     by <- .by
   }

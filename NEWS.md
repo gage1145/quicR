@@ -1,3 +1,9 @@
+# quicR 3.2.1
+## Bug fixes
+- `calculate_TtT()` no longer accepts threshold values less than the background signal.
+- `calculate_TtT()` now accepts unequally spaced time points.
+- Fixed a typo in the deprecation warnings when giving the `.by` argument.
+
 # quicR 3.2.0
 ## New features
 - `get_quic()` now has an option to smooth the data using a rolling mean; useful for reducing noise in the data.

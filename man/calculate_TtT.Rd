@@ -10,13 +10,14 @@ calculate_TtT(
   time = "Time",
   values = "Norm",
   .by = lifecycle::deprecated(),
-  by = "Well"
+  by = "Well",
+  zero = FALSE
 )
 }
 \arguments{
 \item{data}{A dataframe containing real-time RT-QuIC data.}
 
-\item{threshold}{A numeric value defining the threshold.}
+\item{threshold}{A positive numeric value defining the threshold.}
 
 \item{time}{Column containing your time values.}
 
@@ -25,6 +26,8 @@ calculate_TtT(
 \item{.by}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use "by" instead.}
 
 \item{by}{Grouping factor(s). Should typically be by individual wells. Can be supplied a vector as an argument.}
+
+\item{zero}{Logical; has the data been zeroed by \code{get_quic()}? Translates the background fluorescence back to 1.}
 }
 \value{
 A vector containing the times to threshold

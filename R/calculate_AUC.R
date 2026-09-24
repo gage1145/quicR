@@ -28,7 +28,7 @@ calculate_AUC <- function(data, x="Time", y="Norm", .by=lifecycle::deprecated(),
   if (lifecycle::is_present(.by)) {
     lifecycle::deprecate_warn(
       when = "3.2.0", 
-      what = "get_quic(smooth)"
+      what = "calculate_AUC(.by)"
     )
     by <- .by
   }
