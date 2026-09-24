@@ -41,12 +41,14 @@ calculate_QR <- function(data, col="Norm", time_col="Time", .by=lifecycle::depre
 
   col <- sym(col)
   time_col <- sym(time_col)
-  
+  zeroed = min(data[[col]]) < 1
+  if (zeroed) data[[col]] <- data[[col]] + 1
+
   data %>%
     {if (is_grouped_df(.)) . else group_by(., across(all_of(by)))} %>%
     summarize(
-      MPR = max(!!col, na.rm=TRUE),
-      QR = MPR / last(!!col, !!time_col),
+      MPR = max(!!sym(col), na.rm=TRUE),
+      QR = MPR / last(!!sym(col), !!time_col),
       QR = ifelse(flip_ratio, 1 / QR, QR)
     )
 }
