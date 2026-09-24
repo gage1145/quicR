@@ -34,7 +34,7 @@ calculate_QR <- function(data, col="Norm", time_col="Time", .by=lifecycle::depre
   if (lifecycle::is_present(.by)) {
     lifecycle::deprecate_warn(
       when = "3.2.0", 
-      what = "get_quic(smooth)"
+      what = "calculate_QR(.by)"
     )
     by <- .by
   }
