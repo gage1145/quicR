@@ -1,3 +1,7 @@
+# quicR 3.2.2
+## Bug fixes
+- Fixed a bug where MPR would be artificially decreased if the raw data had been zeroed out.
+
 # quicR 3.2.1
 ## Bug fixes
 - `calculate_TtT()` no longer accepts threshold values less than the background signal.
