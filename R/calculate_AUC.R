@@ -4,8 +4,8 @@
 #' background fluorescence.
 #'
 #' @param data A data frame output from 'get_quic()'.
-#' @param x The column name containing the time data.
-#' @param y The column containing the normalized fluorescence data.
+#' @param x `r lifecycle::badge("deprecated")`
+#' @param y `r lifecycle::badge("deprecated")`
 #' @param .by `r lifecycle::badge("deprecated")` Use "by" instead.
 #' @param by Grouping factor. Should typically be by individual wells.
 #' @return A data frame containing well-matched AUC values.
@@ -23,7 +23,7 @@
 #'   calculate_AUC()
 #'
 #' @export
-calculate_AUC <- function(data, x="Time", y="Norm", .by=lifecycle::deprecated(), by="Well") {
+calculate_AUC <- function(data, x=lifecycle::deprecated(), y=lifecycle::deprecated(), .by=lifecycle::deprecated(), by="well") {
 
   if (lifecycle::is_present(.by)) {
     lifecycle::deprecate_warn(
@@ -35,6 +35,6 @@ calculate_AUC <- function(data, x="Time", y="Norm", .by=lifecycle::deprecated(),
 
   data %>%
     {if (is_grouped_df(.)) . else group_by(., across(all_of(by)))} %>%
-    summarize(AUC = trapz(!!sym(x), !!sym(y)))
+    summarize(auc = trapz(time, norm))
 }
 

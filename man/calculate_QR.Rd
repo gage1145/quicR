@@ -6,19 +6,20 @@
 \usage{
 calculate_QR(
   data,
-  col = "Norm",
-  time_col = "Time",
+  col = lifecycle::deprecated(),
+  time_col = lifecycle::deprecated(),
   .by = lifecycle::deprecated(),
-  by = "Well",
-  flip_ratio = FALSE
+  by = "well",
+  flip_ratio = FALSE,
+  zeroed = FALSE
 )
 }
 \arguments{
 \item{data}{A data frame output from 'get_quic()'.}
 
-\item{col}{The column containing the normalized fluorescence data.}
+\item{col}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 
-\item{time_col}{The column containing the time points.}
+\item{time_col}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 
 \item{.by}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use "by" instead.}
 

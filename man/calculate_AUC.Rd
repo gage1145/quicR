@@ -6,18 +6,18 @@
 \usage{
 calculate_AUC(
   data,
-  x = "Time",
-  y = "Norm",
+  x = lifecycle::deprecated(),
+  y = lifecycle::deprecated(),
   .by = lifecycle::deprecated(),
-  by = "Well"
+  by = "well"
 )
 }
 \arguments{
 \item{data}{A data frame output from 'get_quic()'.}
 
-\item{x}{The column name containing the time data.}
+\item{x}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 
-\item{y}{The column containing the normalized fluorescence data.}
+\item{y}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 
 \item{.by}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use "by" instead.}
 

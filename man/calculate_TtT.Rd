@@ -7,10 +7,12 @@
 calculate_TtT(
   data,
   threshold,
-  time = "Time",
-  values = "Norm",
+  time = lifecycle::deprecated(),
+  values = lifecycle::deprecated(),
   .by = lifecycle::deprecated(),
-  by = "Well"
+  by = "well",
+  zeroed = FALSE,
+  use_normalized = TRUE
 )
 }
 \arguments{
@@ -18,9 +20,9 @@ calculate_TtT(
 
 \item{threshold}{A positive numeric value defining the threshold.}
 
-\item{time}{Column containing your time values.}
+\item{time}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 
-\item{values}{Column containing your fluorescence values.}
+\item{values}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 
 \item{.by}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use "by" instead.}
 

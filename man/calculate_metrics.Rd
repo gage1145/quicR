@@ -8,35 +8,35 @@ calculate_metrics(
   data,
   ...,
   threshold = 2,
-  time_col = "Time",
-  ttt_values = "Norm",
-  auc_values = "Norm",
-  norm_col = "Norm",
-  deriv_col = "Deriv",
+  time_col = lifecycle::deprecated(),
+  ttt_values = lifecycle::deprecated(),
+  auc_values = lifecycle::deprecated(),
+  norm_col = lifecycle::deprecated(),
+  deriv_col = lifecycle::deprecated(),
   flip_ratio = FALSE
 )
 }
 \arguments{
-\item{data}{A data frame containing the raw RT-QuIC data.}
+\item{data}{A S3 object of class "quic".}
 
 \item{...}{A list of grouping factors. If left empty, function groups by "Sample IDs", "Dilutions", and "Wells".}
 
 \item{threshold}{Float; the threshold applied to the calculation of time-to-threshold.}
 
-\item{time_col}{String; column name containing the time values.}
+\item{time_col}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 
-\item{ttt_values}{String; column name containing values to use for calculating time-to-threshold.}
+\item{ttt_values}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 
-\item{auc_values}{String; column name containing values to use for calculating the area under the curve.}
+\item{auc_values}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 
-\item{norm_col}{String; column name containing the normalized fluorescent values.}
+\item{norm_col}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 
-\item{deriv_col}{String; column name containing the estimated derivative values.}
+\item{deriv_col}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 
 \item{flip_ratio}{Logical; should the quenching ratio be calculated as max / last (default) or last / max?}
 }
 \value{
-A data frame of calculated metrics.
+An S3 object of class "quic_metrics" containing relevant kinetic metrics.
 }
 \description{
 Uses functions from the "calculate" family of quicR functions to generate an analyzed dataframe.

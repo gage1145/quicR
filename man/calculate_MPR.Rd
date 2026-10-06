@@ -4,12 +4,19 @@
 \alias{calculate_MPR}
 \title{Calculate the Maxpoint Ratio}
 \usage{
-calculate_MPR(data, col = "Norm", .by = lifecycle::deprecated(), by = "Well")
+calculate_MPR(
+  data,
+  col = lifecycle::deprecated(),
+  .by = lifecycle::deprecated(),
+  by = "well",
+  zeroed = FALSE,
+  use_normalized = TRUE
+)
 }
 \arguments{
 \item{data}{A data frame output from 'get_quic()'.}
 
-\item{col}{The column containing the normalized fluorescence data.}
+\item{col}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 
 \item{.by}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use "by" instead.}
 
