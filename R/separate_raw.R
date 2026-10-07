@@ -16,6 +16,13 @@
 #' @export
 # Separates the raw run files in the .xlsx file.
 separate_raw <- function(file, num_rows, export_name) {
+
+  lifecycle::deprecate_warn(
+    when = "3.2.0", 
+    what = "separate_raw()",
+    details = "This function has become deprecated and should no longer be used."
+  )
+
   if (is.character(file)) { # Read the Excel file into R.
     data <- read_xlsx(file, sheet = 2)
   } else if (is.data.frame(file)) {
