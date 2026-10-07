@@ -6,10 +6,10 @@
 \usage{
 calculate_threshold(
   data,
-  values = "RFU",
-  time = "Time",
+  values = "rfu",
+  time = lifecycle::deprecated(),
   background_time = 0,
-  method = list("stdev", "none"),
+  method = c("stdev"),
   multiplier = 1
 )
 }

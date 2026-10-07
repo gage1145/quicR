@@ -24,24 +24,23 @@
 #'   calculate_threshold(multiplier=10)
 #'
 #' @export
-calculate_threshold <- function(data, values="RFU", time="Time",
-                                background_time=0, method=list("stdev", "none"),
+calculate_threshold <- function(data, values="rfu", time=lifecycle::deprecated(),
+                                background_time=0, method=c("stdev"),
                                 multiplier=1) {
 
-  time <- sym(time)
   values <- sym(values)
-  if (is.list(method)) method <- "stdev"
-  if (method == "none") return(NA)
-
+  if (is.array(method)) method <- method[1]
+  # if (method == "none") return(NA_real_)
   if (method == "stdev") {
-    (
-      data %>%
-       filter(!!time == background_time) %>%
-       summarize(
-         avg = mean(!!values),
-         std = sd(!!values),
-         thr = avg + std * multiplier
-       )
-    )$thr
+    data %>%
+      as.data.frame() %>%
+      filter(time == background_time) %>%
+      summarize(
+        avg = mean(!!values),
+        std = sd(!!values),
+        thr = avg + std * multiplier
+      ) %>%
+      pull(thr) %>%
+      pluck(1)
   }
 }
