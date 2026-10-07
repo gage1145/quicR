@@ -2,29 +2,36 @@
 % Please edit documentation in R/plot_metrics.R
 \name{plot_metrics}
 \alias{plot_metrics}
+\alias{plot_metrics.quic_metrics}
+\alias{plot_metrics.data.frame}
 \title{Plot metrics generated from the "calculate" family of quicR functions.}
 \usage{
-plot_metrics(
+plot_metrics(data, ...)
+
+\method{plot_metrics}{quic_metrics}(data, ...)
+
+\method{plot_metrics}{data.frame}(
   data,
   ...,
-  sample_col = "Sample IDs",
+  sample_col = "sample",
   color = "black",
-  fill = "Dilutions",
+  fill = "dilution",
   dilution_bool = TRUE,
   nrow = 2,
   ncol = 2
 )
 }
 \arguments{
-\item{data}{A dataframe containing the calculated metrics from the "calculate" family of quicR functions.}
+\item{data}{Either an S3 object of class "quic_metrics" returned by
+\code{\link[=calculate_metrics]{calculate_metrics()}}, or a data frame of metrics.}
 
-\item{...}{A list of faceting columns. If empty, groups are set to "MPR", "MS", "TtT", and "RAF".}
+\item{...}{A list of faceting columns. If empty, groups are set to "mpr", "ms", "ttt", and "raf".}
 
 \item{sample_col}{The name of the column containing the sample IDs.}
 
 \item{color}{The color used for the boxplot outline.}
 
-\item{fill}{The column containing the fill aesthetic. Usually the dilutions column.}
+\item{fill}{The column containing the fill aesthetic. Usually the dilution column.}
 
 \item{dilution_bool}{Logical; should dilution factors be included in the plot?}
 
@@ -39,17 +46,14 @@ A ggplot object
 Generates a faceted figure of boxplots.
 }
 \examples{
-\donttest{
 file <- system.file(
   "extdata/input_files",
-  file = "raw.csv",
+  file = "test2.xlsx",
   package = "quicR"
 )
 
-df <- read.csv(file, check.names=FALSE)
-
-calculate_metrics(df, threshold = 3) |>
+get_quic(file) |>
+  calculate_metrics(threshold = 3) |>
   plot_metrics()
-}
 
 }

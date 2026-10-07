@@ -2,21 +2,33 @@
 % Please edit documentation in R/plate_view.R
 \name{plate_view}
 \alias{plate_view}
+\alias{plate_view.quic}
+\alias{plate_view.data.frame}
 \title{Real-Time Plate View}
 \usage{
-plate_view(
+plate_view(data, ...)
+
+\method{plate_view}{quic}(data, plate = data$params$plate, ...)
+
+\method{plate_view}{data.frame}(
   data,
   plate = 96,
   sep = "\\n",
   plot_deriv = TRUE,
   flu_color = "black",
-  der_color = "blue"
+  der_color = "blue",
+  ...
 )
 }
 \arguments{
-\item{data}{Real-time dataframe}
+\item{data}{Either an S3 object of class "quic" returned by \code{\link[=get_quic]{get_quic()}}, or a
+long-format data frame with \code{well}, \code{sample}, \code{dilution}, \code{time}, \code{norm}
+and \code{deriv} columns.}
 
-\item{plate}{Integer either 96 or 384 to denote microplate type.}
+\item{...}{Arguments passed on to the data frame method.}
+
+\item{plate}{Integer either 96 or 384 to denote microplate type. For "quic"
+objects, defaults to the plate size recorded by \code{\link[=get_quic]{get_quic()}}.}
 
 \item{sep}{A string defining how sample IDs and dilutions should be separated.}
 
@@ -34,17 +46,13 @@ Converts the real-time data into a ggplot figure. The layout is either 8x12
 or 16x24 for 96- and 384-well plates, respectively.
 }
 \examples{
-\donttest{
 file <- system.file(
   "extdata/input_files",
-  file = "raw.csv",
+  file = "test2.xlsx",
   package = "quicR"
 )
 
-# Get the real-time data.
-df_ <- read.csv(file, check.names=FALSE)
-
-plate_view(df_, plot_deriv = FALSE)
-}
+get_quic(file) |>
+  plate_view(plot_deriv = FALSE)
 
 }
