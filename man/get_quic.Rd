@@ -45,7 +45,10 @@ get_quic(
 \item{sheet}{Integer; the sheet number to read from.}
 }
 \value{
-An S3 object of class "quic" containing all time-series data and sample/plate metadata.
+An S3 object of class "quic": a list with \code{data}, a tibble with one row
+per well and the time series nested in a \code{data} list-column, and \code{params},
+the settings used to build it. Use \code{as.data.frame()} to get the long-format
+data, and \code{print()}, \code{summary()}, \code{plot()} or \code{ggplot2::autoplot()} to inspect it.
 }
 \description{
 Accepts an Excel file or a data frame of real-time RT-QuIC data.
@@ -56,6 +59,9 @@ file <- system.file(
   file = "test.xlsx",
   package = "quicR"
 )
-get_quic(file)
+x <- get_quic(file)
+x
+summary(x)
+head(as.data.frame(x))
 
 }

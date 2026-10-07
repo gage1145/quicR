@@ -2,9 +2,15 @@
 % Please edit documentation in R/calculate_metrics.R
 \name{calculate_metrics}
 \alias{calculate_metrics}
+\alias{calculate_metrics.quic}
+\alias{calculate_metrics.data.frame}
 \title{Generate a data frame with calculated metrics.}
 \usage{
-calculate_metrics(
+calculate_metrics(data, ...)
+
+\method{calculate_metrics}{quic}(data, ..., threshold = 2, flip_ratio = FALSE)
+
+\method{calculate_metrics}{data.frame}(
   data,
   ...,
   threshold = 2,
@@ -13,15 +19,20 @@ calculate_metrics(
   auc_values = lifecycle::deprecated(),
   norm_col = lifecycle::deprecated(),
   deriv_col = lifecycle::deprecated(),
-  flip_ratio = FALSE
+  flip_ratio = FALSE,
+  zeroed = FALSE
 )
 }
 \arguments{
-\item{data}{A S3 object of class "quic".}
+\item{data}{Either an S3 object of class "quic" returned by \code{\link[=get_quic]{get_quic()}}, or a
+long-format data frame with \code{time}, \code{norm} and \code{deriv} columns.}
 
-\item{...}{A list of grouping factors. If left empty, function groups by "Sample IDs", "Dilutions", and "Wells".}
+\item{...}{A list of grouping factors. If left empty, function groups by
+"sample", "dilution", and "well" (whichever are present).}
 
 \item{threshold}{Float; the threshold applied to the calculation of time-to-threshold.}
+
+\item{flip_ratio}{Logical; should the quenching ratio be calculated as max / last (default) or last / max?}
 
 \item{time_col}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 
@@ -33,10 +44,14 @@ calculate_metrics(
 
 \item{deriv_col}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 
-\item{flip_ratio}{Logical; should the quenching ratio be calculated as max / last (default) or last / max?}
+\item{zeroed}{Logical; was the data zeroed in \code{\link[=get_quic]{get_quic()}}? Only used by the
+data frame method, since a "quic" object already records this.}
 }
 \value{
-An S3 object of class "quic_metrics" containing relevant kinetic metrics.
+For a "quic" object, an S3 object of class "quic_metrics": a list with
+\code{data}, a tibble of kinetic metrics with one row per group, and \code{params},
+the settings carried forward from \code{\link[=get_quic]{get_quic()}} plus \code{by}, \code{threshold} and
+\code{flip_ratio}. For a data frame, a data frame of the metrics.
 }
 \description{
 Uses functions from the "calculate" family of quicR functions to generate an analyzed dataframe.
@@ -47,7 +62,9 @@ file <- system.file(
   file = "test2.xlsx",
   package = "quicR"
 )
-get_quic(file) |>
- calculate_metrics(threshold = 3)
+metrics <- get_quic(file) |>
+  calculate_metrics(threshold = 3)
+metrics
+summary(metrics)
 
 }

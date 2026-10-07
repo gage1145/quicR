@@ -15,7 +15,10 @@
 #' @param zero Logical; if true, will zero out the background fluorescence.
 #' @param sheet Integer; the sheet number to read from.
 #'
-#' @return An S3 object of class "quic" containing all time-series data and sample/plate metadata.
+#' @return An S3 object of class "quic": a list with `data`, a tibble with one row
+#'   per well and the time series nested in a `data` list-column, and `params`,
+#'   the settings used to build it. Use `as.data.frame()` to get the long-format
+#'   data, and `print()`, `summary()`, `plot()` or `ggplot2::autoplot()` to inspect it.
 #'
 #' @import dplyr
 #' @importFrom purrr pluck
@@ -29,7 +32,10 @@
 #'   file = "test.xlsx",
 #'   package = "quicR"
 #' )
-#' get_quic(file)
+#' x <- get_quic(file)
+#' x
+#' summary(x)
+#' head(as.data.frame(x))
 #'
 #' @export
 get_quic <- function(file, transpose_table=lifecycle::deprecated(), norm_point=2, which_table=1,
@@ -51,15 +57,19 @@ get_quic <- function(file, transpose_table=lifecycle::deprecated(), norm_point=2
     by <- .by
   }
 
-  stopifnot(norm_point > smooth_factor / 2)
+  stopifnot(!smooth || norm_point > smooth_factor / 2)
   
   data <- file %>%
     read_xlsx(sheet=sheet, col_names=FALSE) %>%
     get_real() %>%
     pluck(which_table) %>%
     rename_with(tolower) %>%
-    mutate(dilutions = ifelse("dilutions" %in% names(.), dilutions, NA)) %>%
-    rename(sample = "sample ids", dilution = "dilutions") %>%
+    rename(any_of(c(sample = "sample ids", dilution = "dilutions")))
+
+  # Exports without a Sample IDs or Dilutions table still get those columns.
+  data[setdiff(c("sample", "dilution"), names(data))] <- NA_character_
+
+  data <- data %>%
     mutate(
       rfu = if (smooth) rollmean(rfu, smooth_factor, na.pad=TRUE) else rfu,
       norm = rfu/rfu[norm_point] - zero,
@@ -68,8 +78,11 @@ get_quic <- function(file, transpose_table=lifecycle::deprecated(), norm_point=2
     ) %>%
     nest(data = c(time, rfu, norm, deriv)) %>%
     suppressMessages()
-  
-  quic_obj <- as.list(environment())
-  class(quic_obj) <- "quic"
-  return(quic_obj)
+
+  params <- list(
+    plate = plate, by = by, norm_point = norm_point, window_size = window_size,
+    smooth = smooth, smooth_factor = smooth_factor, zero = zero
+  )
+
+  validate_quic(new_quic(data, params))
 }
