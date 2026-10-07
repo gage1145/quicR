@@ -1,6 +1,6 @@
 Package: quicR
 Title: RT-QuIC Data Formatting and Analysis
-Version: 3.2.1
+Version: 4.0.0
 Authors@R: 
     person(
       given = "Gage",
@@ -22,6 +22,7 @@ Imports:
   readxl,
   stats,
   stringr,
+  tibble,
   tidyr,
   zoo
 Depends: R (>= 4.1.0)

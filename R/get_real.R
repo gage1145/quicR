@@ -38,13 +38,11 @@ get_real <- function(data, order_by_sample = lifecycle::deprecated(), transpose_
   }
   
   check_format <- function(x) {
+    stopifnot(is.character(x) | is.data.frame(x))
     if (is.character(x)) {
       return(suppressMessages(read_xlsx(x, sheet = 2, col_names = FALSE)))
-    } else if (is.data.frame(x)) {
-      return(x)
-    } else {
-      stop("Please enter either .xlsx file path or data frame. ")
-    }
+    } 
+    return(x)
   }
 
   get_locs <- function(x) {

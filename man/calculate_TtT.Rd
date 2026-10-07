@@ -7,10 +7,11 @@
 calculate_TtT(
   data,
   threshold,
-  time = "Time",
-  values = "Norm",
+  time = lifecycle::deprecated(),
+  values = lifecycle::deprecated(),
   .by = lifecycle::deprecated(),
-  by = "Well"
+  by = "well",
+  zeroed = FALSE
 )
 }
 \arguments{
@@ -18,13 +19,15 @@ calculate_TtT(
 
 \item{threshold}{A positive numeric value defining the threshold.}
 
-\item{time}{Column containing your time values.}
+\item{time}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 
-\item{values}{Column containing your fluorescence values.}
+\item{values}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 
 \item{.by}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use "by" instead.}
 
 \item{by}{Grouping factor(s). Should typically be by individual wells. Can be supplied a vector as an argument.}
+
+\item{zeroed}{Logical; was the data zeroed in \code{\link[=get_quic]{get_quic()}}? Only used by the data frame method, since a "quic" object already records this.}
 }
 \value{
 A vector containing the times to threshold
@@ -39,6 +42,7 @@ file <- system.file(
   package = "quicR"
 )
 get_quic(file) |>
+  as.data.frame() |>
   calculate_TtT(threshold = 3)
 
 }

@@ -11,10 +11,10 @@ get_quic(
   which_table = 1,
   window_size = 2,
   smooth = FALSE,
-  smooth_factor = 10,
+  smooth_factor = 4,
   zero = FALSE,
   .by = lifecycle::deprecated(),
-  by = c("Well"),
+  by = c("well"),
   plate = 96,
   sheet = 2
 )
@@ -38,14 +38,17 @@ get_quic(
 
 \item{.by}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use "by" instead.}
 
-\item{by}{Grouping factor. Should typically be by individual wells.}
+\item{by}{Grouping factor. Should typically be by 'well'. Can also include 'sample' and 'dilution' if present.}
 
 \item{plate}{Integer; either 96 or 384 to denote the type of well plate being used.}
 
 \item{sheet}{Integer; the sheet number to read from.}
 }
 \value{
-A data frame containing all time-series data and sample/plate metadata.
+An S3 object of class "quic": a list with \code{data}, a tibble with one row
+per well and the time series nested in a \code{data} list-column, and \code{params},
+the settings used to build it. Use \code{as.data.frame()} to get the long-format
+data, and \code{print()}, \code{summary()}, \code{plot()} or \code{ggplot2::autoplot()} to inspect it.
 }
 \description{
 Accepts an Excel file or a data frame of real-time RT-QuIC data.
@@ -56,6 +59,9 @@ file <- system.file(
   file = "test.xlsx",
   package = "quicR"
 )
-get_quic(file)
+x <- get_quic(file)
+x
+summary(x)
+head(as.data.frame(x))
 
 }

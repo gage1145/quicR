@@ -1,3 +1,19 @@
+# quicR 4.0.0
+## Breaking changes
+- `get_quic()` now returns an S3 object of class `"quic"` instead of a data frame. It is a list with `data` (one row per well, with the time series nested in a `data` list-column) and `params` (the settings used to build it). Use `as.data.frame()` or `tibble::as_tibble()` to get the previous long-format data.
+- `calculate_metrics()` on a `"quic"` object returns an S3 object of class `"quic_metrics"`, which carries the `get_quic()` settings forward along with `by`, `threshold` and `flip_ratio`. Passing a data frame still returns a data frame.
+- Column names are now lowercase throughout: `well`, `sample`, `dilution`, `time`, `rfu`, `norm`, `deriv`, and the metrics `mpr`, `qr`, `ms`, `auc`, `ttt`, `raf`. `plate_view()` and `plot_metrics()` expect these names, and their defaults have changed accordingly.
+- `plate_view()` now returns the ggplot object instead of printing it.
+
+## New features
+- `print()`, `summary()`, `plot()` and `ggplot2::autoplot()` methods for `"quic"` and `"quic_metrics"` objects.
+- `calculate_metrics()`, `plate_view()` and `plot_metrics()` are now generics that accept either the new objects or data frames. `plate_view()` reads the plate size from a `"quic"` object.
+
+## Bug fixes
+- `get_quic()` no longer fails with the default `norm_point` and `smooth_factor` when `smooth = FALSE`.
+- `get_quic()` no longer gives every well the first well's dilution.
+- `get_quic()` no longer fails on exports without a Sample IDs or Dilutions table; those columns are filled with `NA`.
+
 # quicR 3.2.2
 ## Bug fixes
 - Fixed a bug where MPR would be artificially decreased if the raw data had been zeroed out.

@@ -4,12 +4,17 @@
 \alias{calculate_MS}
 \title{Calculate Maximum Slope}
 \usage{
-calculate_MS(data, col = "Deriv", .by = lifecycle::deprecated(), by = "Well")
+calculate_MS(
+  data,
+  col = lifecycle::deprecated(),
+  .by = lifecycle::deprecated(),
+  by = "well"
+)
 }
 \arguments{
 \item{data}{A dataframe containing real-time reads. It is recommended to use a dataframe made from normalize_RFU.}
 
-\item{col}{Character, defines the column containing the derivative curve.}
+\item{col}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 
 \item{.by}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use "by" instead.}
 

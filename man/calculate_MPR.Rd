@@ -4,16 +4,24 @@
 \alias{calculate_MPR}
 \title{Calculate the Maxpoint Ratio}
 \usage{
-calculate_MPR(data, col = "Norm", .by = lifecycle::deprecated(), by = "Well")
+calculate_MPR(
+  data,
+  col = lifecycle::deprecated(),
+  .by = lifecycle::deprecated(),
+  by = "well",
+  zeroed = FALSE
+)
 }
 \arguments{
 \item{data}{A data frame output from 'get_quic()'.}
 
-\item{col}{The column containing the normalized fluorescence data.}
+\item{col}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 
 \item{.by}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use "by" instead.}
 
-\item{by}{Grouping factor. Should typically be by individual wells.}
+\item{by}{Grouping factor. Should typically be by individual wells.#'}
+
+\item{zeroed}{Logical; was the data zeroed in \code{\link[=get_quic]{get_quic()}}? Only used by the data frame method, since a "quic" object already records this.}
 }
 \value{
 A data frame containing well-matched MPR values.
@@ -29,6 +37,7 @@ file <- system.file(
   package = "quicR"
 )
 get_quic(file) |>
+  as.data.frame() |>
   calculate_MPR()
 
 }

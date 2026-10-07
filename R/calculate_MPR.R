@@ -4,9 +4,10 @@
 #' background fluorescence.
 #'
 #' @param data A data frame output from 'get_quic()'.
-#' @param col The column containing the normalized fluorescence data.
+#' @param col `r lifecycle::badge("deprecated")`
 #' @param .by `r lifecycle::badge("deprecated")` Use "by" instead.
-#' @param by Grouping factor. Should typically be by individual wells.
+#' @param by Grouping factor. Should typically be by individual wells.#' 
+#' @param zeroed Logical; was the data zeroed in [get_quic()]? Only used by the data frame method, since a "quic" object already records this.
 #' @return A data frame containing well-matched MPR values.
 #'
 #' @import dplyr
@@ -18,10 +19,11 @@
 #'   package = "quicR"
 #' )
 #' get_quic(file) |>
+#'   as.data.frame() |>
 #'   calculate_MPR()
 #'
 #' @export
-calculate_MPR <- function(data, col="Norm", .by=lifecycle::deprecated(), by="Well") {
+calculate_MPR <- function(data, col=lifecycle::deprecated(), .by=lifecycle::deprecated(), by="well", zeroed=FALSE) {
 
   if (lifecycle::is_present(.by)) {
     lifecycle::deprecate_warn(
@@ -31,10 +33,9 @@ calculate_MPR <- function(data, col="Norm", .by=lifecycle::deprecated(), by="Wel
     by <- .by
   }
 
-  zeroed = min(data[[col]]) < 1
-  if (zeroed) data[[col]] <- data[[col]] + 1
+  data$norm <- data$norm + zeroed
 
   data %>%
     {if (is_grouped_df(.)) . else group_by(., across(all_of(by)))} %>%
-    summarize(MPR = max(!!sym(col), na.rm=TRUE))
+    summarize(mpr = max(norm, na.rm=TRUE))
 }
