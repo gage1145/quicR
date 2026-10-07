@@ -9,6 +9,7 @@
 #' @param flip_ratio Logical; Should the ratio be calculated as max / last (default), or last / max?
 #' @param .by `r lifecycle::badge("deprecated")` Use "by" instead.
 #' @param by Grouping factor. Should typically be by individual wells.
+#' @param zeroed Logical; was the data zeroed in [get_quic()]? Only used by the data frame method, since a "quic" object already records this.
 #' @return A data frame containing well-matched quenching ratio values.
 #'
 #' @importFrom dplyr summarize
@@ -26,6 +27,7 @@
 #'   package = "quicR"
 #' )
 #' get_quic(file) |>
+#'   as.data.frame() |>
 #'   calculate_QR()
 #'
 #' @export

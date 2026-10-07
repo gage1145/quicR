@@ -37,6 +37,7 @@ file <- system.file(
   package = "quicR"
 )
 get_quic(file) |>
+  as.data.frame() |>
   calculate_AUC()
 
 }

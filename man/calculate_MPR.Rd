@@ -9,8 +9,7 @@ calculate_MPR(
   col = lifecycle::deprecated(),
   .by = lifecycle::deprecated(),
   by = "well",
-  zeroed = FALSE,
-  use_normalized = TRUE
+  zeroed = FALSE
 )
 }
 \arguments{
@@ -20,7 +19,9 @@ calculate_MPR(
 
 \item{.by}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use "by" instead.}
 
-\item{by}{Grouping factor. Should typically be by individual wells.}
+\item{by}{Grouping factor. Should typically be by individual wells.#'}
+
+\item{zeroed}{Logical; was the data zeroed in \code{\link[=get_quic]{get_quic()}}? Only used by the data frame method, since a "quic" object already records this.}
 }
 \value{
 A data frame containing well-matched MPR values.
@@ -36,6 +37,7 @@ file <- system.file(
   package = "quicR"
 )
 get_quic(file) |>
+  as.data.frame() |>
   calculate_MPR()
 
 }

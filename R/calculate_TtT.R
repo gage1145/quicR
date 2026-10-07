@@ -8,6 +8,7 @@
 #' @param values `r lifecycle::badge("deprecated")`
 #' @param .by `r lifecycle::badge("deprecated")` Use "by" instead.
 #' @param by Grouping factor(s). Should typically be by individual wells. Can be supplied a vector as an argument.
+#' @param zeroed Logical; was the data zeroed in [get_quic()]? Only used by the data frame method, since a "quic" object already records this.
 #'
 #' @return A vector containing the times to threshold
 #'
@@ -21,11 +22,12 @@
 #'   package = "quicR"
 #' )
 #' get_quic(file) |>
+#'   as.data.frame() |>
 #'   calculate_TtT(threshold = 3)
 #'
 #' @export
 calculate_TtT <- function(data, threshold, time=lifecycle::deprecated(), values=lifecycle::deprecated(), .by=lifecycle::deprecated(), 
-                          by="well", zeroed=FALSE, use_normalized=TRUE) {
+                          by="well", zeroed=FALSE) {
 
   if (lifecycle::is_present(.by)) {
     lifecycle::deprecate_warn(
@@ -35,13 +37,13 @@ calculate_TtT <- function(data, threshold, time=lifecycle::deprecated(), values=
     by <- .by
   }
 
-  # check_positive <- function(threshold, min_y) {
-  #   stopifnot(threshold > min_y)
-  #   return("Threshold must be a positive number")
-  # }
-  # min_y = min(data$norm, na.rm=TRUE)
+  validate_threshold <- function(threshold, min_y) {
+    stopifnot(threshold > min_y)
+    return("Threshold must be a positive number higher than the minimum value.")
+  }
+  min_y = min(data$norm, na.rm=TRUE)
 
-  # check_positive(threshold, min_y)
+  validate_threshold(threshold, min_y)
   
   if (zeroed) threshold <- threshold - 1
 

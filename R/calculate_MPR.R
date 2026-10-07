@@ -6,7 +6,8 @@
 #' @param data A data frame output from 'get_quic()'.
 #' @param col `r lifecycle::badge("deprecated")`
 #' @param .by `r lifecycle::badge("deprecated")` Use "by" instead.
-#' @param by Grouping factor. Should typically be by individual wells.
+#' @param by Grouping factor. Should typically be by individual wells.#' 
+#' @param zeroed Logical; was the data zeroed in [get_quic()]? Only used by the data frame method, since a "quic" object already records this.
 #' @return A data frame containing well-matched MPR values.
 #'
 #' @import dplyr
@@ -18,10 +19,11 @@
 #'   package = "quicR"
 #' )
 #' get_quic(file) |>
+#'   as.data.frame() |>
 #'   calculate_MPR()
 #'
 #' @export
-calculate_MPR <- function(data, col=lifecycle::deprecated(), .by=lifecycle::deprecated(), by="well", zeroed=FALSE, use_normalized=TRUE) {
+calculate_MPR <- function(data, col=lifecycle::deprecated(), .by=lifecycle::deprecated(), by="well", zeroed=FALSE) {
 
   if (lifecycle::is_present(.by)) {
     lifecycle::deprecate_warn(

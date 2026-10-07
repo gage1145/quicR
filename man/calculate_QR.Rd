@@ -26,6 +26,8 @@ calculate_QR(
 \item{by}{Grouping factor. Should typically be by individual wells.}
 
 \item{flip_ratio}{Logical; Should the ratio be calculated as max / last (default), or last / max?}
+
+\item{zeroed}{Logical; was the data zeroed in \code{\link[=get_quic]{get_quic()}}? Only used by the data frame method, since a "quic" object already records this.}
 }
 \value{
 A data frame containing well-matched quenching ratio values.
@@ -41,6 +43,7 @@ file <- system.file(
   package = "quicR"
 )
 get_quic(file) |>
+  as.data.frame() |>
   calculate_QR()
 
 }
